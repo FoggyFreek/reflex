@@ -1,0 +1,5011 @@
+
+==== sub_01a5
+01a5: push si
+01a6: push di
+01a7: push bp
+01a8: mov bp, sp
+01aa: sub sp, 4
+01ad: mov ax, 0x2ce0
+01b0: push ax
+01b1: call 0x8cc9   ; registerbgidriver
+01b4: inc sp
+01b5: inc sp
+01b6: xor si, si
+01b8: jmp 0x1cd
+01ba: mov ax, si
+01bc: mov dx, 0x117   ; "Productions"
+01bf: mul dx
+01c1: add ax, 0x29e0
+01c4: mov bx, si
+01c6: shl bx, 1
+01c8: mov word ptr [bx + 0x295a], ax
+01cc: inc si
+01cd: cmp si, 0x1b
+01d0: jl 0x1ba
+01d2: call 0xe84
+01d5: call 0x24fa
+01d8: call 0x10f9
+01db: push ds
+01dc: mov ax, 0xcd
+01df: push ax
+01e0: push ds
+01e1: mov ax, 0xc7
+01e4: push ax
+01e5: push ds
+01e6: mov ax, 0xc9
+01e9: push ax
+01ea: lcall 0, 0x4a88   ; initgraph
+01ef: add sp, 0xc
+01f2: mov ax, 4
+01f5: push ax
+01f6: mov ax, 1
+01f9: push ax
+01fa: lcall 0, 0x5281   ; setpalette
+01ff: add sp, 4
+0202: call 0x2964
+0205: mov word ptr [bp - 4], 0
+020a: lcall 0, 0x4c9c   ; restorecrtmode
+020f: call 0xd25
+0212: mov ax, 1
+0215: push ax
+0216: call 0x808c   ; textbackground
+0219: inc sp
+021a: inc sp
+021b: call 0x804d   ; clrscr
+021e: mov ax, 0xe
+0221: push ax
+0222: call 0x8076   ; textcolor
+0225: inc sp
+0226: inc sp
+0227: mov ax, 2
+022a: push ax
+022b: mov ax, 0x1e
+022e: push ax
+022f: call 0x8be6   ; gotoxy
+0232: add sp, 4
+0235: mov ax, 0xce
+0238: push ax
+0239: call 0x8200   ; cprintf
+023c: inc sp
+023d: inc sp
+023e: mov ax, 3
+0241: push ax
+0242: mov ax, 0x19
+0245: push ax
+0246: call 0x8be6   ; gotoxy
+0249: add sp, 4
+024c: mov ax, 0xe3
+024f: push ax
+0250: call 0x8200   ; cprintf
+0253: inc sp
+0254: inc sp
+0255: mov ax, 4
+0258: push ax
+0259: call 0x8076   ; textcolor
+025c: inc sp
+025d: inc sp
+025e: mov ax, 5
+0261: push ax
+0262: mov ax, 0x18
+0265: push ax
+0266: call 0x8be6   ; gotoxy
+0269: add sp, 4
+026c: mov ax, 0x102   ; "Copyright 1988 by 3F Productions"
+026f: push ax
+0270: call 0x8200   ; cprintf
+0273: inc sp
+0274: inc sp
+0275: mov ax, 2
+0278: push ax
+0279: call 0x808c   ; textbackground
+027c: inc sp
+027d: inc sp
+027e: mov ax, 4
+0281: push ax
+0282: call 0x8076   ; textcolor
+0285: inc sp
+0286: inc sp
+0287: mov ax, 0xa
+028a: push ax
+028b: mov ax, 0x1e
+028e: push ax
+028f: call 0x8be6   ; gotoxy
+0292: add sp, 4
+0295: mov ax, 0x123   ; "   Functions Menu   "
+0298: push ax
+0299: call 0x8200   ; cprintf
+029c: inc sp
+029d: inc sp
+029e: mov ax, 0x11
+02a1: push ax
+02a2: mov ax, 0x1e
+02a5: push ax
+02a6: call 0x8be6   ; gotoxy
+02a9: add sp, 4
+02ac: mov ax, 0x138   ; "                    "
+02af: push ax
+02b0: call 0x8200   ; cprintf
+02b3: inc sp
+02b4: inc sp
+02b5: mov word ptr [bp - 2], 8
+02ba: xor di, di
+02bc: mov ax, word ptr [0xcb]
+02bf: cmp ax, word ptr [bp - 2]
+02c2: jne 0x2c7
+02c4: jmp 0x3a8
+02c7: mov si, 1
+02ca: jmp 0x3a0
+02cd: mov ax, word ptr [0xcb]
+02d0: cmp ax, si
+02d2: jne 0x2df
+02d4: mov ax, 4
+02d7: push ax
+02d8: call 0x808c   ; textbackground
+02db: inc sp
+02dc: inc sp
+02dd: jmp 0x2e8
+02df: mov ax, 3
+02e2: push ax
+02e3: call 0x808c   ; textbackground
+02e6: inc sp
+02e7: inc sp
+02e8: mov ax, word ptr [0xcb]
+02eb: cmp ax, si
+02ed: jne 0x2fa
+02ef: mov ax, 0xe
+02f2: push ax
+02f3: call 0x8076   ; textcolor
+02f6: inc sp
+02f7: inc sp
+02f8: jmp 0x303
+02fa: mov ax, 1
+02fd: push ax
+02fe: call 0x8076   ; textcolor
+0301: inc sp
+0302: inc sp
+0303: mov ax, si
+0305: add ax, 0xa
+0308: push ax
+0309: mov ax, 0x1e
+030c: push ax
+030d: call 0x8be6   ; gotoxy
+0310: add sp, 4
+0313: mov ax, si
+0315: dec ax
+0316: cmp ax, 5
+0319: jbe 0x31e
+031b: jmp 0x399
+031e: mov bx, ax
+0320: shl bx, 1
+0322: jmp word ptr cs:[bx + 0x327]
+0333: mov ax, 0x14d   ; "Display Instructions"
+0336: push ax
+0337: call 0x8200   ; cprintf
+033a: inc sp
+033b: inc sp
+033c: jmp 0x399
+033e: cmp word ptr [0xbc], 0
+0343: je 0x350
+0345: mov ax, 0x162   ; " Keyboard Explained "
+0348: push ax
+0349: call 0x8200   ; cprintf
+034c: inc sp
+034d: inc sp
+034e: jmp 0x359
+0350: mov ax, 0x177   ; " Calibrate Joystick "
+0353: push ax
+0354: call 0x8200   ; cprintf
+0357: inc sp
+0358: inc sp
+0359: jmp 0x399
+035b: mov ax, 0x18c   ; " View The Top Forty "
+035e: push ax
+035f: call 0x8200   ; cprintf
+0362: inc sp
+0363: inc sp
+0364: jmp 0x399
+0366: cmp word ptr [0xbc], 0
+036b: je 0x378
+036d: mov ax, 0x1a1   ; "  To Use Joystick   "
+0370: push ax
+0371: call 0x8200   ; cprintf
+0374: inc sp
+0375: inc sp
+0376: jmp 0x381
+0378: mov ax, 0x1b6   ; "  To Use Keyboard   "
+037b: push ax
+037c: call 0x8200   ; cprintf
+037f: inc sp
+0380: inc sp
+0381: jmp 0x399
+0383: mov ax, 0x1cb   ; "     Play Reflex    "
+0386: push ax
+0387: call 0x8200   ; cprintf
+038a: inc sp
+038b: inc sp
+038c: jmp 0x399
+038e: mov ax, 0x1e0   ; "  Exit The Program  "
+0391: push ax
+0392: call 0x8200   ; cprintf
+0395: inc sp
+0396: inc sp
+0397: jmp 0x399
+0399: mov ax, word ptr [0xcb]
+039c: mov word ptr [bp - 2], ax
+039f: inc si
+03a0: cmp si, 7
+03a3: jge 0x3a8
+03a5: jmp 0x2cd
+03a8: inc word ptr [0xba]
+03ac: push word ptr [bp - 4]
+03af: call 0x834a   ; delay
+03b2: inc sp
+03b3: inc sp
+03b4: call 0x8e39   ; kbhit
+03b7: or ax, ax
+03b9: je 0x3c0
+03bb: call 0x8b60   ; getch
+03be: mov di, ax
+03c0: mov word ptr [bp - 4], 0
+03c5: cmp word ptr [0xbc], 0
+03ca: jne 0x3f2
+03cc: cmp word ptr [0x48ed], 0
+03d1: jle 0x3f2
+03d3: push word ptr [0x48ed]
+03d7: push word ptr [0x2906]
+03db: mov ax, 2
+03de: push ax
+03df: call 0xfc7
+03e2: add sp, 6
+03e5: cmp ax, 0xffff
+03e8: jne 0x3f2
+03ea: mov di, 0x48
+03ed: mov word ptr [bp - 4], 0xc8
+03f2: cmp word ptr [0xbc], 0
+03f7: jne 0x41f
+03f9: cmp word ptr [0x48ed], 0
+03fe: jle 0x41f
+0400: push word ptr [0x48ed]
+0404: push word ptr [0x2906]
+0408: mov ax, 2
+040b: push ax
+040c: call 0xfc7
+040f: add sp, 6
+0412: cmp ax, 1
+0415: jne 0x41f
+0417: mov di, 0x50
+041a: mov word ptr [bp - 4], 0xc8
+041f: cmp di, 0x48
+0422: jne 0x42f
+0424: cmp word ptr [0xcb], 1
+0429: jle 0x42f
+042b: dec word ptr [0xcb]
+042f: cmp di, 0x50
+0432: jne 0x43f
+0434: cmp word ptr [0xcb], 6
+0439: jge 0x43f
+043b: inc word ptr [0xcb]
+043f: cmp di, 0xd
+0442: je 0x454
+0444: mov ax, 1
+0447: push ax
+0448: call 0x1033
+044b: inc sp
+044c: inc sp
+044d: or ax, ax
+044f: jne 0x454
+0451: jmp 0x2ba
+0454: mov ax, word ptr [0xcb]
+0457: dec ax
+0458: cmp ax, 5
+045b: ja 0x4c7
+045d: mov bx, ax
+045f: shl bx, 1
+0461: jmp word ptr cs:[bx + 0x466]
+0472: call 0x1dfb
+0475: jmp 0x4c7
+0477: cmp word ptr [0xbc], 0
+047c: je 0x483
+047e: call 0x1d3b
+0481: jmp 0x486
+0483: call 0x1ac3
+0486: jmp 0x4c7
+0488: mov ax, 1
+048b: push ax
+048c: call 0x261f
+048f: inc sp
+0490: inc sp
+0491: jmp 0x4c7
+0493: inc word ptr [0xbc]
+0497: mov ax, word ptr [0xbc]
+049a: mov bx, 2
+049d: cdq 
+049e: idiv bx
+04a0: mov word ptr [0xbc], dx
+04a4: jmp 0x4c7
+04a6: cmp word ptr [0x48ed], 0
+04ab: jne 0x4bc
+04ad: cmp word ptr [0xbc], 0
+04b2: jne 0x4bc
+04b4: mov word ptr [0xcb], 2
+04ba: jmp 0x4bf
+04bc: call 0x4f1
+04bf: jmp 0x4c7
+04c1: mov word ptr [0xb8], 1
+04c7: xor di, di
+04c9: cmp word ptr [0xb8], 0
+04ce: jne 0x4d3
+04d0: jmp 0x205
+04d3: push word ptr [0xc7]
+04d7: lcall 0, 0x4c1c   ; setgraphmode
+04dc: inc sp
+04dd: inc sp
+04de: lcall 0, 0x4c9c   ; restorecrtmode
+04e3: lcall 0, 0x4cc9   ; closegraph
+04e8: call 0x2c0d
+04eb: mov sp, bp
+04ed: pop bp
+04ee: pop di
+04ef: pop si
+04f0: ret 
+
+
+==== sub_04f1
+04f1: push si
+04f2: push word ptr [0xba]
+04f6: call 0x9564   ; srand
+04f9: inc sp
+04fa: inc sp
+04fb: mov ax, 1
+04fe: mov word ptr [0xa0], ax
+0501: mov word ptr [0xa2], ax
+0504: xor ax, ax
+0506: mov word ptr [0xb6], ax
+0509: cdq 
+050a: mov word ptr [0xac], dx
+050e: mov word ptr [0xaa], ax
+0511: mov word ptr [0xa8], ax
+0514: mov word ptr [0xa6], ax
+0517: mov word ptr [0xae], 0xc
+051d: mov word ptr [0xb0], 8
+0523: mov word ptr [0xa4], 4
+0529: mov word ptr [0x9e], 0x16
+052f: push word ptr [0xc7]
+0533: lcall 0, 0x4c1c   ; setgraphmode
+0538: inc sp
+0539: inc sp
+053a: mov ax, 1
+053d: push ax
+053e: lcall 0, 0x57c9   ; setactivepage
+0543: inc sp
+0544: inc sp
+0545: xor ax, ax
+0547: push ax
+0548: lcall 0, 0x579f   ; setvisualpage
+054d: inc sp
+054e: inc sp
+054f: mov ax, 0xe
+0552: push ax
+0553: mov ax, 1
+0556: push ax
+0557: lcall 0, 0x501b   ; setfillstyle
+055c: add sp, 4
+055f: mov ax, 8
+0562: push ax
+0563: mov ax, 0x289   ; ": Reflex.EGA"
+0566: push ax
+0567: xor ax, ax
+0569: push ax
+056a: push ax
+056b: lcall 0, 0x59ff   ; bar
+0570: add sp, 8
+0573: call 0x7ef
+0576: mov ax, 4
+0579: push ax
+057a: lcall 0, 0x5aea   ; setcolor
+057f: inc sp
+0580: inc sp
+0581: push ds
+0582: mov ax, 0x1f5   ; "SCORE          LEVEL       FORCEFIELD       WORMS "
+0585: push ax
+0586: mov ax, 1
+0589: push ax
+058a: mov ax, 2
+058d: push ax
+058e: lcall 0, 0x5c28   ; outtextxy
+0593: add sp, 8
+0596: mov ax, 4
+0599: push ax
+059a: mov ax, 1
+059d: push ax
+059e: lcall 0, 0x501b   ; setfillstyle
+05a3: add sp, 4
+05a6: mov ax, 0x15d   ; "ions"
+05a9: push ax
+05aa: mov ax, 0x289   ; ": Reflex.EGA"
+05ad: push ax
+05ae: mov ax, 9
+05b1: push ax
+05b2: xor ax, ax
+05b4: push ax
+05b5: lcall 0, 0x59ff   ; bar
+05ba: add sp, 8
+05bd: mov ax, 1
+05c0: push ax
+05c1: lcall 0, 0x579f   ; setvisualpage
+05c6: inc sp
+05c7: inc sp
+05c8: call 0x969
+05cb: call 0x637
+05ce: cmp word ptr [0xb6], 0
+05d3: jne 0x615
+05d5: call 0x9ba
+05d8: call 0x7f9
+05db: mov ax, 0x8c0   ; "ill begin travel in the direction you select. "
+05de: push ax
+05df: call 0xa2b3   ; sound
+05e2: inc sp
+05e3: inc sp
+05e4: mov ax, 2
+05e7: push ax
+05e8: call 0x834a   ; delay
+05eb: inc sp
+05ec: inc sp
+05ed: call 0xa2df   ; nosound
+05f0: mov ax, 8
+05f3: push ax
+05f4: mov ax, word ptr [0xa0]
+05f7: mov bx, 0x32
+05fa: cdq 
+05fb: idiv bx
+05fd: mov bx, ax
+05ff: inc bx
+0600: pop ax
+0601: cdq 
+0602: idiv bx
+0604: mov si, ax
+0606: mov ax, 0x32
+0609: sub ax, word ptr [0xa2]
+060d: mul si
+060f: push ax
+0610: call 0x834a   ; delay
+0613: inc sp
+0614: inc sp
+0615: mov ax, 2
+0618: push ax
+0619: call 0x7f63   ; bioskey
+061c: inc sp
+061d: inc sp
+061e: and ax, 0xc
+0621: cmp ax, 0xc
+0624: je 0x62d
+0626: cmp word ptr [0xb6], 0
+062b: je 0x5cb
+062d: lcall 0, 0x4c9c   ; restorecrtmode
+0632: call 0x2733
+0635: pop si
+0636: ret 
+
+
+==== sub_0637
+0637: push si
+0638: push di
+0639: push bp
+063a: mov bp, sp
+063c: sub sp, 4
+063f: mov ax, 2
+0642: push ax
+0643: call 0x1033
+0646: inc sp
+0647: inc sp
+0648: or ax, ax
+064a: je 0x656
+064c: cmp word ptr [0xa8], 0
+0651: je 0x656
+0653: call 0xc09
+0656: xor si, si
+0658: mov ax, word ptr [0xae]
+065b: mov dx, 0x12
+065e: mul dx
+0660: mov bx, ax
+0662: add bx, word ptr [0xb0]
+0666: cmp byte ptr [bx + 0x474d], 0xf
+066b: je 0x6aa
+066d: mov ax, si
+066f: push ax
+0670: mov ax, word ptr [0x295c]
+0673: mov dx, ds
+0675: push dx
+0676: push ax
+0677: mov ax, word ptr [0xb0]
+067a: mov dx, 0x11
+067d: mul dx
+067f: add ax, 0x15
+0682: push ax
+0683: mov ax, word ptr [0xae]
+0686: mov dx, 0x1b
+0689: mul dx
+068b: add ax, 9
+068e: push ax
+068f: lcall 0, 0x533f   ; putimage
+0694: add sp, 0xa
+0697: mov ax, word ptr [0xae]
+069a: mov dx, 0x12
+069d: mul dx
+069f: mov bx, ax
+06a1: add bx, word ptr [0xb0]
+06a5: mov byte ptr [bx + 0x474d], 1
+06aa: mov ax, 1
+06ad: push ax
+06ae: call 0x1033
+06b1: inc sp
+06b2: inc sp
+06b3: or ax, ax
+06b5: je 0x6c8
+06b7: cmp word ptr [0xa6], 0
+06bc: jle 0x6c8
+06be: mov si, 0x1a
+06c1: dec word ptr [0xa6]
+06c5: call 0x7ef
+06c8: cmp word ptr [0xbc], 0
+06cd: je 0x6d4
+06cf: call 0xf11
+06d2: jmp 0x70f
+06d4: push word ptr [0x2904]
+06d8: push word ptr [0x48ef]
+06dc: mov ax, 1
+06df: push ax
+06e0: call 0xfc7
+06e3: add sp, 6
+06e6: mov di, ax
+06e8: push word ptr [0x48ed]
+06ec: push word ptr [0x2906]
+06f0: mov ax, 2
+06f3: push ax
+06f4: call 0xfc7
+06f7: add sp, 6
+06fa: mov word ptr [bp - 4], ax
+06fd: or di, di
+06ff: jne 0x705
+0701: or ax, ax
+0703: je 0x70f
+0705: mov word ptr [0xb2], di
+0709: mov ax, word ptr [bp - 4]
+070c: mov word ptr [0xb4], ax
+070f: mov ax, word ptr [0xb2]
+0712: add word ptr [0xae], ax
+0716: cmp word ptr [0xae], 0
+071b: jge 0x723
+071d: mov word ptr [0xae], 0x16
+0723: cmp word ptr [0xae], 0x16
+0728: jle 0x730
+072a: mov word ptr [0xae], 0
+0730: mov ax, word ptr [0xb4]
+0733: add word ptr [0xb0], ax
+0737: cmp word ptr [0xb0], 0
+073c: jge 0x744
+073e: mov word ptr [0xb0], 0x11
+0744: cmp word ptr [0xb0], 0x11
+0749: jle 0x751
+074b: mov word ptr [0xb0], 0
+0751: mov ax, word ptr [0xae]
+0754: mov dx, 0x12
+0757: mul dx
+0759: mov bx, ax
+075b: add bx, word ptr [0xb0]
+075f: cmp byte ptr [bx + 0x474d], 4
+0764: jl 0x76a
+0766: or si, si
+0768: je 0x771
+076a: mov word ptr [bp - 2], 0
+076f: jmp 0x776
+0771: mov word ptr [bp - 2], 3
+0776: push word ptr [bp - 2]
+0779: mov bx, si
+077b: shl bx, 1
+077d: mov ax, word ptr [bx + 0x295a]
+0781: mov dx, ds
+0783: push dx
+0784: push ax
+0785: mov ax, word ptr [0xb0]
+0788: mov dx, 0x11
+078b: mul dx
+078d: add ax, 0x15
+0790: push ax
+0791: mov ax, word ptr [0xae]
+0794: mov dx, 0x1b
+0797: mul dx
+0799: add ax, 9
+079c: push ax
+079d: lcall 0, 0x533f   ; putimage
+07a2: add sp, 0xa
+07a5: or si, si
+07a7: jne 0x7ae
+07a9: call 0x1152
+07ac: jmp 0x7c1
+07ae: mov ax, word ptr [0xae]
+07b1: mov dx, 0x12
+07b4: mul dx
+07b6: mov bx, ax
+07b8: add bx, word ptr [0xb0]
+07bc: mov byte ptr [bx + 0x474d], 1
+07c1: mov ax, word ptr [0xae]
+07c4: mov dx, 0x12
+07c7: mul dx
+07c9: mov bx, ax
+07cb: add bx, word ptr [0xb0]
+07cf: cmp byte ptr [bx + 0x474d], 0xf
+07d4: je 0x7e9
+07d6: mov ax, word ptr [0xae]
+07d9: mov dx, 0x12
+07dc: mul dx
+07de: mov bx, ax
+07e0: add bx, word ptr [0xb0]
+07e4: mov byte ptr [bx + 0x474d], 1
+07e9: mov sp, bp
+07eb: pop bp
+07ec: pop di
+07ed: pop si
+07ee: ret 
+
+
+==== sub_07ef
+07ef: call 0x858
+07f2: call 0x8b3
+07f5: call 0x90e
+07f8: ret 
+
+
+==== sub_07f9
+07f9: mov ax, 0xe
+07fc: push ax
+07fd: mov ax, 1
+0800: push ax
+0801: lcall 0, 0x501b   ; setfillstyle
+0806: add sp, 4
+0809: mov ax, 8
+080c: push ax
+080d: mov ax, 0x68
+0810: push ax
+0811: mov ax, 1
+0814: push ax
+0815: mov ax, 0x30
+0818: push ax
+0819: lcall 0, 0x59ff   ; bar
+081e: add sp, 8
+0821: mov ax, 1
+0824: push ax
+0825: lcall 0, 0x5aea   ; setcolor
+082a: inc sp
+082b: inc sp
+082c: push word ptr [0xac]
+0830: push word ptr [0xaa]
+0834: mov ax, 0x245   ; "%ld"
+0837: push ax
+0838: mov ax, 0x2990
+083b: push ax
+083c: call 0xa30c   ; sprintf
+083f: add sp, 8
+0842: push ds
+0843: mov ax, 0x2990
+0846: push ax
+0847: mov ax, 1
+084a: push ax
+084b: mov ax, 0x30
+084e: push ax
+084f: lcall 0, 0x5c28   ; outtextxy
+0854: add sp, 8
+0857: ret 
+
+
+==== sub_0858
+0858: mov ax, 0xe
+085b: push ax
+085c: mov ax, 1
+085f: push ax
+0860: lcall 0, 0x501b   ; setfillstyle
+0865: add sp, 4
+0868: mov ax, 8
+086b: push ax
+086c: mov ax, 0xc0
+086f: push ax
+0870: mov ax, 1
+0873: push ax
+0874: mov ax, 0xa8
+0877: push ax
+0878: lcall 0, 0x59ff   ; bar
+087d: add sp, 8
+0880: mov ax, 1
+0883: push ax
+0884: lcall 0, 0x5aea   ; setcolor
+0889: inc sp
+088a: inc sp
+088b: push word ptr [0xa0]
+088f: mov ax, 0x249   ; "%d"
+0892: push ax
+0893: mov ax, 0x2990
+0896: push ax
+0897: call 0xa30c   ; sprintf
+089a: add sp, 6
+089d: push ds
+089e: mov ax, 0x2990
+08a1: push ax
+08a2: mov ax, 1
+08a5: push ax
+08a6: mov ax, 0xa8
+08a9: push ax
+08aa: lcall 0, 0x5c28   ; outtextxy
+08af: add sp, 8
+08b2: ret 
+
+
+==== sub_08b3
+08b3: mov ax, 0xe
+08b6: push ax
+08b7: mov ax, 1
+08ba: push ax
+08bb: lcall 0, 0x501b   ; setfillstyle
+08c0: add sp, 4
+08c3: mov ax, 8
+08c6: push ax
+08c7: mov ax, 0x140   ; "            "
+08ca: push ax
+08cb: mov ax, 1
+08ce: push ax
+08cf: mov ax, 0x130   ; "Menu   "
+08d2: push ax
+08d3: lcall 0, 0x59ff   ; bar
+08d8: add sp, 8
+08db: mov ax, 1
+08de: push ax
+08df: lcall 0, 0x5aea   ; setcolor
+08e4: inc sp
+08e5: inc sp
+08e6: push word ptr [0xa6]
+08ea: mov ax, 0x249   ; "%d"
+08ed: push ax
+08ee: mov ax, 0x2990
+08f1: push ax
+08f2: call 0xa30c   ; sprintf
+08f5: add sp, 6
+08f8: push ds
+08f9: mov ax, 0x2990
+08fc: push ax
+08fd: mov ax, 1
+0900: push ax
+0901: mov ax, 0x130   ; "Menu   "
+0904: push ax
+0905: lcall 0, 0x5c28   ; outtextxy
+090a: add sp, 8
+090d: ret 
+
+
+==== sub_090e
+090e: mov ax, 0xe
+0911: push ax
+0912: mov ax, 1
+0915: push ax
+0916: lcall 0, 0x501b   ; setfillstyle
+091b: add sp, 4
+091e: mov ax, 8
+0921: push ax
+0922: mov ax, 0x1a0
+0925: push ax
+0926: mov ax, 1
+0929: push ax
+092a: mov ax, 0x190   ; "w The Top Forty "
+092d: push ax
+092e: lcall 0, 0x59ff   ; bar
+0933: add sp, 8
+0936: mov ax, 1
+0939: push ax
+093a: lcall 0, 0x5aea   ; setcolor
+093f: inc sp
+0940: inc sp
+0941: push word ptr [0xa4]
+0945: mov ax, 0x249   ; "%d"
+0948: push ax
+0949: mov ax, 0x2990
+094c: push ax
+094d: call 0xa30c   ; sprintf
+0950: add sp, 6
+0953: push ds
+0954: mov ax, 0x2990
+0957: push ax
+0958: mov ax, 1
+095b: push ax
+095c: mov ax, 0x190   ; "w The Top Forty "
+095f: push ax
+0960: lcall 0, 0x5c28   ; outtextxy
+0965: add sp, 8
+0968: ret 
+
+
+==== sub_0969
+0969: push si
+096a: push di
+096b: xor di, di
+096d: jmp 0x9b2
+096f: xor si, si
+0971: jmp 0x9ac
+0973: mov ax, si
+0975: mov dx, 0x12
+0978: mul dx
+097a: mov bx, ax
+097c: add bx, di
+097e: mov byte ptr [bx + 0x474d], 3
+0983: xor ax, ax
+0985: push ax
+0986: mov ax, word ptr [0x2960]
+0989: mov dx, ds
+098b: push dx
+098c: push ax
+098d: mov ax, di
+098f: mov dx, 0x11
+0992: mul dx
+0994: add ax, 0x15
+0997: push ax
+0998: mov ax, si
+099a: mov dx, 0x1b
+099d: mul dx
+099f: add ax, 9
+09a2: push ax
+09a3: lcall 0, 0x533f   ; putimage
+09a8: add sp, 0xa
+09ab: inc si
+09ac: cmp si, 0x17
+09af: jl 0x973
+09b1: inc di
+09b2: cmp di, 0x12
+09b5: jl 0x96f
+09b7: pop di
+09b8: pop si
+09b9: ret 
+
+
+==== sub_09ba
+09ba: push si
+09bb: push di
+09bc: push bp
+09bd: mov bp, sp
+09bf: sub sp, 4
+09c2: cmp word ptr [0xa2], 0x20
+09c7: jg 0x9cc
+09c9: jmp 0xa5a
+09cc: mov ax, 0x17
+09cf: push ax
+09d0: call 0xcf3
+09d3: inc sp
+09d4: inc sp
+09d5: mov si, ax
+09d7: cmp si, word ptr [0x9e]
+09db: je 0x9cc
+09dd: mov ax, 0x12
+09e0: push ax
+09e1: call 0xcf3
+09e4: inc sp
+09e5: inc sp
+09e6: mov di, ax
+09e8: mov ax, 7
+09eb: push ax
+09ec: call 0xcf3
+09ef: inc sp
+09f0: inc sp
+09f1: inc al
+09f3: push ax
+09f4: mov ax, si
+09f6: mov dx, 0x12
+09f9: mul dx
+09fb: mov bx, ax
+09fd: add bx, di
+09ff: pop ax
+0a00: add byte ptr [bx + 0x474d], al
+0a04: mov al, byte ptr [bx + 0x474d]
+0a08: cmp al, 0xf
+0a0b: jle 0xa1d
+0a0d: mov ax, si
+0a0f: mov dx, 0x12
+0a12: mul dx
+0a14: mov bx, ax
+0a16: add bx, di
+0a18: mov byte ptr [bx + 0x474d], 0xf
+0a1d: xor ax, ax
+0a1f: push ax
+0a20: mov ax, si
+0a22: mov dx, 0x12
+0a25: mul dx
+0a27: mov bx, ax
+0a29: add bx, di
+0a2b: mov al, byte ptr [bx + 0x474d]
+0a2f: cwde 
+0a30: mov bx, ax
+0a32: shl bx, 1
+0a34: mov ax, word ptr [bx + 0x295a]
+0a38: mov dx, ds
+0a3a: push dx
+0a3b: push ax
+0a3c: mov ax, di
+0a3e: mov dx, 0x11
+0a41: mul dx
+0a43: add ax, 0x15
+0a46: push ax
+0a47: mov ax, si
+0a49: mov dx, 0x1b
+0a4c: mul dx
+0a4e: add ax, 9
+0a51: push ax
+0a52: lcall 0, 0x533f   ; putimage
+0a57: add sp, 0xa
+0a5a: mov word ptr [bp - 4], 0
+0a5f: mov word ptr [bp - 2], 0
+0a64: jmp 0xb3b
+0a67: mov ax, 0x17
+0a6a: push ax
+0a6b: call 0xcf3
+0a6e: inc sp
+0a6f: inc sp
+0a70: mov si, ax
+0a72: cmp si, word ptr [0x9e]
+0a76: je 0xa67
+0a78: mov ax, 0x12
+0a7b: push ax
+0a7c: call 0xcf3
+0a7f: inc sp
+0a80: inc sp
+0a81: mov di, ax
+0a83: mov ax, si
+0a85: mov dx, 0x12
+0a88: mul dx
+0a8a: mov bx, ax
+0a8c: add bx, di
+0a8e: cmp byte ptr [bx + 0x474d], 0xf
+0a93: jne 0xaa0
+0a95: inc word ptr [bp - 4]
+0a98: mov ax, word ptr [bp - 4]
+0a9b: cmp ax, 1
+0a9e: je 0xa67
+0aa0: mov ax, si
+0aa2: mov dx, 0x12
+0aa5: mul dx
+0aa7: mov bx, ax
+0aa9: add bx, di
+0aab: cmp byte ptr [bx + 0x474d], 0xf
+0ab0: jne 0xaf7
+0ab2: mov ax, 0xf
+0ab5: push ax
+0ab6: call 0xcf3
+0ab9: inc sp
+0aba: inc sp
+0abb: inc ax
+0abc: push ax
+0abd: mov ax, 0x12
+0ac0: push ax
+0ac1: call 0xcf3
+0ac4: inc sp
+0ac5: inc sp
+0ac6: push ax
+0ac7: mov ax, di
+0ac9: mov dx, 0x11
+0acc: mul dx
+0ace: pop dx
+0acf: add dx, ax
+0ad1: add dx, 0x15
+0ad4: push dx
+0ad5: mov ax, 0x17
+0ad8: push ax
+0ad9: call 0xcf3
+0adc: inc sp
+0add: inc sp
+0ade: push ax
+0adf: mov ax, si
+0ae1: mov dx, 0x1b
+0ae4: mul dx
+0ae6: pop dx
+0ae7: add dx, ax
+0ae9: add dx, 9
+0aec: push dx
+0aed: lcall 0, 0x5d39   ; putpixel
+0af2: add sp, 6
+0af5: jmp 0xb38
+0af7: xor ax, ax
+0af9: push ax
+0afa: mov ax, si
+0afc: mov dx, 0x12
+0aff: mul dx
+0b01: mov bx, ax
+0b03: add bx, di
+0b05: inc byte ptr [bx + 0x474d]
+0b09: mov al, byte ptr [bx + 0x474d]
+0b0d: cwde 
+0b0e: mov bx, ax
+0b10: shl bx, 1
+0b12: mov ax, word ptr [bx + 0x295a]
+0b16: mov dx, ds
+0b18: push dx
+0b19: push ax
+0b1a: mov ax, di
+0b1c: mov dx, 0x11
+0b1f: mul dx
+0b21: add ax, 0x15
+0b24: push ax
+0b25: mov ax, si
+0b27: mov dx, 0x1b
+0b2a: mul dx
+0b2c: add ax, 9
+0b2f: push ax
+0b30: lcall 0, 0x533f   ; putimage
+0b35: add sp, 0xa
+0b38: inc word ptr [bp - 2]
+0b3b: mov ax, word ptr [bp - 2]
+0b3e: cmp ax, word ptr [0xa2]
+0b42: jge 0xb47
+0b44: jmp 0xa67
+0b47: mov ax, word ptr [0xa0]
+0b4a: cdq 
+0b4b: add ax, word ptr [0xaa]
+0b4f: adc dx, word ptr [0xac]
+0b53: mov word ptr [0xac], dx
+0b57: mov word ptr [0xaa], ax
+0b5a: mov sp, bp
+0b5c: pop bp
+0b5d: pop di
+0b5e: pop si
+0b5f: ret 
+
+
+==== sub_0b60
+0b60: push si
+0b61: push di
+0b62: push bp
+0b63: mov bp, sp
+0b65: xor di, di
+0b67: jmp 0xbf8
+0b6a: xor si, si
+0b6c: jmp 0xbd4
+0b6e: mov ax, si
+0b70: mov dx, 0x12
+0b73: mul dx
+0b75: mov bx, ax
+0b77: add bx, di
+0b79: cmp byte ptr [bx + 0x474d], 0xf
+0b7e: jge 0xbd3
+0b80: mov ax, si
+0b82: mov dx, 0x12
+0b85: mul dx
+0b87: mov bx, ax
+0b89: add bx, di
+0b8b: mov byte ptr [bx + 0x474d], 3
+0b90: xor ax, ax
+0b92: push ax
+0b93: mov ax, word ptr [0x2960]
+0b96: mov dx, ds
+0b98: push dx
+0b99: push ax
+0b9a: mov ax, di
+0b9c: mov dx, 0x11
+0b9f: mul dx
+0ba1: add ax, 0x15
+0ba4: push ax
+0ba5: mov ax, si
+0ba7: mov dx, 0x1b
+0baa: mul dx
+0bac: add ax, 9
+0baf: push ax
+0bb0: lcall 0, 0x533f   ; putimage
+0bb5: mov sp, bp
+0bb7: cmp word ptr [bp + 8], 0
+0bbb: je 0xbd3
+0bbd: mov ax, di
+0bbf: mov dx, 0x24
+0bc2: mul dx
+0bc4: mov dx, si
+0bc6: shl dx, 1
+0bc8: add ax, dx
+0bca: add ax, 0x64
+0bcd: push ax
+0bce: call 0xa2b3   ; sound
+0bd1: mov sp, bp
+0bd3: inc si
+0bd4: cmp si, 0x17
+0bd7: jl 0xb6e
+0bd9: cmp word ptr [bp + 8], 0
+0bdd: je 0xbf2
+0bdf: mov ax, word ptr [0xa0]
+0be2: cdq 
+0be3: add ax, word ptr [0xaa]
+0be7: adc dx, word ptr [0xac]
+0beb: mov word ptr [0xac], dx
+0bef: mov word ptr [0xaa], ax
+0bf2: call 0x7f9
+0bf5: mov sp, bp
+0bf7: inc di
+0bf8: cmp di, 0x12
+0bfb: jge 0xc00
+0bfd: jmp 0xb6a
+0c00: call 0xa2df   ; nosound
+0c03: mov sp, bp
+0c05: pop bp
+0c06: pop di
+0c07: pop si
+0c08: ret 
+
+
+==== sub_0c09
+0c09: push si
+0c0a: mov si, 0xca
+0c0d: jmp 0xc8c
+0c0f: mov ax, 4
+0c12: push ax
+0c13: mov ax, 1
+0c16: push ax
+0c17: lcall 0, 0x501b   ; setfillstyle
+0c1c: add sp, 4
+0c1f: mov ax, 1
+0c22: push ax
+0c23: mov ax, 5
+0c26: push ax
+0c27: mov ax, 0x159   ; "ructions"
+0c2a: push ax
+0c2b: mov ax, 0x276   ; "t locate Shape File: Reflex.EGA"
+0c2e: push ax
+0c2f: mov ax, 0x14f   ; "splay Instructions"
+0c32: push ax
+0c33: mov ax, 9
+0c36: push ax
+0c37: lcall 0, 0x5a22   ; bar3d
+0c3c: add sp, 0xc
+0c3f: mov ax, 0xe
+0c42: push ax
+0c43: mov ax, 7
+0c46: push ax
+0c47: lcall 0, 0x501b   ; setfillstyle
+0c4c: add sp, 4
+0c4f: mov ax, 1
+0c52: push ax
+0c53: mov ax, 5
+0c56: push ax
+0c57: mov ax, 0x159   ; "ructions"
+0c5a: push ax
+0c5b: mov ax, si
+0c5d: mov dx, 3
+0c60: mul dx
+0c62: add ax, 9
+0c65: push ax
+0c66: mov ax, 0x14f   ; "splay Instructions"
+0c69: push ax
+0c6a: mov ax, 9
+0c6d: push ax
+0c6e: lcall 0, 0x5a22   ; bar3d
+0c73: add sp, 0xc
+0c76: mov ax, 0x14
+0c79: push ax
+0c7a: call 0xa2b3   ; sound
+0c7d: inc sp
+0c7e: inc sp
+0c7f: mov ax, 0xa
+0c82: push ax
+0c83: call 0x834a   ; delay
+0c86: inc sp
+0c87: inc sp
+0c88: call 0xa2df   ; nosound
+0c8b: dec si
+0c8c: or si, si
+0c8e: jle 0xc93
+0c90: jmp 0xc0f
+0c93: mov ax, 4
+0c96: push ax
+0c97: mov ax, 1
+0c9a: push ax
+0c9b: lcall 0, 0x501b   ; setfillstyle
+0ca0: add sp, 4
+0ca3: mov ax, 1
+0ca6: push ax
+0ca7: mov ax, 5
+0caa: push ax
+0cab: mov ax, 0x159   ; "ructions"
+0cae: push ax
+0caf: mov ax, 0x276   ; "t locate Shape File: Reflex.EGA"
+0cb2: push ax
+0cb3: mov ax, 0x14f   ; "splay Instructions"
+0cb6: push ax
+0cb7: mov ax, 9
+0cba: push ax
+0cbb: lcall 0, 0x5a22   ; bar3d
+0cc0: add sp, 0xc
+0cc3: mov word ptr [0xa8], 0
+0cc9: pop si
+0cca: ret 
+
+
+==== sub_0ccb
+0ccb: mov ax, 1
+0cce: push ax
+0ccf: call 0xa256   ; sleep
+0cd2: inc sp
+0cd3: inc sp
+0cd4: call 0x8e39   ; kbhit
+0cd7: or ax, ax
+0cd9: jne 0xcef
+0cdb: mov ax, 1
+0cde: push ax
+0cdf: call 0x1033
+0ce2: inc sp
+0ce3: inc sp
+0ce4: or ax, ax
+0ce6: je 0xced
+0ce8: mov ax, 1
+0ceb: jmp 0xcf2
+0ced: jmp 0xcd4
+0cef: call 0x8b60   ; getch
+0cf2: ret 
+
+
+==== sub_0cf3
+0cf3: push bp
+0cf4: mov bp, sp
+0cf6: call 0x9575   ; rand
+0cf9: mov sp, bp
+0cfb: cdq 
+0cfc: push dx
+0cfd: push ax
+0cfe: int 0x37
+0d00: inc si
+0d01: cld 
+0d02: int 0x3d
+0d04: add sp, 4
+0d07: int 0x38
+0d09: dec sp
+0d0b: add cl, byte ptr [bp + di + 0x446]
+0d0f: cdq 
+0d10: push dx
+0d11: push ax
+0d12: int 0x37
+0d14: inc si
+0d15: cld 
+0d16: int 0x3d
+0d18: add sp, 4
+0d1b: int 0x3a
+0d1d: leave 
+0d1e: lcall 0, 0x7860
+0d23: pop bp
+0d24: ret 
+
+
+==== sub_0d25
+0d25: push bp
+0d26: mov bp, sp
+0d28: sub sp, 0x10
+0d2b: mov byte ptr [bp - 0xf], 3
+0d2f: mov byte ptr [bp - 0xd], 0
+0d33: lea ax, [bp - 0x10]
+0d36: push ax
+0d37: lea ax, [bp - 0x10]
+0d3a: push ax
+0d3b: mov ax, 0x10
+0d3e: push ax
+0d3f: call 0x8d01   ; int86
+0d42: add sp, 6
+0d45: mov byte ptr [bp - 0xf], 1
+0d49: mov word ptr [bp - 0xc], 0x2020   ; "n."
+0d4e: lea ax, [bp - 0x10]
+0d51: push ax
+0d52: lea ax, [bp - 0x10]
+0d55: push ax
+0d56: mov ax, 0x10
+0d59: push ax
+0d5a: call 0x8d01   ; int86
+0d5d: add sp, 6
+0d60: mov sp, bp
+0d62: pop bp
+0d63: ret 
+
+
+==== sub_0d64
+0d64: push si
+0d65: mov si, 0xa
+0d68: jmp 0xd94
+0d6a: mov ax, si
+0d6c: mov dx, 0x32
+0d6f: mul dx
+0d71: push ax
+0d72: call 0xa2b3   ; sound
+0d75: inc sp
+0d76: inc sp
+0d77: mov ax, 0x48
+0d7a: sub ax, si
+0d7c: push ax
+0d7d: call 0x834a   ; delay
+0d80: inc sp
+0d81: inc sp
+0d82: mov ax, 0x3e8   ; "ull the joystick to RIGHT and press the joystick b"
+0d85: push ax
+0d86: call 0xcf3
+0d89: inc sp
+0d8a: inc sp
+0d8b: push ax
+0d8c: call 0xa2b3   ; sound
+0d8f: inc sp
+0d90: inc sp
+0d91: add si, 2
+0d94: cmp si, 0x46
+0d97: jl 0xd6a
+0d99: call 0xa2df   ; nosound
+0d9c: pop si
+0d9d: ret 
+
+
+==== sub_0d9e
+0d9e: push si
+0d9f: mov si, 0x28
+0da2: jmp 0xdd2
+0da4: mov ax, si
+0da6: add ax, 0x32
+0da9: push ax
+0daa: call 0xa2b3   ; sound
+0dad: inc sp
+0dae: inc sp
+0daf: mov ax, si
+0db1: mov bx, 2
+0db4: cdq 
+0db5: idiv bx
+0db7: push ax
+0db8: call 0x834a   ; delay
+0dbb: inc sp
+0dbc: inc sp
+0dbd: mov ax, 0x3e8   ; "ull the joystick to RIGHT and press the joystick b"
+0dc0: push ax
+0dc1: call 0xa2b3   ; sound
+0dc4: inc sp
+0dc5: inc sp
+0dc6: mov ax, 3
+0dc9: push ax
+0dca: call 0x834a   ; delay
+0dcd: inc sp
+0dce: inc sp
+0dcf: sub si, 2
+0dd2: cmp si, 0xa
+0dd5: jg 0xda4
+0dd7: call 0xa2df   ; nosound
+0dda: pop si
+0ddb: ret 
+
+
+==== sub_0ddc
+0ddc: push si
+0ddd: push bp
+0dde: mov bp, sp
+0de0: sub sp, 8
+0de3: mov ax, 0x64
+0de6: push ax
+0de7: call 0xcf3
+0dea: inc sp
+0deb: inc sp
+0dec: mov si, ax
+0dee: add si, 0x1f4
+0df2: mov dx, 0x4348
+0df5: xor ax, ax
+0df7: mov word ptr [bp - 6], dx
+0dfa: mov word ptr [bp - 8], ax
+0dfd: mov dx, 0x44bb
+0e00: mov ax, 0x8000
+0e03: mov word ptr [bp - 2], dx
+0e06: mov word ptr [bp - 4], ax
+0e09: jmp 0xe59
+0e0b: int 0x35
+0e0d: inc si
+0e0e: cld 
+0e0f: lcall 0, 0x7860
+0e14: push ax
+0e15: call 0xa2b3   ; sound
+0e18: inc sp
+0e19: inc sp
+0e1a: mov ax, 2
+0e1d: push ax
+0e1e: call 0x834a   ; delay
+0e21: inc sp
+0e22: inc sp
+0e23: int 0x35
+0e25: inc si
+0e26: clc 
+0e27: lcall 0, 0x7860
+0e2c: push ax
+0e2d: call 0xa2b3   ; sound
+0e30: inc sp
+0e31: inc sp
+0e32: mov ax, 1
+0e35: push ax
+0e36: call 0x834a   ; delay
+0e39: inc sp
+0e3a: inc sp
+0e3b: int 0x35
+0e3d: inc si
+0e3e: clc 
+0e3f: int 0x38
+0e41: push es
+0e42: push sp
+0e43: add cl, ch
+0e45: xor ax, 0xf85e
+0e48: int 0x3d
+0e4a: int 0x35
+0e4c: inc si
+0e4d: cld 
+0e4e: int 0x38
+0e50: pop sp
+0e52: add cl, ch
+0e54: xor ax, 0xfc5e
+0e57: int 0x3d
+0e59: mov ax, si
+0e5b: cdq 
+0e5c: push dx
+0e5d: push ax
+0e5e: int 0x37
+0e60: inc si
+0e61: hlt 
+0e62: int 0x3d
+0e64: add sp, 4
+0e67: int 0x35
+0e69: inc si
+0e6a: clc 
+0e6b: int 0x3a
+0e6d: fxch st(5)
+0e6f: cmp word ptr [0x4a74], di
+0e73: int 0x3d
+0e75: mov ah, byte ptr [0x4a75]
+0e79: sahf 
+0e7a: jb 0xe0b
+0e7c: call 0xa2df   ; nosound
+0e7f: mov sp, bp
+0e81: pop bp
+0e82: pop si
+0e83: ret 
+
+
+==== sub_0e84
+0e84: push si
+0e85: push di
+0e86: push bp
+0e87: mov bp, sp
+0e89: sub sp, 4
+0e8c: xor di, di
+0e8e: jmp 0xea3
+0e90: mov ax, di
+0e92: mov dx, 0x117   ; "Productions"
+0e95: mul dx
+0e97: add ax, 0x29e0
+0e9a: mov bx, di
+0e9c: shl bx, 1
+0e9e: mov word ptr [bx + 0x295a], ax
+0ea2: inc di
+0ea3: cmp di, 0x1b
+0ea6: jl 0xe90
+0ea8: mov ax, 0x26f   ; "rb"
+0eab: push ax
+0eac: mov ax, 0x264   ; "reflex.ega"
+0eaf: push ax
+0eb0: call 0x8725   ; fopen
+0eb3: add sp, 4
+0eb6: mov word ptr [bp - 4], ax
+0eb9: or ax, ax
+0ebb: jne 0xecf
+0ebd: mov ax, 0x272   ; "Can't locate Shape File: Reflex.EGA"
+0ec0: push ax
+0ec1: call 0x935e   ; printf
+0ec4: inc sp
+0ec5: inc sp
+0ec6: mov ax, 3
+0ec9: push ax
+0eca: call 0x846b   ; exit
+0ecd: inc sp
+0ece: inc sp
+0ecf: xor di, di
+0ed1: jmp 0xefe
+0ed3: xor si, si
+0ed5: jmp 0xef7
+0ed7: push word ptr [bp - 4]
+0eda: call 0x8b19   ; fgetc
+0edd: inc sp
+0ede: inc sp
+0edf: mov byte ptr [bp - 1], al
+0ee2: mov al, byte ptr [bp - 1]
+0ee5: push ax
+0ee6: mov ax, di
+0ee8: mov dx, 0x117   ; "Productions"
+0eeb: mul dx
+0eed: mov bx, ax
+0eef: add bx, si
+0ef1: pop ax
+0ef2: mov byte ptr [bx + 0x29e0], al
+0ef6: inc si
+0ef7: cmp si, 0x117
+0efb: jle 0xed7
+0efd: inc di
+0efe: cmp di, 0x1b
+0f01: jl 0xed3
+0f03: push word ptr [bp - 4]
+0f06: call 0x849a   ; fclose
+0f09: inc sp
+0f0a: inc sp
+0f0b: mov sp, bp
+0f0d: pop bp
+0f0e: pop di
+0f0f: pop si
+0f10: ret 
+
+
+==== sub_0f11
+0f11: push bp
+0f12: mov bp, sp
+0f14: dec sp
+0f15: dec sp
+0f16: mov byte ptr [bp - 1], 0
+0f1a: call 0x8e39   ; kbhit
+0f1d: or ax, ax
+0f1f: je 0xf29
+0f21: call 0x8b60   ; getch
+0f24: mov byte ptr [bp - 1], al
+0f27: jmp 0xf1a
+0f29: mov al, byte ptr [bp - 1]
+0f2c: cwde 
+0f2d: sub ax, 0x31
+0f30: cmp ax, 8
+0f33: jbe 0xf38
+0f35: jmp 0xfc3
+0f38: mov bx, ax
+0f3a: shl bx, 1
+0f3c: jmp word ptr cs:[bx + 0xf41]
+0f53: mov word ptr [0xb2], 0xffff
+0f59: mov word ptr [0xb4], 1
+0f5f: jmp 0xfc3
+0f61: mov word ptr [0xb2], 0
+0f67: mov word ptr [0xb4], 1
+0f6d: jmp 0xfc3
+0f6f: mov word ptr [0xb2], 1
+0f75: mov word ptr [0xb4], 1
+0f7b: jmp 0xfc3
+0f7d: mov word ptr [0xb2], 0xffff
+0f83: mov word ptr [0xb4], 0
+0f89: jmp 0xfc3
+0f8b: mov word ptr [0xb2], 1
+0f91: mov word ptr [0xb4], 0
+0f97: jmp 0xfc3
+0f99: mov word ptr [0xb2], 0xffff
+0f9f: mov word ptr [0xb4], 0xffff
+0fa5: jmp 0xfc3
+0fa7: mov word ptr [0xb2], 0
+0fad: mov word ptr [0xb4], 0xffff
+0fb3: jmp 0xfc3
+0fb5: mov word ptr [0xb2], 1
+0fbb: mov word ptr [0xb4], 0xffff
+0fc1: jmp 0xfc3
+0fc3: mov sp, bp
+0fc5: pop bp
+0fc6: ret 
+
+
+==== sub_0fc7
+0fc7: push si
+0fc8: push di
+0fc9: push bp
+0fca: mov bp, sp
+0fcc: dec sp
+0fcd: dec sp
+0fce: mov si, word ptr [bp + 8]
+0fd1: push si
+0fd2: mov ax, 0x200   ; "    LEVEL       FORCEFIELD       WORMS            "
+0fd5: push ax
+0fd6: call 0x9346   ; outport
+0fd9: add sp, 4
+0fdc: push si
+0fdd: mov ax, 0x200   ; "    LEVEL       FORCEFIELD       WORMS            "
+0fe0: push ax
+0fe1: call 0x9346   ; outport
+0fe4: add sp, 4
+0fe7: xor di, di
+0fe9: jmp 0xfec
+0feb: inc di
+0fec: mov ax, 0x201   ; "   LEVEL       FORCEFIELD       WORMS             "
+0fef: push ax
+0ff0: call 0x8ced   ; inport
+0ff3: inc sp
+0ff4: inc sp
+0ff5: and ax, si
+0ff7: cmp ax, si
+0ff9: je 0xfeb
+0ffb: mov ax, word ptr [bp + 0xa]
+0ffe: add ax, word ptr [bp + 0xc]
+1001: je 0x101e
+1003: mov word ptr [bp - 2], 0
+1008: cmp di, word ptr [bp + 0xa]
+100b: jge 0x1012
+100d: mov word ptr [bp - 2], 0xffff
+1012: cmp di, word ptr [bp + 0xc]
+1015: jle 0x101c
+1017: mov word ptr [bp - 2], 1
+101c: jmp 0x1021
+101e: mov word ptr [bp - 2], di
+1021: mov ax, 6
+1024: push ax
+1025: call 0x834a   ; delay
+1028: inc sp
+1029: inc sp
+102a: mov ax, word ptr [bp - 2]
+102d: mov sp, bp
+102f: pop bp
+1030: pop di
+1031: pop si
+1032: ret 
+
+
+==== sub_1033
+1033: push si
+1034: push di
+1035: push bp
+1036: mov bp, sp
+1038: mov di, word ptr [bp + 8]
+103b: xor si, si
+103d: cmp word ptr [0xbc], si
+1041: je 0x1055
+1043: mov ax, 2
+1046: push ax
+1047: call 0x7f63   ; bioskey
+104a: mov sp, bp
+104c: and ax, di
+104e: cmp ax, di
+1050: jne 0x1055
+1052: mov si, 1
+1055: cmp word ptr [0xbc], 0
+105a: jne 0x1089
+105c: push di
+105d: mov ax, 0x200   ; "    LEVEL       FORCEFIELD       WORMS            "
+1060: push ax
+1061: call 0x9346   ; outport
+1064: mov sp, bp
+1066: push di
+1067: mov ax, 0x200   ; "    LEVEL       FORCEFIELD       WORMS            "
+106a: push ax
+106b: call 0x9346   ; outport
+106e: mov sp, bp
+1070: mov ax, di
+1072: mov cx, 4
+1075: shl ax, cl
+1077: push ax
+1078: mov ax, 0x201   ; "   LEVEL       FORCEFIELD       WORMS             "
+107b: push ax
+107c: call 0x8ced   ; inport
+107f: inc sp
+1080: inc sp
+1081: pop dx
+1082: test dx, ax
+1084: jne 0x1089
+1086: mov si, 1
+1089: cmp si, 1
+108c: jne 0x10a5
+108e: mov ax, 0x9c4   ; " that will be explained on"
+1091: push ax
+1092: call 0xa2b3   ; sound
+1095: mov sp, bp
+1097: mov ax, 0x3c
+109a: push ax
+109b: call 0x834a   ; delay
+109e: mov sp, bp
+10a0: call 0xa2df   ; nosound
+10a3: mov sp, bp
+10a5: mov ax, 6
+10a8: push ax
+10a9: call 0x834a   ; delay
+10ac: mov sp, bp
+10ae: mov ax, si
+10b0: pop bp
+10b1: pop di
+10b2: pop si
+10b3: ret 
+
+
+==== sub_10b4
+10b4: push si
+10b5: mov ax, 0x2a1
+10b8: push ax
+10b9: mov ax, 0x296   ; "reflex.joy"
+10bc: push ax
+10bd: call 0x8725   ; fopen
+10c0: add sp, 4
+10c3: mov si, ax
+10c5: push si
+10c6: push word ptr [0x48ef]
+10ca: call 0x9468   ; fputc
+10cd: add sp, 4
+10d0: push si
+10d1: push word ptr [0x2906]
+10d5: call 0x9468   ; fputc
+10d8: add sp, 4
+10db: push si
+10dc: push word ptr [0x2904]
+10e0: call 0x9468   ; fputc
+10e3: add sp, 4
+10e6: push si
+10e7: push word ptr [0x48ed]
+10eb: call 0x9468   ; fputc
+10ee: add sp, 4
+10f1: push si
+10f2: call 0x849a   ; fclose
+10f5: inc sp
+10f6: inc sp
+10f7: pop si
+10f8: ret 
+
+
+==== sub_10f9
+10f9: push si
+10fa: mov ax, 0x2a3
+10fd: push ax
+10fe: mov ax, 0x296   ; "reflex.joy"
+1101: push ax
+1102: call 0x8725   ; fopen
+1105: add sp, 4
+1108: mov si, ax
+110a: mov ax, si
+110c: or ax, ax
+110e: jne 0x1120
+1110: xor ax, ax
+1112: mov word ptr [0x48ed], ax
+1115: mov word ptr [0x2904], ax
+1118: mov word ptr [0x2906], ax
+111b: mov word ptr [0x48ef], ax
+111e: jmp 0x114a
+1120: push si
+1121: call 0x8b19   ; fgetc
+1124: inc sp
+1125: inc sp
+1126: mov word ptr [0x48ef], ax
+1129: push si
+112a: call 0x8b19   ; fgetc
+112d: inc sp
+112e: inc sp
+112f: mov word ptr [0x2906], ax
+1132: push si
+1133: call 0x8b19   ; fgetc
+1136: inc sp
+1137: inc sp
+1138: mov word ptr [0x2904], ax
+113b: push si
+113c: call 0x8b19   ; fgetc
+113f: inc sp
+1140: inc sp
+1141: mov word ptr [0x48ed], ax
+1144: mov word ptr [0xbc], 0
+114a: push si
+114b: call 0x849a   ; fclose
+114e: inc sp
+114f: inc sp
+1150: pop si
+1151: ret 
+
+
+==== sub_1152
+1152: mov ax, word ptr [0xae]
+1155: mov dx, 0x12
+1158: mul dx
+115a: mov bx, ax
+115c: add bx, word ptr [0xb0]
+1160: mov al, byte ptr [bx + 0x474d]
+1164: cwde 
+1165: dec ax
+1166: cmp ax, 0xe
+1169: jbe 0x116e
+116b: jmp 0x11e4
+116e: mov bx, ax
+1170: shl bx, 1
+1172: jmp word ptr cs:[bx + 0x1177]
+1195: call 0x11e5
+1198: jmp 0x11e4
+119a: jmp 0x11e4
+119c: call 0x11e5
+119f: jmp 0x11e4
+11a1: mov ax, 1
+11a4: push ax
+11a5: call 0x1246
+11a8: inc sp
+11a9: inc sp
+11aa: jmp 0x11e4
+11ac: call 0x12ea
+11af: jmp 0x11e4
+11b1: call 0x1352
+11b4: jmp 0x11e4
+11b6: call 0x1403
+11b9: jmp 0x11e4
+11bb: call 0x16f1
+11be: jmp 0x11e4
+11c0: call 0x1738
+11c3: jmp 0x11e4
+11c5: mov ax, 6
+11c8: push ax
+11c9: call 0x1246
+11cc: inc sp
+11cd: inc sp
+11ce: jmp 0x11e4
+11d0: call 0x1761
+11d3: jmp 0x11e4
+11d5: call 0x1821
+11d8: jmp 0x11e4
+11da: call 0x18ed
+11dd: jmp 0x11e4
+11df: call 0x11e5
+11e2: jmp 0x11e4
+11e4: ret 
+
+
+==== sub_11e5
+11e5: call 0xddc
+11e8: mov ax, word ptr [0xae]
+11eb: mov dx, 0x12
+11ee: mul dx
+11f0: mov bx, ax
+11f2: add bx, word ptr [0xb0]
+11f6: mov byte ptr [bx + 0x474d], 0xf
+11fb: dec word ptr [0xa4]
+11ff: mov ax, word ptr [0xa4]
+1202: or ax, ax
+1204: jne 0x1209
+1206: call 0x1a5b
+1209: cmp word ptr [0xb6], 0
+120e: jne 0x1218
+1210: xor ax, ax
+1212: push ax
+1213: call 0xb60
+1216: inc sp
+1217: inc sp
+1218: xor ax, ax
+121a: push ax
+121b: mov ax, word ptr [0x2978]
+121e: mov dx, ds
+1220: push dx
+1221: push ax
+1222: mov ax, word ptr [0xb0]
+1225: mov dx, 0x11
+1228: mul dx
+122a: add ax, 0x15
+122d: push ax
+122e: mov ax, word ptr [0xae]
+1231: mov dx, 0x1b
+1234: mul dx
+1236: add ax, 9
+1239: push ax
+123a: lcall 0, 0x533f   ; putimage
+123f: add sp, 0xa
+1242: call 0x7ef
+1245: ret 
+
+
+==== sub_1246
+1246: push si
+1247: push di
+1248: push bp
+1249: mov bp, sp
+124b: mov di, word ptr [bp + 8]
+124e: mov ax, word ptr [0xae]
+1251: mov dx, 0x12
+1254: mul dx
+1256: mov bx, ax
+1258: add bx, word ptr [0xb0]
+125c: mov byte ptr [bx + 0x474d], 0xf
+1261: xor si, si
+1263: jmp 0x12b9
+1265: mov ax, 1
+1268: push ax
+1269: call 0xb60
+126c: mov sp, bp
+126e: inc word ptr [0xa0]
+1272: inc word ptr [0xa2]
+1276: cmp word ptr [0xa2], 0x33
+127b: jne 0x1283
+127d: mov word ptr [0xa2], 1
+1283: cmp word ptr [0xa6], 0xa
+1288: jge 0x128e
+128a: inc word ptr [0xa6]
+128e: inc word ptr [0xa8]
+1292: call 0x7f9
+1295: mov sp, bp
+1297: call 0x858
+129a: mov sp, bp
+129c: call 0x8b3
+129f: mov sp, bp
+12a1: cmp word ptr [0xa2], 0x1e
+12a6: jl 0x12ac
+12a8: dec word ptr [0x9e]
+12ac: cmp word ptr [0xa2], 0x23
+12b1: jl 0x12b8
+12b3: call 0x19df
+12b6: mov sp, bp
+12b8: inc si
+12b9: cmp si, di
+12bb: jl 0x1265
+12bd: xor ax, ax
+12bf: push ax
+12c0: mov ax, word ptr [0x2978]
+12c3: mov dx, ds
+12c5: push dx
+12c6: push ax
+12c7: mov ax, word ptr [0xb0]
+12ca: mov dx, 0x11
+12cd: mul dx
+12cf: add ax, 0x15
+12d2: push ax
+12d3: mov ax, word ptr [0xae]
+12d6: mov dx, 0x1b
+12d9: mul dx
+12db: add ax, 9
+12de: push ax
+12df: lcall 0, 0x533f   ; putimage
+12e4: mov sp, bp
+12e6: pop bp
+12e7: pop di
+12e8: pop si
+12e9: ret 
+
+
+==== sub_12ea
+12ea: push si
+12eb: mov ax, 0xa
+12ee: push ax
+12ef: call 0xcf3
+12f2: inc sp
+12f3: inc sp
+12f4: mov si, ax
+12f6: inc si
+12f7: mov ax, si
+12f9: mov dx, 0xc8
+12fc: mul dx
+12fe: push ax
+12ff: call 0xa2b3   ; sound
+1302: inc sp
+1303: inc sp
+1304: xor ax, ax
+1306: push ax
+1307: mov bx, si
+1309: add bx, 0xf
+130c: shl bx, 1
+130e: mov ax, word ptr [bx + 0x295a]
+1312: mov dx, ds
+1314: push dx
+1315: push ax
+1316: mov ax, word ptr [0xb0]
+1319: mov dx, 0x11
+131c: mul dx
+131e: add ax, 0x15
+1321: push ax
+1322: mov ax, word ptr [0xae]
+1325: mov dx, 0x1b
+1328: mul dx
+132a: add ax, 9
+132d: push ax
+132e: lcall 0, 0x533f   ; putimage
+1333: add sp, 0xa
+1336: mov ax, si
+1338: mov dx, 0x64
+133b: mul dx
+133d: cdq 
+133e: add ax, word ptr [0xaa]
+1342: adc dx, word ptr [0xac]
+1346: mov word ptr [0xac], dx
+134a: mov word ptr [0xaa], ax
+134d: call 0x7f9
+1350: pop si
+1351: ret 
+
+
+==== sub_1352
+1352: push si
+1353: push di
+1354: xor di, di
+1356: jmp 0x13f8
+1359: xor si, si
+135b: jmp 0x13ef
+135e: mov ax, 0xfa0   ; "rned each time you decend a level until a max-"
+1361: push ax
+1362: call 0xcf3
+1365: inc sp
+1366: inc sp
+1367: push ax
+1368: call 0xa2b3   ; sound
+136b: inc sp
+136c: inc sp
+136d: mov ax, si
+136f: mov dx, 0x12
+1372: mul dx
+1374: mov bx, ax
+1376: add bx, di
+1378: cmp byte ptr [bx + 0x474d], 0xf
+137d: jge 0x13eb
+137f: mov ax, si
+1381: mov dx, 0x12
+1384: mul dx
+1386: mov bx, ax
+1388: add bx, di
+138a: cmp byte ptr [bx + 0x474d], 3
+138f: jle 0x13eb
+1391: xor ax, ax
+1393: push ax
+1394: mov ax, si
+1396: mov dx, 0x12
+1399: mul dx
+139b: mov bx, ax
+139d: add bx, di
+139f: dec byte ptr [bx + 0x474d]
+13a3: mov al, byte ptr [bx + 0x474d]
+13a7: cwde 
+13a8: mov bx, ax
+13aa: shl bx, 1
+13ac: mov ax, word ptr [bx + 0x295a]
+13b0: mov dx, ds
+13b2: push dx
+13b3: push ax
+13b4: mov ax, di
+13b6: mov dx, 0x11
+13b9: mul dx
+13bb: add ax, 0x15
+13be: push ax
+13bf: mov ax, si
+13c1: mov dx, 0x1b
+13c4: mul dx
+13c6: add ax, 9
+13c9: push ax
+13ca: lcall 0, 0x533f   ; putimage
+13cf: add sp, 0xa
+13d2: mov ax, 5
+13d5: push ax
+13d6: call 0xcf3
+13d9: inc sp
+13da: inc sp
+13db: cdq 
+13dc: add ax, word ptr [0xaa]
+13e0: adc dx, word ptr [0xac]
+13e4: mov word ptr [0xac], dx
+13e8: mov word ptr [0xaa], ax
+13eb: call 0xa2df   ; nosound
+13ee: inc si
+13ef: cmp si, 0x17
+13f2: jge 0x13f7
+13f4: jmp 0x135e
+13f7: inc di
+13f8: cmp di, 0x12
+13fb: jge 0x1400
+13fd: jmp 0x1359
+1400: pop di
+1401: pop si
+1402: ret 
+
+
+==== sub_1403
+1403: push si
+1404: push di
+1405: push bp
+1406: mov bp, sp
+1408: sub sp, 8
+140b: call 0xd64
+140e: mov ax, 6
+1411: push ax
+1412: lcall 0, 0x517d   ; setbkcolor
+1417: inc sp
+1418: inc sp
+1419: mov si, word ptr [0xa0]
+141d: add si, 2
+1420: jmp 0x16aa
+1423: cmp si, 3
+1426: jne 0x1433
+1428: mov ax, 4
+142b: push ax
+142c: lcall 0, 0x517d   ; setbkcolor
+1431: inc sp
+1432: inc sp
+1433: cmp si, 2
+1436: jne 0x1443
+1438: mov ax, 2
+143b: push ax
+143c: lcall 0, 0x517d   ; setbkcolor
+1441: inc sp
+1442: inc sp
+1443: cmp si, 1
+1446: jne 0x1453
+1448: mov ax, 7
+144b: push ax
+144c: lcall 0, 0x517d   ; setbkcolor
+1451: inc sp
+1452: inc sp
+1453: mov ax, word ptr [0xae]
+1456: mov word ptr [bp - 6], ax
+1459: mov ax, word ptr [0xb0]
+145c: mov word ptr [bp - 4], ax
+145f: cmp word ptr [0xbc], 0
+1464: je 0x146b
+1466: call 0xf11
+1469: jmp 0x14a6
+146b: push word ptr [0x2904]
+146f: push word ptr [0x48ef]
+1473: mov ax, 1
+1476: push ax
+1477: call 0xfc7
+147a: add sp, 6
+147d: mov di, ax
+147f: push word ptr [0x48ed]
+1483: push word ptr [0x2906]
+1487: mov ax, 2
+148a: push ax
+148b: call 0xfc7
+148e: add sp, 6
+1491: mov word ptr [bp - 8], ax
+1494: or di, di
+1496: jne 0x149c
+1498: or ax, ax
+149a: je 0x14a6
+149c: mov word ptr [0xb2], di
+14a0: mov ax, word ptr [bp - 8]
+14a3: mov word ptr [0xb4], ax
+14a6: mov ax, word ptr [0xb2]
+14a9: add word ptr [0xae], ax
+14ad: cmp word ptr [0xae], 0
+14b2: jge 0x14ba
+14b4: mov word ptr [0xae], 0x16
+14ba: cmp word ptr [0xae], 0x16
+14bf: jle 0x14c7
+14c1: mov word ptr [0xae], 0
+14c7: mov ax, word ptr [0xb4]
+14ca: add word ptr [0xb0], ax
+14ce: cmp word ptr [0xb0], 0
+14d3: jge 0x14db
+14d5: mov word ptr [0xb0], 0x11
+14db: cmp word ptr [0xb0], 0x11
+14e0: jle 0x14e8
+14e2: mov word ptr [0xb0], 0
+14e8: mov ax, word ptr [bp - 6]
+14eb: mov dx, 0x12
+14ee: mul dx
+14f0: mov bx, ax
+14f2: add bx, word ptr [bp - 4]
+14f5: mov byte ptr [bx + 0x474d], 1
+14fa: xor ax, ax
+14fc: push ax
+14fd: mov ax, word ptr [0x295c]
+1500: mov dx, ds
+1502: push dx
+1503: push ax
+1504: mov ax, word ptr [bp - 4]
+1507: mov dx, 0x11
+150a: mul dx
+150c: add ax, 0x15
+150f: push ax
+1510: mov ax, word ptr [bp - 6]
+1513: mov dx, 0x1b
+1516: mul dx
+1518: add ax, 9
+151b: push ax
+151c: lcall 0, 0x533f   ; putimage
+1521: add sp, 0xa
+1524: xor ax, ax
+1526: push ax
+1527: mov ax, word ptr [0x298e]
+152a: mov dx, ds
+152c: push dx
+152d: push ax
+152e: mov ax, word ptr [0xb0]
+1531: mov dx, 0x11
+1534: mul dx
+1536: add ax, 0x15
+1539: push ax
+153a: mov ax, word ptr [0xae]
+153d: mov dx, 0x1b
+1540: mul dx
+1542: add ax, 9
+1545: push ax
+1546: lcall 0, 0x533f   ; putimage
+154b: add sp, 0xa
+154e: mov ax, word ptr [0xae]
+1551: mov dx, 0x12
+1554: mul dx
+1556: mov bx, ax
+1558: add bx, word ptr [0xb0]
+155c: cmp byte ptr [bx + 0x474d], 0xf
+1561: jne 0x156b
+1563: call 0x11e5
+1566: xor si, si
+1568: jmp 0x16a9
+156b: mov ax, word ptr [0xae]
+156e: mov dx, 0x12
+1571: mul dx
+1573: mov bx, ax
+1575: add bx, word ptr [0xb0]
+1579: cmp byte ptr [bx + 0x474d], 3
+157e: jg 0x1583
+1580: jmp 0x1614
+1583: mov ax, word ptr [0xae]
+1586: mov dx, 0x12
+1589: mul dx
+158b: mov bx, ax
+158d: add bx, word ptr [0xb0]
+1591: mov al, byte ptr [bx + 0x474d]
+1595: cwde 
+1596: mov dx, 0xc8
+1599: mul dx
+159b: push ax
+159c: call 0xa2b3   ; sound
+159f: inc sp
+15a0: inc sp
+15a1: xor ax, ax
+15a3: push ax
+15a4: mov ax, word ptr [0xae]
+15a7: mov dx, 0x12
+15aa: mul dx
+15ac: mov bx, ax
+15ae: add bx, word ptr [0xb0]
+15b2: mov al, byte ptr [bx + 0x474d]
+15b6: cwde 
+15b7: mov bx, ax
+15b9: add bx, 0xc
+15bc: shl bx, 1
+15be: mov ax, word ptr [bx + 0x295a]
+15c2: mov dx, ds
+15c4: push dx
+15c5: push ax
+15c6: mov ax, word ptr [0xb0]
+15c9: mov dx, 0x11
+15cc: mul dx
+15ce: add ax, 0x15
+15d1: push ax
+15d2: mov ax, word ptr [0xae]
+15d5: mov dx, 0x1b
+15d8: mul dx
+15da: add ax, 9
+15dd: push ax
+15de: lcall 0, 0x533f   ; putimage
+15e3: add sp, 0xa
+15e6: mov ax, word ptr [0xae]
+15e9: mov dx, 0x12
+15ec: mul dx
+15ee: mov bx, ax
+15f0: add bx, word ptr [0xb0]
+15f4: mov al, byte ptr [bx + 0x474d]
+15f8: cwde 
+15f9: add ax, 0xfffd
+15fc: mov dx, 0x64
+15ff: mul dx
+1601: cdq 
+1602: add ax, word ptr [0xaa]
+1606: adc dx, word ptr [0xac]
+160a: mov word ptr [0xac], dx
+160e: mov word ptr [0xaa], ax
+1611: call 0x7f9
+1614: mov ax, 4
+1617: push ax
+1618: mov ax, 1
+161b: push ax
+161c: lcall 0, 0x501b   ; setfillstyle
+1621: add sp, 4
+1624: mov ax, 1
+1627: push ax
+1628: mov ax, 5
+162b: push ax
+162c: mov ax, 0x159   ; "ructions"
+162f: push ax
+1630: mov ax, 0x276   ; "t locate Shape File: Reflex.EGA"
+1633: push ax
+1634: mov ax, 0x14f   ; "splay Instructions"
+1637: push ax
+1638: mov ax, 9
+163b: push ax
+163c: lcall 0, 0x5a22   ; bar3d
+1641: add sp, 0xc
+1644: mov ax, 0xe
+1647: push ax
+1648: mov ax, 7
+164b: push ax
+164c: lcall 0, 0x501b   ; setfillstyle
+1651: add sp, 4
+1654: cmp si, 0x32
+1657: jle 0x1660
+1659: mov word ptr [bp - 2], 0x32
+165e: jmp 0x1663
+1660: mov word ptr [bp - 2], si
+1663: mov ax, 1
+1666: push ax
+1667: mov ax, 5
+166a: push ax
+166b: mov ax, 0x159   ; "ructions"
+166e: push ax
+166f: mov ax, word ptr [bp - 2]
+1672: mov dx, 0xc
+1675: mul dx
+1677: add ax, 9
+167a: push ax
+167b: mov ax, 0x14f   ; "splay Instructions"
+167e: push ax
+167f: mov ax, 9
+1682: push ax
+1683: lcall 0, 0x5a22   ; bar3d
+1688: add sp, 0xc
+168b: mov ax, 0x15e   ; "ons"
+168e: push ax
+168f: call 0x834a   ; delay
+1692: inc sp
+1693: inc sp
+1694: mov ax, 0x14
+1697: push ax
+1698: call 0xa2b3   ; sound
+169b: inc sp
+169c: inc sp
+169d: mov ax, 3
+16a0: push ax
+16a1: call 0x834a   ; delay
+16a4: inc sp
+16a5: inc sp
+16a6: call 0xa2df   ; nosound
+16a9: dec si
+16aa: or si, si
+16ac: jle 0x16b1
+16ae: jmp 0x1423
+16b1: mov ax, 4
+16b4: push ax
+16b5: mov ax, 1
+16b8: push ax
+16b9: lcall 0, 0x501b   ; setfillstyle
+16be: add sp, 4
+16c1: mov ax, 1
+16c4: push ax
+16c5: mov ax, 5
+16c8: push ax
+16c9: mov ax, 0x159   ; "ructions"
+16cc: push ax
+16cd: mov ax, 0x276   ; "t locate Shape File: Reflex.EGA"
+16d0: push ax
+16d1: mov ax, 0x14f   ; "splay Instructions"
+16d4: push ax
+16d5: mov ax, 9
+16d8: push ax
+16d9: lcall 0, 0x5a22   ; bar3d
+16de: add sp, 0xc
+16e1: xor ax, ax
+16e3: push ax
+16e4: lcall 0, 0x517d   ; setbkcolor
+16e9: inc sp
+16ea: inc sp
+16eb: mov sp, bp
+16ed: pop bp
+16ee: pop di
+16ef: pop si
+16f0: ret 
+
+
+==== sub_16f1
+16f1: cmp word ptr [0xa4], 0xa
+16f6: jge 0x1734
+16f8: mov ax, 0x190   ; "w The Top Forty "
+16fb: push ax
+16fc: call 0xa2b3   ; sound
+16ff: inc sp
+1700: inc sp
+1701: mov ax, 0xfa
+1704: push ax
+1705: call 0x834a   ; delay
+1708: inc sp
+1709: inc sp
+170a: mov ax, 0xdac   ; " the number of turns in which you could use your f"
+170d: push ax
+170e: call 0xa2b3   ; sound
+1711: inc sp
+1712: inc sp
+1713: mov ax, 0x96
+1716: push ax
+1717: call 0x834a   ; delay
+171a: inc sp
+171b: inc sp
+171c: mov dx, word ptr [0xac]
+1720: mov ax, word ptr [0xaa]
+1723: add ax, 0xbb8
+1726: adc dx, 0
+1729: mov word ptr [0xac], dx
+172d: mov word ptr [0xaa], ax
+1730: inc word ptr [0xa4]
+1734: call 0x7ef
+1737: ret 
+
+
+==== sub_1738
+1738: push si
+1739: mov ax, 4
+173c: push ax
+173d: call 0xcf3
+1740: inc sp
+1741: inc sp
+1742: mov si, ax
+1744: jmp 0x175b
+1746: call 0xd9e
+1749: dec word ptr [0xa4]
+174d: mov ax, word ptr [0xa4]
+1750: or ax, ax
+1752: jne 0x1757
+1754: call 0x1a5b
+1757: call 0x7ef
+175a: dec si
+175b: or si, si
+175d: jg 0x1746
+175f: pop si
+1760: ret 
+
+
+==== sub_1761
+1761: push si
+1762: push di
+1763: push bp
+1764: mov bp, sp
+1766: dec sp
+1767: dec sp
+1768: mov word ptr [bp - 2], 0
+176d: jmp 0x1812
+1770: xor di, di
+1772: jmp 0x1807
+1775: mov ax, di
+1777: mov dx, 0x12
+177a: mul dx
+177c: mov bx, ax
+177e: add bx, word ptr [bp - 2]
+1781: cmp byte ptr [bx + 0x474d], 1
+1786: je 0x178b
+1788: jmp 0x1806
+178b: mov ax, di
+178d: mov dx, 0x12
+1790: mul dx
+1792: mov bx, ax
+1794: add bx, word ptr [bp - 2]
+1797: mov byte ptr [bx + 0x474d], 0xf
+179c: xor ax, ax
+179e: push ax
+179f: mov ax, word ptr [0x2978]
+17a2: mov dx, ds
+17a4: push dx
+17a5: push ax
+17a6: mov ax, word ptr [bp - 2]
+17a9: mov dx, 0x11
+17ac: mul dx
+17ae: add ax, 0x15
+17b1: push ax
+17b2: mov ax, di
+17b4: mov dx, 0x1b
+17b7: mul dx
+17b9: add ax, 9
+17bc: push ax
+17bd: lcall 0, 0x533f   ; putimage
+17c2: add sp, 0xa
+17c5: mov si, 0x64
+17c8: jmp 0x17eb
+17ca: mov ax, si
+17cc: mov dx, 0xa
+17cf: mul dx
+17d1: push ax
+17d2: call 0xa2b3   ; sound
+17d5: inc sp
+17d6: inc sp
+17d7: mov ax, si
+17d9: mov bx, 3
+17dc: cdq 
+17dd: idiv bx
+17df: push ax
+17e0: call 0x834a   ; delay
+17e3: inc sp
+17e4: inc sp
+17e5: call 0xa2df   ; nosound
+17e8: sub si, 7
+17eb: or si, si
+17ed: jg 0x17ca
+17ef: mov dx, word ptr [0xac]
+17f3: mov ax, word ptr [0xaa]
+17f6: add ax, 8
+17f9: adc dx, 0
+17fc: mov word ptr [0xac], dx
+1800: mov word ptr [0xaa], ax
+1803: call 0x7ef
+1806: inc di
+1807: cmp di, 0x17
+180a: jge 0x180f
+180c: jmp 0x1775
+180f: inc word ptr [bp - 2]
+1812: cmp word ptr [bp - 2], 0x12
+1816: jge 0x181b
+1818: jmp 0x1770
+181b: mov sp, bp
+181d: pop bp
+181e: pop di
+181f: pop si
+1820: ret 
+
+
+==== sub_1821
+1821: push si
+1822: xor si, si
+1824: jmp 0x1861
+1826: mov ax, word ptr [0xae]
+1829: mov dx, 0x12
+182c: mul dx
+182e: mov bx, ax
+1830: add bx, si
+1832: mov byte ptr [bx + 0x474d], 2
+1837: xor ax, ax
+1839: push ax
+183a: mov ax, word ptr [0x2960]
+183d: mov dx, ds
+183f: push dx
+1840: push ax
+1841: mov ax, si
+1843: mov dx, 0x11
+1846: mul dx
+1848: add ax, 0x15
+184b: push ax
+184c: mov ax, word ptr [0xae]
+184f: mov dx, 0x1b
+1852: mul dx
+1854: add ax, 9
+1857: push ax
+1858: lcall 0, 0x533f   ; putimage
+185d: add sp, 0xa
+1860: inc si
+1861: cmp si, 0x12
+1864: jl 0x1826
+1866: xor si, si
+1868: jmp 0x18a6
+186a: mov ax, si
+186c: mov dx, 0x12
+186f: mul dx
+1871: mov bx, ax
+1873: add bx, word ptr [0xb0]
+1877: mov byte ptr [bx + 0x474d], 2
+187c: xor ax, ax
+187e: push ax
+187f: mov ax, word ptr [0x2960]
+1882: mov dx, ds
+1884: push dx
+1885: push ax
+1886: mov ax, word ptr [0xb0]
+1889: mov dx, 0x11
+188c: mul dx
+188e: add ax, 0x15
+1891: push ax
+1892: mov ax, si
+1894: mov dx, 0x1b
+1897: mul dx
+1899: add ax, 9
+189c: push ax
+189d: lcall 0, 0x533f   ; putimage
+18a2: add sp, 0xa
+18a5: inc si
+18a6: cmp si, 0x17
+18a9: jl 0x186a
+18ab: mov dx, word ptr [0xac]
+18af: mov ax, word ptr [0xaa]
+18b2: add ax, 0xfa0
+18b5: adc dx, 0
+18b8: mov word ptr [0xac], dx
+18bc: mov word ptr [0xaa], ax
+18bf: call 0x7ef
+18c2: mov si, 0x14
+18c5: jmp 0x18e4
+18c7: mov ax, 0xbb8   ; "begins"
+18ca: push ax
+18cb: call 0xcf3
+18ce: inc sp
+18cf: inc sp
+18d0: push ax
+18d1: call 0xa2b3   ; sound
+18d4: inc sp
+18d5: inc sp
+18d6: push si
+18d7: call 0xcf3
+18da: inc sp
+18db: inc sp
+18dc: inc ax
+18dd: push ax
+18de: call 0x834a   ; delay
+18e1: inc sp
+18e2: inc sp
+18e3: dec si
+18e4: or si, si
+18e6: jg 0x18c7
+18e8: call 0xa2df   ; nosound
+18eb: pop si
+18ec: ret 
+
+
+==== sub_18ed
+18ed: push si
+18ee: push di
+18ef: push bp
+18f0: mov bp, sp
+18f2: dec sp
+18f3: dec sp
+18f4: mov word ptr [bp - 2], 0
+18f9: jmp 0x19d0
+18fc: xor di, di
+18fe: jmp 0x19c5
+1901: mov ax, di
+1903: mov dx, 0x12
+1906: mul dx
+1908: mov bx, ax
+190a: add bx, word ptr [bp - 2]
+190d: cmp byte ptr [bx + 0x474d], 0xe
+1912: je 0x1917
+1914: jmp 0x19c4
+1917: mov ax, di
+1919: mov dx, 0x12
+191c: mul dx
+191e: mov bx, ax
+1920: add bx, word ptr [bp - 2]
+1923: mov byte ptr [bx + 0x474d], 3
+1928: mov si, 0x23
+192b: jmp 0x19a9
+192d: mov ax, si
+192f: mov dx, 0xa
+1932: mul dx
+1934: push ax
+1935: call 0xa2b3   ; sound
+1938: inc sp
+1939: inc sp
+193a: xor ax, ax
+193c: push ax
+193d: mov ax, word ptr [0x2976]
+1940: mov dx, ds
+1942: push dx
+1943: push ax
+1944: mov ax, word ptr [bp - 2]
+1947: mov dx, 0x11
+194a: mul dx
+194c: add ax, 0x15
+194f: push ax
+1950: mov ax, di
+1952: mov dx, 0x1b
+1955: mul dx
+1957: add ax, 9
+195a: push ax
+195b: lcall 0, 0x533f   ; putimage
+1960: add sp, 0xa
+1963: push si
+1964: call 0x834a   ; delay
+1967: inc sp
+1968: inc sp
+1969: mov ax, si
+196b: mov dx, 0x64
+196e: mul dx
+1970: push ax
+1971: call 0xa2b3   ; sound
+1974: inc sp
+1975: inc sp
+1976: xor ax, ax
+1978: push ax
+1979: mov ax, word ptr [0x2960]
+197c: mov dx, ds
+197e: push dx
+197f: push ax
+1980: mov ax, word ptr [bp - 2]
+1983: mov dx, 0x11
+1986: mul dx
+1988: add ax, 0x15
+198b: push ax
+198c: mov ax, di
+198e: mov dx, 0x1b
+1991: mul dx
+1993: add ax, 9
+1996: push ax
+1997: lcall 0, 0x533f   ; putimage
+199c: add sp, 0xa
+199f: push si
+19a0: call 0x834a   ; delay
+19a3: inc sp
+19a4: inc sp
+19a5: call 0xa2df   ; nosound
+19a8: dec si
+19a9: or si, si
+19ab: jg 0x192d
+19ad: mov dx, word ptr [0xac]
+19b1: mov ax, word ptr [0xaa]
+19b4: add ax, 0x1f4
+19b7: adc dx, 0
+19ba: mov word ptr [0xac], dx
+19be: mov word ptr [0xaa], ax
+19c1: call 0x7ef
+19c4: inc di
+19c5: cmp di, 0x17
+19c8: jge 0x19cd
+19ca: jmp 0x1901
+19cd: inc word ptr [bp - 2]
+19d0: cmp word ptr [bp - 2], 0x12
+19d4: jge 0x19d9
+19d6: jmp 0x18fc
+19d9: mov sp, bp
+19db: pop bp
+19dc: pop di
+19dd: pop si
+19de: ret 
+
+
+==== sub_19df
+19df: push si
+19e0: mov ax, 0x17
+19e3: push ax
+19e4: call 0xcf3
+19e7: inc sp
+19e8: inc sp
+19e9: mov word ptr [0x9e], ax
+19ec: xor si, si
+19ee: jmp 0x1a54
+19f0: mov ax, word ptr [0x9e]
+19f3: mov dx, 0x12
+19f6: mul dx
+19f8: mov bx, ax
+19fa: add bx, si
+19fc: mov byte ptr [bx + 0x474d], 3
+1a01: xor ax, ax
+1a03: push ax
+1a04: mov ax, word ptr [0x2978]
+1a07: mov dx, ds
+1a09: push dx
+1a0a: push ax
+1a0b: mov ax, si
+1a0d: mov dx, 0x11
+1a10: mul dx
+1a12: add ax, 0x15
+1a15: push ax
+1a16: mov ax, word ptr [0x9e]
+1a19: mov dx, 0x1b
+1a1c: mul dx
+1a1e: add ax, 9
+1a21: push ax
+1a22: lcall 0, 0x533f   ; putimage
+1a27: add sp, 0xa
+1a2a: xor ax, ax
+1a2c: push ax
+1a2d: mov ax, word ptr [0x2960]
+1a30: mov dx, ds
+1a32: push dx
+1a33: push ax
+1a34: mov ax, si
+1a36: mov dx, 0x11
+1a39: mul dx
+1a3b: add ax, 0x15
+1a3e: push ax
+1a3f: mov ax, word ptr [0x9e]
+1a42: mov dx, 0x1b
+1a45: mul dx
+1a47: add ax, 9
+1a4a: push ax
+1a4b: lcall 0, 0x533f   ; putimage
+1a50: add sp, 0xa
+1a53: inc si
+1a54: cmp si, 0x12
+1a57: jl 0x19f0
+1a59: pop si
+1a5a: ret 
+
+
+==== sub_1a5b
+1a5b: call 0x7ef
+1a5e: mov word ptr [0xb6], 1
+1a64: mov ax, 1
+1a67: push ax
+1a68: lcall 0, 0x517d   ; setbkcolor
+1a6d: inc sp
+1a6e: inc sp
+1a6f: mov ax, 4
+1a72: push ax
+1a73: mov ax, 0xb
+1a76: push ax
+1a77: lcall 0, 0x501b   ; setfillstyle
+1a7c: add sp, 4
+1a7f: mov ax, 2
+1a82: push ax
+1a83: mov ax, 0xc
+1a86: push ax
+1a87: mov ax, 0xb4
+1a8a: push ax
+1a8b: mov ax, 0x170   ; "ained "
+1a8e: push ax
+1a8f: mov ax, 0x96
+1a92: push ax
+1a93: mov ax, 0x100
+1a96: push ax
+1a97: lcall 0, 0x5a22   ; bar3d
+1a9c: add sp, 0xc
+1a9f: mov ax, 0xe
+1aa2: push ax
+1aa3: lcall 0, 0x5aea   ; setcolor
+1aa8: inc sp
+1aa9: inc sp
+1aaa: push ds
+1aab: mov ax, 0x2a5   ; "  GAME OVER!  "
+1aae: push ax
+1aaf: mov ax, 0xa0
+1ab2: push ax
+1ab3: mov ax, 0x100
+1ab6: push ax
+1ab7: lcall 0, 0x5c28   ; outtextxy
+1abc: add sp, 8
+1abf: call 0xccb
+1ac2: ret 
+
+
+==== sub_1ac3
+1ac3: push si
+1ac4: push di
+1ac5: mov ax, 1
+1ac8: push ax
+1ac9: call 0x808c   ; textbackground
+1acc: inc sp
+1acd: inc sp
+1ace: call 0x804d   ; clrscr
+1ad1: mov ax, 4
+1ad4: push ax
+1ad5: call 0x808c   ; textbackground
+1ad8: inc sp
+1ad9: inc sp
+1ada: mov ax, 1
+1add: push ax
+1ade: mov ax, 0xb
+1ae1: push ax
+1ae2: call 0x8be6   ; gotoxy
+1ae5: add sp, 4
+1ae8: mov ax, 0x2b4   ; "                   Joystick Calibration           "
+1aeb: push ax
+1aec: call 0x8200   ; cprintf
+1aef: inc sp
+1af0: inc sp
+1af1: mov ax, 2
+1af4: push ax
+1af5: mov ax, 0xb
+1af8: push ax
+1af9: call 0x8be6   ; gotoxy
+1afc: add sp, 4
+1aff: mov ax, 0x2f1   ; "                                                  "
+1b02: push ax
+1b03: call 0x8200   ; cprintf
+1b06: inc sp
+1b07: inc sp
+1b08: mov ax, 3
+1b0b: push ax
+1b0c: mov ax, 0xb
+1b0f: push ax
+1b10: call 0x8be6   ; gotoxy
+1b13: add sp, 4
+1b16: mov ax, 0x32e   ; "  Push the joystick to TOP   and press the joystic"
+1b19: push ax
+1b1a: call 0x8200   ; cprintf
+1b1d: inc sp
+1b1e: inc sp
+1b1f: mov ax, 1
+1b22: push ax
+1b23: call 0x1033
+1b26: inc sp
+1b27: inc sp
+1b28: or ax, ax
+1b2a: je 0x1b32
+1b2c: inc word ptr [0xba]
+1b30: jmp 0x1b1f
+1b32: mov ax, 1
+1b35: push ax
+1b36: call 0x1033
+1b39: inc sp
+1b3a: inc sp
+1b3b: or ax, ax
+1b3d: jne 0x1b45
+1b3f: inc word ptr [0xba]
+1b43: jmp 0x1b32
+1b45: xor ax, ax
+1b47: push ax
+1b48: push ax
+1b49: mov ax, 2
+1b4c: push ax
+1b4d: call 0xfc7
+1b50: add sp, 6
+1b53: mov word ptr [0x2906], ax
+1b56: mov ax, 4
+1b59: push ax
+1b5a: mov ax, 0xb
+1b5d: push ax
+1b5e: call 0x8be6   ; gotoxy
+1b61: add sp, 4
+1b64: mov ax, 0x2f1   ; "                                                  "
+1b67: push ax
+1b68: call 0x8200   ; cprintf
+1b6b: inc sp
+1b6c: inc sp
+1b6d: mov ax, 5
+1b70: push ax
+1b71: mov ax, 0xb
+1b74: push ax
+1b75: call 0x8be6   ; gotoxy
+1b78: add sp, 4
+1b7b: mov ax, 0x36b   ; "  Pull the joystick to DOWN  and press the joystic"
+1b7e: push ax
+1b7f: call 0x8200   ; cprintf
+1b82: inc sp
+1b83: inc sp
+1b84: mov ax, 1
+1b87: push ax
+1b88: call 0x1033
+1b8b: inc sp
+1b8c: inc sp
+1b8d: or ax, ax
+1b8f: je 0x1b97
+1b91: inc word ptr [0xba]
+1b95: jmp 0x1b84
+1b97: mov ax, 1
+1b9a: push ax
+1b9b: call 0x1033
+1b9e: inc sp
+1b9f: inc sp
+1ba0: or ax, ax
+1ba2: jne 0x1baa
+1ba4: inc word ptr [0xba]
+1ba8: jmp 0x1b97
+1baa: xor ax, ax
+1bac: push ax
+1bad: push ax
+1bae: mov ax, 2
+1bb1: push ax
+1bb2: call 0xfc7
+1bb5: add sp, 6
+1bb8: mov word ptr [0x48ed], ax
+1bbb: mov ax, 6
+1bbe: push ax
+1bbf: mov ax, 0xb
+1bc2: push ax
+1bc3: call 0x8be6   ; gotoxy
+1bc6: add sp, 4
+1bc9: mov ax, 0x2f1   ; "                                                  "
+1bcc: push ax
+1bcd: call 0x8200   ; cprintf
+1bd0: inc sp
+1bd1: inc sp
+1bd2: mov ax, 7
+1bd5: push ax
+1bd6: mov ax, 0xb
+1bd9: push ax
+1bda: call 0x8be6   ; gotoxy
+1bdd: add sp, 4
+1be0: mov ax, 0x3a8   ; "  Push the joystick to LEFT  and press the joystic"
+1be3: push ax
+1be4: call 0x8200   ; cprintf
+1be7: inc sp
+1be8: inc sp
+1be9: mov ax, 1
+1bec: push ax
+1bed: call 0x1033
+1bf0: inc sp
+1bf1: inc sp
+1bf2: or ax, ax
+1bf4: je 0x1bfc
+1bf6: inc word ptr [0xba]
+1bfa: jmp 0x1be9
+1bfc: mov ax, 1
+1bff: push ax
+1c00: call 0x1033
+1c03: inc sp
+1c04: inc sp
+1c05: or ax, ax
+1c07: jne 0x1c0f
+1c09: inc word ptr [0xba]
+1c0d: jmp 0x1bfc
+1c0f: xor ax, ax
+1c11: push ax
+1c12: push ax
+1c13: mov ax, 1
+1c16: push ax
+1c17: call 0xfc7
+1c1a: add sp, 6
+1c1d: mov word ptr [0x48ef], ax
+1c20: mov ax, 8
+1c23: push ax
+1c24: mov ax, 0xb
+1c27: push ax
+1c28: call 0x8be6   ; gotoxy
+1c2b: add sp, 4
+1c2e: mov ax, 0x2f1   ; "                                                  "
+1c31: push ax
+1c32: call 0x8200   ; cprintf
+1c35: inc sp
+1c36: inc sp
+1c37: mov ax, 9
+1c3a: push ax
+1c3b: mov ax, 0xb
+1c3e: push ax
+1c3f: call 0x8be6   ; gotoxy
+1c42: add sp, 4
+1c45: mov ax, 0x3e5   ; "  Pull the joystick to RIGHT and press the joystic"
+1c48: push ax
+1c49: call 0x8200   ; cprintf
+1c4c: inc sp
+1c4d: inc sp
+1c4e: mov ax, 1
+1c51: push ax
+1c52: call 0x1033
+1c55: inc sp
+1c56: inc sp
+1c57: or ax, ax
+1c59: je 0x1c61
+1c5b: inc word ptr [0xba]
+1c5f: jmp 0x1c4e
+1c61: mov ax, 1
+1c64: push ax
+1c65: call 0x1033
+1c68: inc sp
+1c69: inc sp
+1c6a: or ax, ax
+1c6c: jne 0x1c74
+1c6e: inc word ptr [0xba]
+1c72: jmp 0x1c61
+1c74: xor ax, ax
+1c76: push ax
+1c77: push ax
+1c78: mov ax, 1
+1c7b: push ax
+1c7c: call 0xfc7
+1c7f: add sp, 6
+1c82: mov word ptr [0x2904], ax
+1c85: mov ax, 0xa
+1c88: push ax
+1c89: mov ax, 0xb
+1c8c: push ax
+1c8d: call 0x8be6   ; gotoxy
+1c90: add sp, 4
+1c93: mov ax, 0x2f1   ; "                                                  "
+1c96: push ax
+1c97: call 0x8200   ; cprintf
+1c9a: inc sp
+1c9b: inc sp
+1c9c: mov ax, 0xb
+1c9f: push ax
+1ca0: push ax
+1ca1: call 0x8be6   ; gotoxy
+1ca4: add sp, 4
+1ca7: mov ax, 0x422   ; "Release the joystick to center and press the joyst"
+1caa: push ax
+1cab: call 0x8200   ; cprintf
+1cae: inc sp
+1caf: inc sp
+1cb0: mov ax, 1
+1cb3: push ax
+1cb4: call 0x1033
+1cb7: inc sp
+1cb8: inc sp
+1cb9: or ax, ax
+1cbb: je 0x1cc3
+1cbd: inc word ptr [0xba]
+1cc1: jmp 0x1cb0
+1cc3: mov ax, 1
+1cc6: push ax
+1cc7: call 0x1033
+1cca: inc sp
+1ccb: inc sp
+1ccc: or ax, ax
+1cce: jne 0x1cd6
+1cd0: inc word ptr [0xba]
+1cd4: jmp 0x1cc3
+1cd6: xor ax, ax
+1cd8: push ax
+1cd9: push ax
+1cda: mov ax, 1
+1cdd: push ax
+1cde: call 0xfc7
+1ce1: add sp, 6
+1ce4: mov si, ax
+1ce6: xor ax, ax
+1ce8: push ax
+1ce9: push ax
+1cea: mov ax, 2
+1ced: push ax
+1cee: call 0xfc7
+1cf1: add sp, 6
+1cf4: mov di, ax
+1cf6: mov ax, si
+1cf8: sub ax, word ptr [0x48ef]
+1cfc: mov bx, 4
+1cff: cdq 
+1d00: idiv bx
+1d02: mov word ptr [0x48ef], ax
+1d05: mov ax, di
+1d07: sub ax, word ptr [0x2906]
+1d0b: cdq 
+1d0c: idiv bx
+1d0e: mov word ptr [0x2906], ax
+1d11: mov ax, word ptr [0x2904]
+1d14: sub ax, si
+1d16: cdq 
+1d17: idiv bx
+1d19: mov dx, 3
+1d1c: mul dx
+1d1e: add ax, si
+1d20: mov word ptr [0x2904], ax
+1d23: mov ax, word ptr [0x48ed]
+1d26: sub ax, di
+1d28: cdq 
+1d29: idiv bx
+1d2b: mov dx, 3
+1d2e: mul dx
+1d30: add ax, di
+1d32: mov word ptr [0x48ed], ax
+1d35: call 0x10b4
+1d38: pop di
+1d39: pop si
+1d3a: ret 
+
+
+==== sub_1d3b
+1d3b: mov ax, 6
+1d3e: push ax
+1d3f: call 0x808c   ; textbackground
+1d42: inc sp
+1d43: inc sp
+1d44: call 0x804d   ; clrscr
+1d47: mov ax, 1
+1d4a: push ax
+1d4b: call 0x8076   ; textcolor
+1d4e: inc sp
+1d4f: inc sp
+1d50: mov ax, 1
+1d53: push ax
+1d54: mov ax, 0x15
+1d57: push ax
+1d58: call 0x8be6   ; gotoxy
+1d5b: add sp, 4
+1d5e: mov ax, 0x45f   ; "How to Use the Keyboard to Play Reflex
+
+"
+1d61: push ax
+1d62: call 0x8200   ; cprintf
+1d65: inc sp
+1d66: inc sp
+1d67: mov ax, 0xe
+1d6a: push ax
+1d6b: call 0x8076   ; textcolor
+1d6e: inc sp
+1d6f: inc sp
+1d70: mov ax, 0x488   ; "        To move your Worm use the numeric keypad w"
+1d73: push ax
+1d74: call 0x8200   ; cprintf
+1d77: inc sp
+1d78: inc sp
+1d79: mov ax, 0x4d8
+1d7c: push ax
+1d7d: call 0x8200   ; cprintf
+1d80: inc sp
+1d81: inc sp
+1d82: mov ax, 0x50d
+1d85: push ax
+1d86: call 0x8200   ; cprintf
+1d89: inc sp
+1d8a: inc sp
+1d8b: mov ax, 0x542
+1d8e: push ax
+1d8f: call 0x8200   ; cprintf
+1d92: inc sp
+1d93: inc sp
+1d94: mov ax, 0x577
+1d97: push ax
+1d98: call 0x8200   ; cprintf
+1d9b: inc sp
+1d9c: inc sp
+1d9d: mov ax, 0x5ac
+1da0: push ax
+1da1: call 0x8200   ; cprintf
+1da4: inc sp
+1da5: inc sp
+1da6: mov ax, 0x5e1
+1da9: push ax
+1daa: call 0x8200   ; cprintf
+1dad: inc sp
+1dae: inc sp
+1daf: mov ax, 0x616
+1db2: push ax
+1db3: call 0x8200   ; cprintf
+1db6: inc sp
+1db7: inc sp
+1db8: mov ax, 0x577
+1dbb: push ax
+1dbc: call 0x8200   ; cprintf
+1dbf: inc sp
+1dc0: inc sp
+1dc1: mov ax, 0x5ac
+1dc4: push ax
+1dc5: call 0x8200   ; cprintf
+1dc8: inc sp
+1dc9: inc sp
+1dca: mov ax, 0x64b
+1dcd: push ax
+1dce: call 0x8200   ; cprintf
+1dd1: inc sp
+1dd2: inc sp
+1dd3: mov ax, 0x680
+1dd6: push ax
+1dd7: call 0x8200   ; cprintf
+1dda: inc sp
+1ddb: inc sp
+1ddc: mov ax, 0x577
+1ddf: push ax
+1de0: call 0x8200   ; cprintf
+1de3: inc sp
+1de4: inc sp
+1de5: mov ax, 0x6b5
+1de8: push ax
+1de9: call 0x8200   ; cprintf
+1dec: inc sp
+1ded: inc sp
+1dee: mov ax, 0x6eb   ; "The Right Shift key activates the Forcefield & the"
+1df1: push ax
+1df2: call 0x8200   ; cprintf
+1df5: inc sp
+1df6: inc sp
+1df7: call 0xccb
+1dfa: ret 
+
+
+==== sub_1dfb
+1dfb: push si
+1dfc: push di
+1dfd: xor si, si
+1dff: push word ptr [0xc7]
+1e03: lcall 0, 0x4c1c   ; setgraphmode
+1e08: inc sp
+1e09: inc sp
+1e0a: mov ax, 1
+1e0d: push ax
+1e0e: lcall 0, 0x517d   ; setbkcolor
+1e13: inc sp
+1e14: inc sp
+1e15: mov ax, 3
+1e18: push ax
+1e19: lcall 0, 0x5aea   ; setcolor
+1e1e: inc sp
+1e1f: inc sp
+1e20: push ds
+1e21: mov ax, 0x73b   ; "Reflex Instructions & Explainations"
+1e24: push ax
+1e25: xor ax, ax
+1e27: push ax
+1e28: mov ax, 0xb8
+1e2b: push ax
+1e2c: lcall 0, 0x5c28   ; outtextxy
+1e31: add sp, 8
+1e34: mov ax, 0xe
+1e37: push ax
+1e38: lcall 0, 0x5aea   ; setcolor
+1e3d: inc sp
+1e3e: inc sp
+1e3f: push ds
+1e40: mov ax, 0x75f   ; " Reflex is an Arcade game using joystick or keyboa"
+1e43: push ax
+1e44: inc si
+1e45: mov ax, si
+1e47: mov dx, 0xa
+1e4a: mul dx
+1e4c: push ax
+1e4d: mov ax, 1
+1e50: push ax
+1e51: lcall 0, 0x5c28   ; outtextxy
+1e56: add sp, 8
+1e59: push ds
+1e5a: mov ax, 0x7af   ; "to obtain as many points as possible before exhaus"
+1e5d: push ax
+1e5e: inc si
+1e5f: mov ax, si
+1e61: mov dx, 0xa
+1e64: mul dx
+1e66: push ax
+1e67: mov ax, 1
+1e6a: push ax
+1e6b: lcall 0, 0x5c28   ; outtextxy
+1e70: add sp, 8
+1e73: push ds
+1e74: mov ax, 0x7ff   ; "can manuever your WORM horizontally, vertically & "
+1e77: push ax
+1e78: inc si
+1e79: mov ax, si
+1e7b: mov dx, 0xa
+1e7e: mul dx
+1e80: push ax
+1e81: mov ax, 1
+1e84: push ax
+1e85: lcall 0, 0x5c28   ; outtextxy
+1e8a: add sp, 8
+1e8d: push ds
+1e8e: mov ax, 0x84f   ; "to travel off the edges of the playing field.     "
+1e91: push ax
+1e92: inc si
+1e93: mov ax, si
+1e95: mov dx, 0xa
+1e98: mul dx
+1e9a: push ax
+1e9b: mov ax, 1
+1e9e: push ax
+1e9f: lcall 0, 0x5c28   ; outtextxy
+1ea4: add sp, 8
+1ea7: push ds
+1ea8: mov ax, 0x89f   ; " Once the game begins your WORM will begin travel "
+1eab: push ax
+1eac: inc si
+1ead: mov ax, si
+1eaf: mov dx, 0xa
+1eb2: mul dx
+1eb4: push ax
+1eb5: mov ax, 1
+1eb8: push ax
+1eb9: lcall 0, 0x5c28   ; outtextxy
+1ebe: add sp, 8
+1ec1: push ds
+1ec2: mov ax, 0x8ef   ; "If you don't select a direction the WORM will cont"
+1ec5: push ax
+1ec6: inc si
+1ec7: mov ax, si
+1ec9: mov dx, 0xa
+1ecc: mul dx
+1ece: push ax
+1ecf: mov ax, 1
+1ed2: push ax
+1ed3: lcall 0, 0x5c28   ; outtextxy
+1ed8: add sp, 8
+1edb: push ds
+1edc: mov ax, 0x93f   ; "As the WORM moves it leaves behind a WORM trail. A"
+1edf: push ax
+1ee0: inc si
+1ee1: mov ax, si
+1ee3: mov dx, 0xa
+1ee6: mul dx
+1ee8: push ax
+1ee9: mov ax, 1
+1eec: push ax
+1eed: lcall 0, 0x5c28   ; outtextxy
+1ef2: add sp, 8
+1ef5: push ds
+1ef6: mov ax, 0x98f   ; "appear on the screen. Running into them cause effe"
+1ef9: push ax
+1efa: inc si
+1efb: mov ax, si
+1efd: mov dx, 0xa
+1f00: mul dx
+1f02: push ax
+1f03: mov ax, 1
+1f06: push ax
+1f07: lcall 0, 0x5c28   ; outtextxy
+1f0c: add sp, 8
+1f0f: push ds
+1f10: mov ax, 0x9df   ; "the following page. One vertical strip of the boar"
+1f13: push ax
+1f14: inc si
+1f15: mov ax, si
+1f17: mov dx, 0xa
+1f1a: mul dx
+1f1c: push ax
+1f1d: mov ax, 1
+1f20: push ax
+1f21: lcall 0, 0x5c28   ; outtextxy
+1f26: add sp, 8
+1f29: push ds
+1f2a: mov ax, 0xa2f   ; "fall in the SAFELANE.                             "
+1f2d: push ax
+1f2e: inc si
+1f2f: mov ax, si
+1f31: mov dx, 0xa
+1f34: mul dx
+1f36: push ax
+1f37: mov ax, 1
+1f3a: push ax
+1f3b: lcall 0, 0x5c28   ; outtextxy
+1f40: add sp, 8
+1f43: push ds
+1f44: mov ax, 0xa7f   ; " The game board can be imagined as a stack of scre"
+1f47: push ax
+1f48: inc si
+1f49: mov ax, si
+1f4b: mov dx, 0xa
+1f4e: mul dx
+1f50: push ax
+1f51: mov ax, 1
+1f54: push ax
+1f55: lcall 0, 0x5c28   ; outtextxy
+1f5a: add sp, 8
+1f5d: push ds
+1f5e: mov ax, 0xacf   ; "It is possible to go down LEVELs. The lower the LE"
+1f61: push ax
+1f62: inc si
+1f63: mov ax, si
+1f65: mov dx, 0xa
+1f68: mul dx
+1f6a: push ax
+1f6b: mov ax, 1
+1f6e: push ax
+1f6f: lcall 0, 0x5c28   ; outtextxy
+1f74: add sp, 8
+1f77: push ds
+1f78: mov ax, 0xb1f   ; "appear and the greater the scores obtained.       "
+1f7b: push ax
+1f7c: inc si
+1f7d: mov ax, si
+1f7f: mov dx, 0xa
+1f82: mul dx
+1f84: push ax
+1f85: mov ax, 1
+1f88: push ax
+1f89: lcall 0, 0x5c28   ; outtextxy
+1f8e: add sp, 8
+1f91: push ds
+1f92: mov ax, 0xb6f   ; " At LEVEL 1 the SAFELANE is on right most lane. At"
+1f95: push ax
+1f96: inc si
+1f97: mov ax, si
+1f99: mov dx, 0xa
+1f9c: mul dx
+1f9e: push ax
+1f9f: mov ax, 1
+1fa2: push ax
+1fa3: lcall 0, 0x5c28   ; outtextxy
+1fa8: add sp, 8
+1fab: push ds
+1fac: mov ax, 0xbbf   ; "to move to the left. At level 35, it begins to mov"
+1faf: push ax
+1fb0: inc si
+1fb1: mov ax, si
+1fb3: mov dx, 0xa
+1fb6: mul dx
+1fb8: push ax
+1fb9: mov ax, 1
+1fbc: push ax
+1fbd: lcall 0, 0x5c28   ; outtextxy
+1fc2: add sp, 8
+1fc5: push ds
+1fc6: mov ax, 0xc0f   ; "LEVEL 50 play returns to the way it was at LEVEL 1"
+1fc9: push ax
+1fca: inc si
+1fcb: mov ax, si
+1fcd: mov dx, 0xa
+1fd0: mul dx
+1fd2: push ax
+1fd3: mov ax, 1
+1fd6: push ax
+1fd7: lcall 0, 0x5c28   ; outtextxy
+1fdc: add sp, 8
+1fdf: mov ax, 3
+1fe2: push ax
+1fe3: lcall 0, 0x5aea   ; setcolor
+1fe8: inc sp
+1fe9: inc sp
+1fea: push ds
+1feb: mov ax, 0xc5f   ; "                           Explaining the Status L"
+1fee: push ax
+1fef: inc si
+1ff0: mov ax, si
+1ff2: mov dx, 0xa
+1ff5: mul dx
+1ff7: push ax
+1ff8: mov ax, 1
+1ffb: push ax
+1ffc: lcall 0, 0x5c28   ; outtextxy
+2001: add sp, 8
+2004: mov ax, 7
+2007: push ax
+2008: lcall 0, 0x5aea   ; setcolor
+200d: inc sp
+200e: inc sp
+200f: push ds
+2010: mov ax, 0xcaf   ; "SCORE:0000000    LEVEL:000    FORCEFIELD:00    WOR"
+2013: push ax
+2014: inc si
+2015: mov ax, si
+2017: mov dx, 0xa
+201a: mul dx
+201c: push ax
+201d: mov ax, 1
+2020: push ax
+2021: lcall 0, 0x5c28   ; outtextxy
+2026: add sp, 8
+2029: mov ax, 6
+202c: push ax
+202d: lcall 0, 0x5aea   ; setcolor
+2032: inc sp
+2033: inc sp
+2034: push ds
+2035: mov ax, 0xcff   ; "SCORE is the total points you have acquired at thi"
+2038: push ax
+2039: inc si
+203a: mov ax, si
+203c: mov dx, 0xa
+203f: mul dx
+2041: push ax
+2042: mov ax, 1
+2045: push ax
+2046: lcall 0, 0x5c28   ; outtextxy
+204b: add sp, 8
+204e: push ds
+204f: mov ax, 0xd4f   ; "LEVEL is the current LEVEL that your worm has dece"
+2052: push ax
+2053: inc si
+2054: mov ax, si
+2056: mov dx, 0xa
+2059: mul dx
+205b: push ax
+205c: mov ax, 1
+205f: push ax
+2060: lcall 0, 0x5c28   ; outtextxy
+2065: add sp, 8
+2068: push ds
+2069: mov ax, 0xd9f   ; "FORCEFIELD is the number of turns in which you cou"
+206c: push ax
+206d: inc si
+206e: mov ax, si
+2070: mov dx, 0xa
+2073: mul dx
+2075: push ax
+2076: mov ax, 1
+2079: push ax
+207a: lcall 0, 0x5c28   ; outtextxy
+207f: add sp, 8
+2082: push ds
+2083: mov ax, 0xdef   ; "WORMS is the number of worms you have left before "
+2086: push ax
+2087: inc si
+2088: mov ax, si
+208a: mov dx, 0xa
+208d: mul dx
+208f: push ax
+2090: mov ax, 1
+2093: push ax
+2094: lcall 0, 0x5c28   ; outtextxy
+2099: add sp, 8
+209c: push ds
+209d: mov ax, 0xe3f   ; "To Cancel the game in progress hold down the contr"
+20a0: push ax
+20a1: inc si
+20a2: mov ax, si
+20a4: mov dx, 0xa
+20a7: mul dx
+20a9: push ax
+20aa: mov ax, 1
+20ad: push ax
+20ae: lcall 0, 0x5c28   ; outtextxy
+20b3: add sp, 8
+20b6: mov ax, 3
+20b9: push ax
+20ba: lcall 0, 0x5aea   ; setcolor
+20bf: inc sp
+20c0: inc sp
+20c1: push ds
+20c2: mov ax, 0xe8f   ; "                          Defining Forcefield & Pa"
+20c5: push ax
+20c6: inc si
+20c7: mov ax, si
+20c9: mov dx, 0xa
+20cc: mul dx
+20ce: push ax
+20cf: mov ax, 1
+20d2: push ax
+20d3: lcall 0, 0x5c28   ; outtextxy
+20d8: add sp, 8
+20db: mov ax, 0xe
+20de: push ax
+20df: lcall 0, 0x5aea   ; setcolor
+20e4: inc sp
+20e5: inc sp
+20e6: push ds
+20e7: mov ax, 0xedf   ; "The Forcefield is activated by pressing the first "
+20ea: push ax
+20eb: inc si
+20ec: mov ax, si
+20ee: mov dx, 0xa
+20f1: mul dx
+20f3: push ax
+20f4: mov ax, 1
+20f7: push ax
+20f8: lcall 0, 0x5c28   ; outtextxy
+20fd: add sp, 8
+2100: push ds
+2101: mov ax, 0xf2f   ; "    field allows the WORM to pass through an objec"
+2104: push ax
+2105: inc si
+2106: mov ax, si
+2108: mov dx, 0xa
+210b: mul dx
+210d: push ax
+210e: mov ax, 1
+2111: push ax
+2112: lcall 0, 0x5c28   ; outtextxy
+2117: add sp, 8
+211a: push ds
+211b: mov ax, 0xf7f   ; "    effects. One forcefield is earned each time yo"
+211e: push ax
+211f: inc si
+2120: mov ax, si
+2122: mov dx, 0xa
+2125: mul dx
+2127: push ax
+2128: mov ax, 1
+212b: push ax
+212c: lcall 0, 0x5c28   ; outtextxy
+2131: add sp, 8
+2134: push ds
+2135: mov ax, 0xfcf   ; "    imum of 10 forcefields is reached.            "
+2138: push ax
+2139: inc si
+213a: mov ax, si
+213c: mov dx, 0xa
+213f: mul dx
+2141: push ax
+2142: mov ax, 1
+2145: push ax
+2146: lcall 0, 0x5c28   ; outtextxy
+214b: add sp, 8
+214e: push ds
+214f: mov ax, 0x101f   ; "The PAUSE is activated by pressing the second joys"
+2152: push ax
+2153: inc si
+2154: mov ax, si
+2156: mov dx, 0xa
+2159: mul dx
+215b: push ax
+215c: mov ax, 1
+215f: push ax
+2160: lcall 0, 0x5c28   ; outtextxy
+2165: add sp, 8
+2168: push ds
+2169: mov ax, 0x106f   ; "    all action for 3 seconds. There is only one pa"
+216c: push ax
+216d: inc si
+216e: mov ax, si
+2170: mov dx, 0xa
+2173: mul dx
+2175: push ax
+2176: mov ax, 1
+2179: push ax
+217a: lcall 0, 0x5c28   ; outtextxy
+217f: add sp, 8
+2182: mov ax, 2
+2185: push ax
+2186: lcall 0, 0x5aea   ; setcolor
+218b: inc sp
+218c: inc sp
+218d: add si, 2
+2190: push ds
+2191: mov ax, 0x10bf   ; "Press Any Key to Continue"
+2194: push ax
+2195: inc si
+2196: mov ax, si
+2198: mov dx, 0xa
+219b: mul dx
+219d: push ax
+219e: mov ax, 0xd8
+21a1: push ax
+21a2: lcall 0, 0x5c28   ; outtextxy
+21a7: add sp, 8
+21aa: call 0xccb
+21ad: xor ax, ax
+21af: push ax
+21b0: lcall 0, 0x517d   ; setbkcolor
+21b5: inc sp
+21b6: inc sp
+21b7: lcall 0, 0x4d66   ; gfx_4d66
+21bc: mov ax, 4
+21bf: push ax
+21c0: lcall 0, 0x5aea   ; setcolor
+21c5: inc sp
+21c6: inc sp
+21c7: push ds
+21c8: mov ax, 0x10d9   ; "                   Defining Objects: Their Names a"
+21cb: push ax
+21cc: mov ax, 0xa
+21cf: push ax
+21d0: mov ax, 1
+21d3: push ax
+21d4: lcall 0, 0x5c28   ; outtextxy
+21d9: add sp, 8
+21dc: push ds
+21dd: mov ax, 0x112a   ; "Object Name  Effect                 Object Name   "
+21e0: push ax
+21e1: mov ax, 0x28
+21e4: push ax
+21e5: push ax
+21e6: lcall 0, 0x5c28   ; outtextxy
+21eb: add sp, 8
+21ee: xor di, di
+21f0: jmp 0x2219
+21f2: xor ax, ax
+21f4: push ax
+21f5: mov bx, di
+21f7: shl bx, 1
+21f9: mov ax, word ptr [bx + 0x295a]
+21fd: mov dx, ds
+21ff: push dx
+2200: push ax
+2201: mov ax, di
+2203: mov dx, 0x1e
+2206: mul dx
+2208: add ax, 0x32
+220b: push ax
+220c: mov ax, 3
+220f: push ax
+2210: lcall 0, 0x533f   ; putimage
+2215: add sp, 0xa
+2218: inc di
+2219: cmp di, 8
+221c: jl 0x21f2
+221e: xor di, di
+2220: jmp 0x224c
+2222: xor ax, ax
+2224: push ax
+2225: mov bx, di
+2227: add bx, 8
+222a: shl bx, 1
+222c: mov ax, word ptr [bx + 0x295a]
+2230: mov dx, ds
+2232: push dx
+2233: push ax
+2234: mov ax, di
+2236: mov dx, 0x1e
+2239: mul dx
+223b: add ax, 0x32
+223e: push ax
+223f: mov ax, 0x123   ; "   Functions Menu   "
+2242: push ax
+2243: lcall 0, 0x533f   ; putimage
+2248: add sp, 0xa
+224b: inc di
+224c: cmp di, 8
+224f: jl 0x2222
+2251: mov ax, 0xe
+2254: push ax
+2255: lcall 0, 0x5aea   ; setcolor
+225a: inc sp
+225b: inc sp
+225c: push ds
+225d: mov ax, 0x1166   ; "Worm Head:   This is you"
+2260: push ax
+2261: mov ax, 0x32
+2264: push ax
+2265: mov ax, 0x28
+2268: push ax
+2269: lcall 0, 0x5c28   ; outtextxy
+226e: add sp, 8
+2271: mov ax, 9
+2274: push ax
+2275: lcall 0, 0x5aea   ; setcolor
+227a: inc sp
+227b: inc sp
+227c: push ds
+227d: mov ax, 0x117f   ; "Worm Trail:  Death of Worm"
+2280: push ax
+2281: mov ax, 0x50
+2284: push ax
+2285: mov ax, 0x28
+2288: push ax
+2289: lcall 0, 0x5c28   ; outtextxy
+228e: add sp, 8
+2291: mov ax, 0xe
+2294: push ax
+2295: lcall 0, 0x5aea   ; setcolor
+229a: inc sp
+229b: inc sp
+229c: push ds
+229d: mov ax, 0x119a   ; "Clear Trail: No effect"
+22a0: push ax
+22a1: mov ax, 0x6e
+22a4: push ax
+22a5: mov ax, 0x28
+22a8: push ax
+22a9: lcall 0, 0x5c28   ; outtextxy
+22ae: add sp, 8
+22b1: mov ax, 9
+22b4: push ax
+22b5: lcall 0, 0x5aea   ; setcolor
+22ba: inc sp
+22bb: inc sp
+22bc: push ds
+22bd: mov ax, 0x11b1   ; "Empty Space: No effect"
+22c0: push ax
+22c1: mov ax, 0x8c
+22c4: push ax
+22c5: mov ax, 0x28
+22c8: push ax
+22c9: lcall 0, 0x5c28   ; outtextxy
+22ce: add sp, 8
+22d1: mov ax, 0xe
+22d4: push ax
+22d5: lcall 0, 0x5aea   ; setcolor
+22da: inc sp
+22db: inc sp
+22dc: push ds
+22dd: mov ax, 0x11c8   ; "Pigman:      Death of Worm"
+22e0: push ax
+22e1: mov ax, 0xaa
+22e4: push ax
+22e5: mov ax, 0x28
+22e8: push ax
+22e9: lcall 0, 0x5c28   ; outtextxy
+22ee: add sp, 8
+22f1: mov ax, 9
+22f4: push ax
+22f5: lcall 0, 0x5aea   ; setcolor
+22fa: inc sp
+22fb: inc sp
+22fc: push ds
+22fd: mov ax, 0x11e3   ; "Transport:   Down one Level"
+2300: push ax
+2301: mov ax, 0xc8
+2304: push ax
+2305: mov ax, 0x28
+2308: push ax
+2309: lcall 0, 0x5c28   ; outtextxy
+230e: add sp, 8
+2311: mov ax, 0xe
+2314: push ax
+2315: lcall 0, 0x5aea   ; setcolor
+231a: inc sp
+231b: inc sp
+231c: push ds
+231d: mov ax, 0x11ff   ; "Palmtree:    100 - 1000 points"
+2320: push ax
+2321: mov ax, 0xe6
+2324: push ax
+2325: mov ax, 0x28
+2328: push ax
+2329: lcall 0, 0x5c28   ; outtextxy
+232e: add sp, 8
+2331: mov ax, 9
+2334: push ax
+2335: lcall 0, 0x5aea   ; setcolor
+233a: inc sp
+233b: inc sp
+233c: push ds
+233d: mov ax, 0x121e   ; "Down Arrow:  Deevolves objects"
+2340: push ax
+2341: mov ax, 0x104   ; "pyright 1988 by 3F Productions"
+2344: push ax
+2345: mov ax, 0x28
+2348: push ax
+2349: lcall 0, 0x5c28   ; outtextxy
+234e: add sp, 8
+2351: push ds
+2352: mov ax, 0x123d   ; " Transport becomes Pigman, etc."
+2355: push ax
+2356: mov ax, 0x10e   ; "88 by 3F Productions"
+2359: push ax
+235a: mov ax, 0x28
+235d: push ax
+235e: lcall 0, 0x5c28   ; outtextxy
+2363: add sp, 8
+2366: mov ax, 0xe
+2369: push ax
+236a: lcall 0, 0x5aea   ; setcolor
+236f: inc sp
+2370: inc sp
+2371: push ds
+2372: mov ax, 0x125d   ; "Martini:         Turns on Hunger mode."
+2375: push ax
+2376: mov ax, 0x32
+2379: push ax
+237a: mov ax, 0x148   ; "    "
+237d: push ax
+237e: lcall 0, 0x5c28   ; outtextxy
+2383: add sp, 8
+2386: push ds
+2387: mov ax, 0x1284   ; "   Gobble up objects for fun and profit"
+238a: push ax
+238b: mov ax, 0x3c
+238e: push ax
+238f: mov ax, 0x148   ; "    "
+2392: push ax
+2393: lcall 0, 0x5c28   ; outtextxy
+2398: add sp, 8
+239b: mov ax, 9
+239e: push ax
+239f: lcall 0, 0x5aea   ; setcolor
+23a4: inc sp
+23a5: inc sp
+23a6: push ds
+23a7: mov ax, 0x12ac   ; "Extraman:        Gain one Worm"
+23aa: push ax
+23ab: mov ax, 0x50
+23ae: push ax
+23af: mov ax, 0x148   ; "    "
+23b2: push ax
+23b3: lcall 0, 0x5c28   ; outtextxy
+23b8: add sp, 8
+23bb: mov ax, 0xe
+23be: push ax
+23bf: lcall 0, 0x5aea   ; setcolor
+23c4: inc sp
+23c5: inc sp
+23c6: push ds
+23c7: mov ax, 0x12cb   ; "Demon:           Death of 0 - 3 Worms"
+23ca: push ax
+23cb: mov ax, 0x6e
+23ce: push ax
+23cf: mov ax, 0x148   ; "    "
+23d2: push ax
+23d3: lcall 0, 0x5c28   ; outtextxy
+23d8: add sp, 8
+23db: mov ax, 9
+23de: push ax
+23df: lcall 0, 0x5aea   ; setcolor
+23e4: inc sp
+23e5: inc sp
+23e6: push ds
+23e7: mov ax, 0x12f1   ; "Super Transport: Drop 6 levels"
+23ea: push ax
+23eb: mov ax, 0x8c
+23ee: push ax
+23ef: mov ax, 0x148   ; "    "
+23f2: push ax
+23f3: lcall 0, 0x5c28   ; outtextxy
+23f8: add sp, 8
+23fb: mov ax, 0xe
+23fe: push ax
+23ff: lcall 0, 0x5aea   ; setcolor
+2404: inc sp
+2405: inc sp
+2406: push ds
+2407: mov ax, 0x1310   ; "Sunny Island:    Turns Worm Trail into "
+240a: push ax
+240b: mov ax, 0xaa
+240e: push ax
+240f: mov ax, 0x148   ; "    "
+2412: push ax
+2413: lcall 0, 0x5c28   ; outtextxy
+2418: add sp, 8
+241b: push ds
+241c: mov ax, 0x1338   ; "   Barren Areas"
+241f: push ax
+2420: mov ax, 0xb4
+2423: push ax
+2424: mov ax, 0x148   ; "    "
+2427: push ax
+2428: lcall 0, 0x5c28   ; outtextxy
+242d: add sp, 8
+2430: mov ax, 9
+2433: push ax
+2434: lcall 0, 0x5aea   ; setcolor
+2439: inc sp
+243a: inc sp
+243b: push ds
+243c: mov ax, 0x1348   ; "Cross:           Erase a cross across"
+243f: push ax
+2440: mov ax, 0xc8
+2443: push ax
+2444: mov ax, 0x148   ; "    "
+2447: push ax
+2448: lcall 0, 0x5c28   ; outtextxy
+244d: add sp, 8
+2450: push ds
+2451: mov ax, 0x136e   ; "   the screen, including Barren Areas."
+2454: push ax
+2455: mov ax, 0xd2
+2458: push ax
+2459: mov ax, 0x148   ; "    "
+245c: push ax
+245d: lcall 0, 0x5c28   ; outtextxy
+2462: add sp, 8
+2465: mov ax, 0xe
+2468: push ax
+2469: lcall 0, 0x5aea   ; setcolor
+246e: inc sp
+246f: inc sp
+2470: push ds
+2471: mov ax, 0x1395   ; "Pre Barren Area: Kill one you've killed"
+2474: push ax
+2475: mov ax, 0xe6
+2478: push ax
+2479: mov ax, 0x148   ; "    "
+247c: push ax
+247d: lcall 0, 0x5c28   ; outtextxy
+2482: add sp, 8
+2485: push ds
+2486: mov ax, 0x13bd   ; "   them all"
+2489: push ax
+248a: mov ax, 0xf0
+248d: push ax
+248e: mov ax, 0x148   ; "    "
+2491: push ax
+2492: lcall 0, 0x5c28   ; outtextxy
+2497: add sp, 8
+249a: mov ax, 9
+249d: push ax
+249e: lcall 0, 0x5aea   ; setcolor
+24a3: inc sp
+24a4: inc sp
+24a5: push ds
+24a6: mov ax, 0x13c9   ; "Barren Area:     Death of Worm, even"
+24a9: push ax
+24aa: mov ax, 0x104   ; "pyright 1988 by 3F Productions"
+24ad: push ax
+24ae: mov ax, 0x148   ; "    "
+24b1: push ax
+24b2: lcall 0, 0x5c28   ; outtextxy
+24b7: add sp, 8
+24ba: push ds
+24bb: mov ax, 0x13ee   ; "   in Hunger Mode. Also Doesn't Erase"
+24be: push ax
+24bf: mov ax, 0x10e   ; "88 by 3F Productions"
+24c2: push ax
+24c3: mov ax, 0x148   ; "    "
+24c6: push ax
+24c7: lcall 0, 0x5c28   ; outtextxy
+24cc: add sp, 8
+24cf: mov ax, 2
+24d2: push ax
+24d3: lcall 0, 0x5aea   ; setcolor
+24d8: inc sp
+24d9: inc sp
+24da: push ds
+24db: mov ax, 0x10bf   ; "Press Any Key to Continue"
+24de: push ax
+24df: mov ax, 0x154   ; " Instructions"
+24e2: push ax
+24e3: mov ax, 0xd8
+24e6: push ax
+24e7: lcall 0, 0x5c28   ; outtextxy
+24ec: add sp, 8
+24ef: call 0xccb
+24f2: lcall 0, 0x4c9c   ; restorecrtmode
+24f7: pop di
+24f8: pop si
+24f9: ret 
+
+
+==== sub_24fa
+24fa: push si
+24fb: mov ax, 0x26f   ; "rb"
+24fe: push ax
+24ff: mov ax, 0x1414   ; "reflex.t40"
+2502: push ax
+2503: call 0x8725   ; fopen
+2506: add sp, 4
+2509: mov word ptr [0x48eb], ax
+250c: or ax, ax
+250e: jne 0x2524
+2510: call 0x25ba
+2513: mov ax, 0x26f   ; "rb"
+2516: push ax
+2517: mov ax, 0x1414   ; "reflex.t40"
+251a: push ax
+251b: call 0x8725   ; fopen
+251e: add sp, 4
+2521: mov word ptr [0x48eb], ax
+2524: xor si, si
+2526: jmp 0x2554
+2528: mov ax, si
+252a: shl ax, 1
+252c: shl ax, 1
+252e: add ax, 0x48f1
+2531: push ax
+2532: mov ax, si
+2534: shl ax, 1
+2536: add ax, 0x2908
+2539: push ax
+253a: mov ax, si
+253c: mov dx, 0x15
+253f: mul dx
+2541: add ax, 0x25bc
+2544: push ax
+2545: mov ax, 0x141f   ; "%20s%3d%7lu"
+2548: push ax
+2549: push word ptr [0x48eb]
+254d: call 0x8857   ; fscanf
+2550: add sp, 0xa
+2553: inc si
+2554: cmp si, 0x28
+2557: jl 0x2528
+2559: push word ptr [0x48eb]
+255d: call 0x849a   ; fclose
+2560: inc sp
+2561: inc sp
+2562: pop si
+2563: ret 
+
+
+==== sub_2564
+2564: push si
+2565: mov ax, 0x142b   ; "wb"
+2568: push ax
+2569: mov ax, 0x1414   ; "reflex.t40"
+256c: push ax
+256d: call 0x8725   ; fopen
+2570: add sp, 4
+2573: mov word ptr [0x48eb], ax
+2576: xor si, si
+2578: jmp 0x25aa
+257a: mov bx, si
+257c: shl bx, 1
+257e: shl bx, 1
+2580: push word ptr [bx + 0x48f3]
+2584: push word ptr [bx + 0x48f1]
+2588: mov bx, si
+258a: shl bx, 1
+258c: push word ptr [bx + 0x2908]
+2590: mov ax, si
+2592: mov dx, 0x15
+2595: mul dx
+2597: add ax, 0x25bc
+259a: push ax
+259b: mov ax, 0x141f   ; "%20s%3d%7lu"
+259e: push ax
+259f: push word ptr [0x48eb]
+25a3: call 0x8799   ; fprintf
+25a6: add sp, 0xc
+25a9: inc si
+25aa: cmp si, 0x28
+25ad: jl 0x257a
+25af: push word ptr [0x48eb]
+25b3: call 0x849a   ; fclose
+25b6: inc sp
+25b7: inc sp
+25b8: pop si
+25b9: ret 
+
+
+==== sub_25ba
+25ba: push si
+25bb: push di
+25bc: push bp
+25bd: mov bp, sp
+25bf: sub sp, 0x2c
+25c2: mov ax, 0x142e   ; "Vacant              "
+25c5: push ax
+25c6: lea ax, [bp - 0x2c]
+25c9: push ax
+25ca: call 0xa36a   ; strcpy
+25cd: add sp, 4
+25d0: mov word ptr [bp - 2], 0
+25d5: mov word ptr [bp - 4], 0x3e8   ; "ull the joystick to RIGHT and press the joystick b"
+25da: xor di, di
+25dc: mov ax, 0x142b   ; "wb"
+25df: push ax
+25e0: mov ax, 0x1414   ; "reflex.t40"
+25e3: push ax
+25e4: call 0x8725   ; fopen
+25e7: add sp, 4
+25ea: mov word ptr [0x48eb], ax
+25ed: xor si, si
+25ef: jmp 0x260b
+25f1: push word ptr [bp - 2]
+25f4: push word ptr [bp - 4]
+25f7: push di
+25f8: lea ax, [bp - 0x2c]
+25fb: push ax
+25fc: mov ax, 0x141f   ; "%20s%3d%7lu"
+25ff: push ax
+2600: push word ptr [0x48eb]
+2604: call 0x8799   ; fprintf
+2607: add sp, 0xc
+260a: inc si
+260b: cmp si, 0x28
+260e: jl 0x25f1
+2610: push word ptr [0x48eb]
+2614: call 0x849a   ; fclose
+2617: inc sp
+2618: inc sp
+2619: mov sp, bp
+261b: pop bp
+261c: pop di
+261d: pop si
+261e: ret 
+
+
+==== sub_261f
+261f: push si
+2620: push di
+2621: push bp
+2622: mov bp, sp
+2624: sub sp, 0x2a
+2627: lcall 0, 0x4c9c   ; restorecrtmode
+262c: call 0xd25
+262f: mov ax, 1
+2632: push ax
+2633: call 0x808c   ; textbackground
+2636: inc sp
+2637: inc sp
+2638: call 0x804d   ; clrscr
+263b: mov ax, 7
+263e: push ax
+263f: call 0x808c   ; textbackground
+2642: inc sp
+2643: inc sp
+2644: xor ax, ax
+2646: push ax
+2647: call 0x8076   ; textcolor
+264a: inc sp
+264b: inc sp
+264c: mov ax, 1
+264f: push ax
+2650: push ax
+2651: call 0x8be6   ; gotoxy
+2654: add sp, 4
+2657: mov ax, 0x1443   ; "                                                  "
+265a: push ax
+265b: call 0x8200   ; cprintf
+265e: inc sp
+265f: inc sp
+2660: mov ax, 0x1494   ; "                  Reflex's All Time Greatest Top F"
+2663: push ax
+2664: call 0x8200   ; cprintf
+2667: inc sp
+2668: inc sp
+2669: mov ax, 0x1443   ; "                                                  "
+266c: push ax
+266d: call 0x8200   ; cprintf
+2670: inc sp
+2671: inc sp
+2672: mov ax, 4
+2675: push ax
+2676: call 0x808c   ; textbackground
+2679: inc sp
+267a: inc sp
+267b: mov ax, 0xe
+267e: push ax
+267f: call 0x8076   ; textcolor
+2682: inc sp
+2683: inc sp
+2684: mov ax, 0x14e5   ; "        SCORE LVL  PLAYER'S NAME                SC"
+2687: push ax
+2688: call 0x8200   ; cprintf
+268b: inc sp
+268c: inc sp
+268d: mov ax, 1
+2690: push ax
+2691: call 0x808c   ; textbackground
+2694: inc sp
+2695: inc sp
+2696: xor si, si
+2698: jmp 0x26ff
+269a: mov ax, si
+269c: mov bx, 0x14
+269f: cdq 
+26a0: idiv bx
+26a2: add dx, 5
+26a5: mov word ptr [bp - 2], dx
+26a8: mov di, 3
+26ab: cmp si, 0x13
+26ae: jle 0x26b3
+26b0: mov di, 0x2b
+26b3: push word ptr [bp - 2]
+26b6: push di
+26b7: call 0x8be6   ; gotoxy
+26ba: add sp, 4
+26bd: mov bx, si
+26bf: shl bx, 1
+26c1: push word ptr [bx + 0x2908]
+26c5: mov bx, si
+26c7: shl bx, 1
+26c9: shl bx, 1
+26cb: push word ptr [bx + 0x48f3]
+26cf: push word ptr [bx + 0x48f1]
+26d3: mov ax, si
+26d5: inc ax
+26d6: push ax
+26d7: mov ax, 0x1536   ; "%2d- %7lu %3d  "
+26da: push ax
+26db: lea ax, [bp - 0x2a]
+26de: push ax
+26df: call 0xa30c   ; sprintf
+26e2: add sp, 0xc
+26e5: lea ax, [bp - 0x2a]
+26e8: push ax
+26e9: call 0x8200   ; cprintf
+26ec: inc sp
+26ed: inc sp
+26ee: mov ax, si
+26f0: mov dx, 0x15
+26f3: mul dx
+26f5: add ax, 0x25bc
+26f8: push ax
+26f9: call 0x8200   ; cprintf
+26fc: inc sp
+26fd: inc sp
+26fe: inc si
+26ff: cmp si, 0x28
+2702: jl 0x269a
+2704: cmp word ptr [bp + 8], 0
+2708: je 0x272d
+270a: mov ax, 0x14
+270d: push ax
+270e: call 0x8076   ; textcolor
+2711: inc sp
+2712: inc sp
+2713: mov ax, 0x19
+2716: push ax
+2717: mov ax, 0x1b
+271a: push ax
+271b: call 0x8be6   ; gotoxy
+271e: add sp, 4
+2721: mov ax, 0x1546   ; "Press Any Key when Finished"
+2724: push ax
+2725: call 0x8200   ; cprintf
+2728: inc sp
+2729: inc sp
+272a: call 0xccb
+272d: mov sp, bp
+272f: pop bp
+2730: pop di
+2731: pop si
+2732: ret 
+
+
+==== sub_2733
+2733: push si
+2734: push di
+2735: mov di, 0x27
+2738: mov bx, di
+273a: shl bx, 1
+273c: shl bx, 1
+273e: mov dx, word ptr [bx + 0x48f3]
+2742: mov ax, word ptr [bx + 0x48f1]
+2746: cmp dx, word ptr [0xac]
+274a: ja 0x275d
+274c: jb 0x2754
+274e: cmp ax, word ptr [0xaa]
+2752: jae 0x275d
+2754: dec di
+2755: mov ax, di
+2757: or ax, ax
+2759: jl 0x275d
+275b: jmp 0x2738
+275d: inc di
+275e: mov si, 0x27
+2761: jmp 0x27af
+2763: mov bx, si
+2765: dec bx
+2766: shl bx, 1
+2768: shl bx, 1
+276a: mov dx, word ptr [bx + 0x48f3]
+276e: mov ax, word ptr [bx + 0x48f1]
+2772: mov bx, si
+2774: shl bx, 1
+2776: shl bx, 1
+2778: mov word ptr [bx + 0x48f3], dx
+277c: mov word ptr [bx + 0x48f1], ax
+2780: mov bx, si
+2782: dec bx
+2783: shl bx, 1
+2785: mov ax, word ptr [bx + 0x2908]
+2789: mov bx, si
+278b: shl bx, 1
+278d: mov word ptr [bx + 0x2908], ax
+2791: mov ax, si
+2793: dec ax
+2794: mov dx, 0x15
+2797: mul dx
+2799: add ax, 0x25bc
+279c: push ax
+279d: mov ax, si
+279f: mov dx, 0x15
+27a2: mul dx
+27a4: add ax, 0x25bc
+27a7: push ax
+27a8: call 0xa36a   ; strcpy
+27ab: add sp, 4
+27ae: dec si
+27af: cmp di, si
+27b1: jl 0x2763
+27b3: cmp di, 0x27
+27b6: jge 0x27fe
+27b8: mov dx, word ptr [0xac]
+27bc: mov ax, word ptr [0xaa]
+27bf: mov bx, di
+27c1: shl bx, 1
+27c3: shl bx, 1
+27c5: mov word ptr [bx + 0x48f3], dx
+27c9: mov word ptr [bx + 0x48f1], ax
+27cd: mov ax, word ptr [0xa0]
+27d0: mov bx, di
+27d2: shl bx, 1
+27d4: mov word ptr [bx + 0x2908], ax
+27d8: mov ax, 0x138   ; "                    "
+27db: push ax
+27dc: mov ax, di
+27de: mov dx, 0x15
+27e1: mul dx
+27e3: add ax, 0x25bc
+27e6: push ax
+27e7: call 0xa36a   ; strcpy
+27ea: add sp, 4
+27ed: xor ax, ax
+27ef: push ax
+27f0: call 0x261f
+27f3: inc sp
+27f4: inc sp
+27f5: push di
+27f6: call 0x2801
+27f9: inc sp
+27fa: inc sp
+27fb: call 0x2564
+27fe: pop di
+27ff: pop si
+2800: ret 
+
+
+==== sub_2801
+2801: push si
+2802: push di
+2803: push bp
+2804: mov bp, sp
+2806: sub sp, 4
+2809: mov ax, word ptr [bp + 8]
+280c: mov bx, 0x14
+280f: cdq 
+2810: idiv bx
+2812: add dx, 5
+2815: mov word ptr [bp - 2], dx
+2818: mov word ptr [bp - 4], bx
+281b: cmp word ptr [bp + 8], 0x13
+281f: jle 0x2826
+2821: mov word ptr [bp - 4], 0x3c
+2826: mov ax, 4
+2829: push ax
+282a: call 0x8076   ; textcolor
+282d: inc sp
+282e: inc sp
+282f: mov ax, 1
+2832: push ax
+2833: call 0x808c   ; textbackground
+2836: inc sp
+2837: inc sp
+2838: push word ptr [bp - 2]
+283b: push word ptr [bp - 4]
+283e: call 0x8be6   ; gotoxy
+2841: add sp, 4
+2844: mov ax, 0x138   ; "                    "
+2847: push ax
+2848: call 0x8200   ; cprintf
+284b: inc sp
+284c: inc sp
+284d: mov di, 8
+2850: xor si, si
+2852: mov ax, word ptr [bp + 8]
+2855: mov dx, 0x15
+2858: mul dx
+285a: mov bx, ax
+285c: mov byte ptr [bx + 0x25bc], 0xff
+2861: mov ax, di
+2863: cmp ax, 0x177
+2866: je 0x287d
+2868: jg 0x2876
+286a: cmp ax, 8
+286d: je 0x288c
+286f: cmp ax, 0x20
+2872: je 0x28a4
+2874: jmp 0x28a7
+2876: cmp ax, 0x179
+2879: je 0x2884
+287b: jmp 0x28a7
+287d: or si, si
+287f: jle 0x2882
+2881: dec si
+2882: jmp 0x28c1
+2884: cmp si, 0x13
+2887: jge 0x288a
+2889: inc si
+288a: jmp 0x28c1
+288c: or si, si
+288e: jle 0x2891
+2890: dec si
+2891: mov ax, word ptr [bp + 8]
+2894: mov dx, 0x15
+2897: mul dx
+2899: mov bx, ax
+289b: add bx, si
+289d: mov byte ptr [bx + 0x25bc], 0xff
+28a2: jmp 0x28c1
+28a4: mov di, 0xff
+28a7: mov ax, di
+28a9: push ax
+28aa: mov ax, word ptr [bp + 8]
+28ad: mov dx, 0x15
+28b0: mul dx
+28b2: mov bx, ax
+28b4: add bx, si
+28b6: pop ax
+28b7: mov byte ptr [bx + 0x25bc], al
+28bb: cmp si, 0x13
+28be: jge 0x28c1
+28c0: inc si
+28c1: push word ptr [bp - 2]
+28c4: push word ptr [bp - 4]
+28c7: call 0x8be6   ; gotoxy
+28ca: add sp, 4
+28cd: mov ax, 1
+28d0: push ax
+28d1: call 0x808c   ; textbackground
+28d4: inc sp
+28d5: inc sp
+28d6: mov ax, word ptr [bp + 8]
+28d9: mov dx, 0x15
+28dc: mul dx
+28de: add ax, 0x25bc
+28e1: push ax
+28e2: call 0x8200   ; cprintf
+28e5: inc sp
+28e6: inc sp
+28e7: xor ax, ax
+28e9: push ax
+28ea: call 0x808c   ; textbackground
+28ed: inc sp
+28ee: inc sp
+28ef: push word ptr [bp - 2]
+28f2: mov ax, word ptr [bp - 4]
+28f5: add ax, si
+28f7: push ax
+28f8: call 0x8be6   ; gotoxy
+28fb: add sp, 4
+28fe: inc word ptr [0x22ce]
+2902: mov ax, word ptr [0x22ce]
+2905: or ax, ax
+2907: jge 0x2928
+2909: mov ax, word ptr [bp + 8]
+290c: mov dx, 0x15
+290f: mul dx
+2911: mov bx, ax
+2913: add bx, si
+2915: mov al, byte ptr [bx + 0x25bc]
+2919: inc word ptr [0x22d8]
+291d: mov bx, word ptr [0x22d8]
+2921: mov byte ptr [bx - 1], al
+2924: mov ah, 0
+2926: jmp 0x2942
+2928: mov ax, 0x22ce
+292b: push ax
+292c: mov ax, word ptr [bp + 8]
+292f: mov dx, 0x15
+2932: mul dx
+2934: mov bx, ax
+2936: add bx, si
+2938: push word ptr [bx + 0x25bc]
+293c: call 0x9375   ; lib_9375
+293f: add sp, 4
+2942: call 0x8b60   ; getch
+2945: mov di, ax
+2947: mov ax, di
+2949: or ax, ax
+294b: jne 0x2956
+294d: call 0x8b60   ; getch
+2950: mov di, ax
+2952: add di, 0x12c
+2956: cmp di, 0xd
+2959: je 0x295e
+295b: jmp 0x2861
+295e: mov sp, bp
+2960: pop bp
+2961: pop di
+2962: pop si
+2963: ret 
+
+
+==== sub_2964
+2964: push si
+2965: push di
+2966: push word ptr [0xc7]
+296a: lcall 0, 0x4c1c   ; setgraphmode
+296f: inc sp
+2970: inc sp
+2971: mov ax, 1
+2974: push ax
+2975: lcall 0, 0x517d   ; setbkcolor
+297a: inc sp
+297b: inc sp
+297c: mov ax, 1
+297f: push ax
+2980: push ax
+2981: lcall 0, 0x501b   ; setfillstyle
+2986: add sp, 4
+2989: mov ax, 0x15d   ; "ions"
+298c: push ax
+298d: mov ax, 0x289   ; ": Reflex.EGA"
+2990: push ax
+2991: xor ax, ax
+2993: push ax
+2994: push ax
+2995: lcall 0, 0x59ff   ; bar
+299a: add sp, 8
+299d: mov ax, 0xf
+29a0: push ax
+29a1: lcall 0, 0x517d   ; setbkcolor
+29a6: inc sp
+29a7: inc sp
+29a8: mov si, 1
+29ab: jmp 0x2a29
+29ae: mov ax, si
+29b0: add ax, 9
+29b3: push ax
+29b4: lcall 0, 0x5aea   ; setcolor
+29b9: inc sp
+29ba: inc sp
+29bb: push si
+29bc: xor ax, ax
+29be: push ax
+29bf: push ax
+29c0: lcall 0, 0x5463   ; settextstyle
+29c5: add sp, 6
+29c8: push ds
+29c9: mov ax, 0x114   ; "3F Productions"
+29cc: push ax
+29cd: mov ax, si
+29cf: mul si
+29d1: add ax, si
+29d3: push ax
+29d4: mov ax, si
+29d6: mul si
+29d8: push ax
+29d9: mov ax, 0x20
+29dc: pop dx
+29dd: sub ax, dx
+29df: mov dx, 7
+29e2: mul dx
+29e4: push ax
+29e5: lcall 0, 0x5c28   ; outtextxy
+29ea: add sp, 8
+29ed: cmp si, 1
+29f0: jle 0x2a13
+29f2: mov ax, si
+29f4: dec ax
+29f5: mov dx, 0xfa
+29f8: mul dx
+29fa: mov di, ax
+29fc: add di, 2
+29ff: jmp 0x2a08
+2a01: push di
+2a02: call 0xa2b3   ; sound
+2a05: inc sp
+2a06: inc sp
+2a07: inc di
+2a08: mov ax, si
+2a0a: mov dx, 0x320   ; "             "
+2a0d: mul dx
+2a0f: cmp ax, di
+2a11: jg 0x2a01
+2a13: mov ax, 0xf
+2a16: push ax
+2a17: call 0x834a   ; delay
+2a1a: inc sp
+2a1b: inc sp
+2a1c: call 0xa2df   ; nosound
+2a1f: mov ax, 0x1e
+2a22: push ax
+2a23: call 0x834a   ; delay
+2a26: inc sp
+2a27: inc sp
+2a28: inc si
+2a29: cmp si, 6
+2a2c: jge 0x2a31
+2a2e: jmp 0x29ae
+2a31: mov ax, 2
+2a34: push ax
+2a35: call 0xa256   ; sleep
+2a38: inc sp
+2a39: inc sp
+2a3a: mov ax, 4
+2a3d: push ax
+2a3e: lcall 0, 0x5aea   ; setcolor
+2a43: inc sp
+2a44: inc sp
+2a45: mov ax, 2
+2a48: push ax
+2a49: xor ax, ax
+2a4b: push ax
+2a4c: push ax
+2a4d: lcall 0, 0x5463   ; settextstyle
+2a52: add sp, 6
+2a55: mov ax, 2
+2a58: push ax
+2a59: xor ax, ax
+2a5b: push ax
+2a5c: push ax
+2a5d: lcall 0, 0x5463   ; settextstyle
+2a62: add sp, 6
+2a65: push ds
+2a66: mov ax, 0x1562   ; "PRESENTS"
+2a69: push ax
+2a6a: mov ax, 0x50
+2a6d: push ax
+2a6e: mov ax, 0x104   ; "pyright 1988 by 3F Productions"
+2a71: push ax
+2a72: lcall 0, 0x5c28   ; outtextxy
+2a77: add sp, 8
+2a7a: mov ax, 1
+2a7d: push ax
+2a7e: call 0xa256   ; sleep
+2a81: inc sp
+2a82: inc sp
+2a83: mov ax, 0xd
+2a86: push ax
+2a87: xor ax, ax
+2a89: push ax
+2a8a: push ax
+2a8b: lcall 0, 0x5463   ; settextstyle
+2a90: add sp, 6
+2a93: xor ax, ax
+2a95: push ax
+2a96: lcall 0, 0x5aea   ; setcolor
+2a9b: inc sp
+2a9c: inc sp
+2a9d: call 0xddc
+2aa0: push ds
+2aa1: mov ax, 0x156b   ; "REFLEX"
+2aa4: push ax
+2aa5: mov ax, 0x78
+2aa8: push ax
+2aa9: mov ax, 0xf
+2aac: push ax
+2aad: lcall 0, 0x5c28   ; outtextxy
+2ab2: add sp, 8
+2ab5: mov ax, 2
+2ab8: push ax
+2ab9: xor ax, ax
+2abb: push ax
+2abc: push ax
+2abd: lcall 0, 0x5463   ; settextstyle
+2ac2: add sp, 6
+2ac5: mov ax, 0xe
+2ac8: push ax
+2ac9: lcall 0, 0x5aea   ; setcolor
+2ace: inc sp
+2acf: inc sp
+2ad0: push ds
+2ad1: mov ax, 0xe3
+2ad4: push ax
+2ad5: mov ax, 0xd7
+2ad8: push ax
+2ad9: mov ax, 0x54
+2adc: push ax
+2add: lcall 0, 0x5c28   ; outtextxy
+2ae2: add sp, 8
+2ae5: mov ax, 0x1f4
+2ae8: push ax
+2ae9: call 0x834a   ; delay
+2aec: inc sp
+2aed: inc sp
+2aee: mov ax, 1
+2af1: push ax
+2af2: xor ax, ax
+2af4: push ax
+2af5: push ax
+2af6: lcall 0, 0x5463   ; settextstyle
+2afb: add sp, 6
+2afe: mov ax, 3
+2b01: push ax
+2b02: lcall 0, 0x5aea   ; setcolor
+2b07: inc sp
+2b08: inc sp
+2b09: push ds
+2b0a: mov ax, 0x1572   ; "This program is Shareware "
+2b0d: push ax
+2b0e: mov ax, 0x122
+2b11: push ax
+2b12: mov ax, 0x23
+2b15: push ax
+2b16: lcall 0, 0x5c28   ; outtextxy
+2b1b: add sp, 8
+2b1e: mov ax, 4
+2b21: push ax
+2b22: lcall 0, 0x5aea   ; setcolor
+2b27: inc sp
+2b28: inc sp
+2b29: push ds
+2b2a: mov ax, 0x158d   ; "(NOT Freeware)"
+2b2d: push ax
+2b2e: mov ax, 0x122
+2b31: push ax
+2b32: mov ax, 0xf4
+2b35: push ax
+2b36: lcall 0, 0x5c28   ; outtextxy
+2b3b: add sp, 8
+2b3e: mov ax, 3
+2b41: push ax
+2b42: lcall 0, 0x5aea   ; setcolor
+2b47: inc sp
+2b48: inc sp
+2b49: push ds
+2b4a: mov ax, 0x159c   ; ", see ending screen for details"
+2b4d: push ax
+2b4e: mov ax, 0x122
+2b51: push ax
+2b52: mov ax, 0x164   ; "eyboard Explained "
+2b55: push ax
+2b56: lcall 0, 0x5c28   ; outtextxy
+2b5b: add sp, 8
+2b5e: mov ax, 2
+2b61: push ax
+2b62: lcall 0, 0x5aea   ; setcolor
+2b67: inc sp
+2b68: inc sp
+2b69: push ds
+2b6a: mov ax, 0x15bc   ; "All Rights Reserved By 3F Productions,"
+2b6d: push ax
+2b6e: mov ax, 0x136
+2b71: push ax
+2b72: mov ax, 0xaa
+2b75: push ax
+2b76: lcall 0, 0x5c28   ; outtextxy
+2b7b: add sp, 8
+2b7e: push ds
+2b7f: mov ax, 0x15e3   ; "3141 W. Palmer Blvd, Suite 3"
+2b82: push ax
+2b83: mov ax, 0x13f   ; "             "
+2b86: push ax
+2b87: mov ax, 0xd2
+2b8a: push ax
+2b8b: lcall 0, 0x5c28   ; outtextxy
+2b90: add sp, 8
+2b93: push ds
+2b94: mov ax, 0x1600   ; "Chicago, Illnois  60647"
+2b97: push ax
+2b98: mov ax, 0x148   ; "    "
+2b9b: push ax
+2b9c: mov ax, 0xea
+2b9f: push ax
+2ba0: lcall 0, 0x5c28   ; outtextxy
+2ba5: add sp, 8
+2ba8: call 0x8e39   ; kbhit
+2bab: or ax, ax
+2bad: je 0x2bb4
+2baf: call 0x8b60   ; getch
+2bb2: jmp 0x2ba8
+2bb4: xor si, si
+2bb6: mov di, 2
+2bb9: mov ax, di
+2bbb: push ax
+2bbc: mov ax, si
+2bbe: push ax
+2bbf: push si
+2bc0: lcall 0, 0x5463   ; settextstyle
+2bc5: add sp, 6
+2bc8: call 0x8e39   ; kbhit
+2bcb: or ax, ax
+2bcd: je 0x2bd2
+2bcf: jmp 0x2c04
+2bd2: mov ax, 0xd
+2bd5: push ax
+2bd6: call 0xcf3
+2bd9: inc sp
+2bda: inc sp
+2bdb: add ax, di
+2bdd: push ax
+2bde: lcall 0, 0x517d   ; setbkcolor
+2be3: inc sp
+2be4: inc sp
+2be5: mov ax, 0x5dc0
+2be8: push ax
+2be9: call 0xcf3
+2bec: inc sp
+2bed: inc sp
+2bee: push ax
+2bef: call 0xa2b3   ; sound
+2bf2: inc sp
+2bf3: inc sp
+2bf4: mov ax, 0xf
+2bf7: push ax
+2bf8: call 0x834a   ; delay
+2bfb: inc sp
+2bfc: inc sp
+2bfd: inc word ptr [0xba]
+2c01: jmp 0x2bc8
+2c04: call 0xa2df   ; nosound
+2c07: call 0x8b60   ; getch
+2c0a: pop di
+2c0b: pop si
+2c0c: ret 
+
+
+==== sub_2c0d
+2c0d: mov ax, 0x1618   ; "We hope you have enjoyed this game
+"
+2c10: push ax
+2c11: call 0x935e   ; printf
+2c14: inc sp
+2c15: inc sp
+2c16: mov ax, 0x486
+2c19: push ax
+2c1a: call 0x935e   ; printf
+2c1d: inc sp
+2c1e: inc sp
+2c1f: mov ax, 0x163c   ; "  REFLEX is distributed on a shareware basis. Try "
+2c22: push ax
+2c23: call 0x935e   ; printf
+2c26: inc sp
+2c27: inc sp
+2c28: mov ax, 0x168a   ; "it please send us $15. This fee makes you a regist"
+2c2b: push ax
+2c2c: call 0x935e   ; printf
+2c2f: inc sp
+2c30: inc sp
+2c31: mov ax, 0x16d7   ; "be you send a floppy disk with your check you will"
+2c34: push ax
+2c35: call 0x935e   ; printf
+2c38: inc sp
+2c39: inc sp
+2c3a: mov ax, 0x1723   ; "that allows you to modify the shapes in reflex to "
+2c3d: push ax
+2c3e: call 0x935e   ; printf
+2c41: inc sp
+2c42: inc sp
+2c43: mov ax, 0x176f   ; "And you will be placed on our mailing list.
+"
+2c46: push ax
+2c47: call 0x935e   ; printf
+2c4a: inc sp
+2c4b: inc sp
+2c4c: mov ax, 0x179c   ; "  Your contributions encourage us to continue to p"
+2c4f: push ax
+2c50: call 0x935e   ; printf
+2c53: inc sp
+2c54: inc sp
+2c55: mov ax, 0x17ea   ; "to new machines, as we have just done with the IBM"
+2c58: push ax
+2c59: call 0x935e   ; printf
+2c5c: inc sp
+2c5d: inc sp
+2c5e: mov ax, 0x182b   ; "  Please make checks or money orders out to: 3F Pr"
+2c61: push ax
+2c62: call 0x935e   ; printf
+2c65: inc sp
+2c66: inc sp
+2c67: mov ax, 0x1868   ; "  And send it to:   3F Productions
+"
+2c6a: push ax
+2c6b: call 0x935e   ; printf
+2c6e: inc sp
+2c6f: inc sp
+2c70: mov ax, 0x188c   ; "                    3141 W. Palmer Blvd. Suite 3
+"
+2c73: push ax
+2c74: call 0x935e   ; printf
+2c77: inc sp
+2c78: inc sp
+2c79: mov ax, 0x18be   ; "                    Chicago, Illnois  60647
+"
+2c7c: push ax
+2c7d: call 0x935e   ; printf
+2c80: inc sp
+2c81: inc sp
+2c82: mov ax, 0x18eb   ; "  If you do not like the game, simply erase it fro"
+2c85: push ax
+2c86: call 0x935e   ; printf
+2c89: inc sp
+2c8a: inc sp
+2c8b: mov ax, 0x192a   ; "  3F Productions reserves all rights to Reflex, in"
+2c8e: push ax
+2c8f: call 0x935e   ; printf
+2c92: inc sp
+2c93: inc sp
+2c94: mov ax, 0x1979   ; "code and concept. However we grant the right to ma"
+2c97: push ax
+2c98: call 0x935e   ; printf
+2c9b: inc sp
+2c9c: inc sp
+2c9d: mov ax, 0x19c8   ; "program and it's data files and to distribute them"
+2ca0: push ax
+2ca1: call 0x935e   ; printf
+2ca4: inc sp
+2ca5: inc sp
+2ca6: mov ax, 0x1a18   ; "no charge is performed for this service. People re"
+2ca9: push ax
+2caa: call 0x935e   ; printf
+2cad: inc sp
+2cae: inc sp
+2caf: mov ax, 0x1a68   ; "matically registered users.
+"
+2cb2: push ax
+2cb3: call 0x935e   ; printf
+2cb6: inc sp
+2cb7: inc sp
+2cb8: mov ax, 0x1a85   ; "  If you have any suggestions or criticisms, pleas"
+2cbb: push ax
+2cbc: call 0x935e   ; printf
+2cbf: inc sp
+2cc0: inc sp
+2cc1: mov ax, 0x1ad2   ; "address or leave a message on Compuserve, ID# 7154"
+2cc4: push ax
+2cc5: call 0x935e   ; printf
+2cc8: inc sp
+2cc9: inc sp
+2cca: mov ax, 0x1b0d   ; "  We can't serve you better, if we don't hear from"
+2ccd: push ax
+2cce: call 0x935e   ; printf
+2cd1: inc sp
+2cd2: inc sp
+2cd3: ret 

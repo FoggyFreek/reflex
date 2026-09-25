@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Reflex Reimagined</title>
+  <meta name="description" content="A modern web remake of REFLEX (1988, 3F Productions), rebuilt from the reverse-engineered original.">
+  <meta name="theme-color" content="#070a13">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app" id="app" data-mode="menu">
+    <header class="hud" id="hud">
+      <div class="brand"><span class="brand-icon"></span><span class="brand-name">REFLEX</span></div>
+      <div class="stat stat-score"><span class="stat-label">Score</span><output id="hud-score">0</output></div>
+      <div class="stat"><span class="stat-label">Level</span><output id="hud-level">1</output></div>
+      <div class="stat"><span class="stat-label">Forcefield</span><div class="pips" id="hud-shields" aria-live="off"></div></div>
+      <div class="stat"><span class="stat-label">Worms</span><div class="lives" id="hud-worms"></div></div>
+      <div class="stat stat-small"><span class="stat-label">Pause</span><output id="hud-freezes">0</output></div>
+      <button class="icon-btn" id="btn-menu" aria-label="Pause menu" title="Menu (Esc)">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>
+      </button>
+    </header>
+
+    <main class="stage" id="stage">
+      <div class="board-wrap" id="board-wrap">
+        <canvas id="board" aria-label="Game board"></canvas>
+        <div class="scanlines" aria-hidden="true"></div>
+        <div class="meter meter-hunger" id="meter-hunger"><span></span><em>Hunger</em></div>
+        <div class="meter meter-freeze" id="meter-freeze"><span></span><em>Paused</em></div>
+        <div class="toast" id="toast" aria-live="polite"></div>
+      </div>
+    </main>
+
+    <footer class="keys" id="keys">
+      <span><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> / numpad move (two arrows = diagonal)</span>
+      <span><kbd>Space</kbd> forcefield</span>
+      <span><kbd>P</kbd> pause power</span>
+      <span><kbd>Esc</kbd> menu</span>
+    </footer>
+
+    <div class="touch" id="touch" aria-hidden="true">
+      <div class="dpad" id="dpad">
+        <button data-dir="-1,-1">↖</button><button data-dir="0,-1">↑</button><button data-dir="1,-1">↗</button>
+        <button data-dir="-1,0">←</button><span class="dpad-hub"></span><button data-dir="1,0">→</button>
+        <button data-dir="-1,1">↙</button><button data-dir="0,1">↓</button><button data-dir="1,1">↘</button>
+      </div>
+      <div class="actions">
+        <button class="act act-shield" id="touch-shield">Force<br>field</button>
+        <button class="act act-freeze" id="touch-freeze">Pause</button>
+      </div>
+    </div>
+
+    <!-- Screens -->
+    <section class="screen" id="screen-menu" data-screen="menu">
+      <div class="panel panel-menu">
+        <div class="parade" id="parade"></div>
+        <h1 class="logo">REFLEX</h1>
+        <p class="tagline">more than the mind can handle!</p>
+        <nav class="menu" aria-label="Main menu">
+          <button data-action="play" class="primary">Play</button>
+          <button data-action="howto">How to Play</button>
+          <button data-action="top40">Top Forty</button>
+          <button data-action="settings">Settings</button>
+          <button data-action="about">About</button>
+        </nav>
+        <p class="menu-foot" id="menu-best"></p>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-howto" data-screen="howto">
+      <div class="panel panel-wide">
+        <header class="panel-head"><h2>How to Play</h2><button class="close" data-action="back" aria-label="Back">✕</button></header>
+        <div class="panel-body" id="howto-body"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-top40" data-screen="top40">
+      <div class="panel panel-wide">
+        <header class="panel-head"><h2>Reflex's All-Time Greatest Top Forty</h2><button class="close" data-action="back" aria-label="Back">✕</button></header>
+        <div class="panel-body"><div class="top40" id="top40"></div></div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-settings" data-screen="settings">
+      <div class="panel">
+        <header class="panel-head"><h2>Settings</h2><button class="close" data-action="back" aria-label="Back">✕</button></header>
+        <div class="panel-body settings">
+          <label class="toggle"><input type="checkbox" data-setting="sound"><span>Sound</span></label>
+          <label class="toggle"><input type="checkbox" data-setting="tick"><span>Turn tick (the original's metronome click)</span></label>
+          <label class="toggle"><input type="checkbox" data-setting="safeHint"><span>Show the safe lane</span></label>
+          <label class="toggle"><input type="checkbox" data-setting="scanlines"><span>CRT scanlines</span></label>
+          <div class="seg" role="radiogroup" aria-label="Palette">
+            <span>Palette</span>
+            <button data-palette="modern">Modern</button>
+            <button data-palette="classic">Classic EGA</button>
+          </div>
+          <button class="ghost danger" data-action="reset-scores">Reset Top Forty</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-about" data-screen="about">
+      <div class="panel panel-wide">
+        <header class="panel-head"><h2>About</h2><button class="close" data-action="back" aria-label="Back">✕</button></header>
+        <div class="panel-body prose">
+          <p><strong>Reflex Reimagined</strong> is a web remake of <em>REFLEX v1.2.3</em>, a 1988 EGA shareware game by
+            3F Productions of Chicago. It was built by reverse-engineering the original <code>REFLEX.EXE</code> (Turbo C, 1987).</p>
+          <p>Every sprite is the original artwork, decoded straight from <code>REFLEX.EGA</code>. The game rules, level
+            progression, timing and sounds all follow the original machine code, including the parts the 1988
+            manual never mentioned. The biggest of those: the board <em>evolves</em>. Each turn, random tiles move one
+            step along a fixed chain, from trail to empty space to Pigman and on up to Barren.</p>
+          <p>What's new: the look, smooth animation, particles, a dark palette (switch to Classic EGA in Settings),
+            gamepad and touch controls, and a Top Forty saved in your browser.</p>
+          <blockquote>"REFLEX is distributed on a shareware basis. Try this game out, if you like it please send us $15."
+            <cite>3F Productions, 1988</cite></blockquote>
+          <p class="muted">REFLEX and its artwork belong to their original authors. This is a non-commercial tribute.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-pause" data-screen="pause">
+      <div class="panel panel-narrow">
+        <h2 class="center">Paused</h2>
+        <nav class="menu" aria-label="Pause menu">
+          <button data-action="resume" class="primary">Resume</button>
+          <button data-action="restart">Restart</button>
+          <button data-action="howto">How to Play</button>
+          <button data-action="settings">Settings</button>
+          <button data-action="end">End Game</button>
+        </nav>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-gameover" data-screen="gameover">
+      <div class="panel panel-narrow">
+        <h2 class="gameover-title">GAME OVER</h2>
+        <div class="final">
+          <div><span class="stat-label">Score</span><strong id="final-score">0</strong></div>
+          <div><span class="stat-label">Level</span><strong id="final-level">1</strong></div>
+        </div>
+        <form class="entry" id="entry" autocomplete="off">
+          <p id="entry-rank"></p>
+          <input id="entry-name" maxlength="20" placeholder="Your name" aria-label="Your name" spellcheck="false">
+          <button class="primary" type="submit">Save to Top Forty</button>
+        </form>
+        <nav class="menu" id="gameover-menu" aria-label="Game over">
+          <button data-action="play" class="primary">Play Again</button>
+          <button data-action="top40">Top Forty</button>
+          <button data-action="home">Main Menu</button>
+        </nav>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/sprites.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

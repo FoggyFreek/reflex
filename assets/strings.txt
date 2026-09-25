@@ -1,0 +1,184 @@
+Turbo-C - Copyright (c) 1987 Borland Intl.
+Null pointer assignment
+Divide error
+Abnormal program termination
+REFLEX (C) Ver 1.2.3
+more than the mind can handle!
+Copyright 1988 by 3F Productions
+   Functions Menu
+Display Instructions
+ Keyboard Explained
+ Calibrate Joystick
+ View The Top Forty
+  To Use Joystick
+  To Use Keyboard
+     Play Reflex
+  Exit The Program
+SCORE          LEVEL       FORCEFIELD       WORMS              Ctrl-Alt to Quit
+?gfffff
+@reflex.ega
+Can't locate Shape File: Reflex.EGA
+reflex.joy
+  GAME OVER!
+                   Joystick Calibration
+  Push the joystick to TOP   and press the joystick button
+  Pull the joystick to DOWN  and press the joystick button
+  Push the joystick to LEFT  and press the joystick button
+  Pull the joystick to RIGHT and press the joystick button
+Release the joystick to center and press the joystick button
+How to Use the Keyboard to Play Reflex
+        To move your Worm use the numeric keypad with the NUM LOCK ON
+Like so:
+  '7'
+  '8'
+  '9'
+  UP
+  UP
+  UP
+ LEFT
+ RIGHT
+  '4'
+  '6'
+  '1'
+  '2'
+  '3'
+ DOWN
+ DOWN
+ DOWN
+The Right Shift key activates the Forcefield & the Left Shift key is the Pause.
+Reflex Instructions & Explainations
+ Reflex is an Arcade game using joystick or keyboard. The object of the game is
+to obtain as many points as possible before exhausting all of your WORMs. You
+can manuever your WORM horizontally, vertically & Diagonally. It is permissable
+to travel off the edges of the playing field.
+ Once the game begins your WORM will begin travel in the direction you select.
+If you don't select a direction the WORM will continue in its present direction
+As the WORM moves it leaves behind a WORM trail. As the game progresses objects
+appear on the screen. Running into them cause effects that will be explained on
+the following page. One vertical strip of the board is the SAFELANE. No objects
+fall in the SAFELANE.
+ The game board can be imagined as a stack of screens. Each screen is a LEVEL.
+It is possible to go down LEVELs. The lower the LEVEL the faster the objects
+appear and the greater the scores obtained.
+ At LEVEL 1 the SAFELANE is on right most lane. At LEVEL 30 the SAFELANE begins
+to move to the left. At level 35, it begins to move to random locations. After
+LEVEL 50 play returns to the way it was at LEVEL 1, only faster.
+                           Explaining the Status Line
+SCORE:0000000    LEVEL:000    FORCEFIELD:00    WORMS:00        Ctrl-Alt to Quit
+SCORE is the total points you have acquired at this point in this game.
+LEVEL is the current LEVEL that your worm has decended to.
+FORCEFIELD is the number of turns in which you could use your forcefield.
+WORMS is the number of worms you have left before the end of the game.
+To Cancel the game in progress hold down the control & Alt Keys simultaneously.
+                          Defining Forcefield & Pause
+The Forcefield is activated by pressing the first joystick button. The force-
+    field allows the WORM to pass through an object without experiencing the
+    effects. One forcefield is earned each time you decend a level until a max-
+    imum of 10 forcefields is reached.
+The PAUSE is activated by pressing the second joystick button. A PAUSE freezes
+    all action for 3 seconds. There is only one pause per level.
+Press Any Key to Continue
+                   Defining Objects: Their Names and Effects
+Object Name  Effect                 Object Name      Effect
+Worm Head:   This is you
+Worm Trail:  Death of Worm
+Clear Trail: No effect
+Empty Space: No effect
+Pigman:      Death of Worm
+Transport:   Down one Level
+Palmtree:    100 - 1000 points
+Down Arrow:  Deevolves objects
+ Transport becomes Pigman, etc.
+Martini:         Turns on Hunger mode.
+   Gobble up objects for fun and profit
+Extraman:        Gain one Worm
+Demon:           Death of 0 - 3 Worms
+Super Transport: Drop 6 levels
+Sunny Island:    Turns Worm Trail into
+   Barren Areas
+Cross:           Erase a cross across
+   the screen, including Barren Areas.
+Pre Barren Area: Kill one you've killed
+   them all
+Barren Area:     Death of Worm, even
+   in Hunger Mode. Also Doesn't Erase
+reflex.t40
+%20s%3d%7lu
+Vacant
+                  Reflex's All Time Greatest Top Forty Scores
+        SCORE LVL  PLAYER'S NAME                SCORE LVL  PLAYER'S NAME
+%2d- %7lu %3d
+Press Any Key when Finished
+PRESENTS
+REFLEX
+This program is Shareware
+(NOT Freeware)
+, see ending screen for details
+All Rights Reserved By 3F Productions,
+3141 W. Palmer Blvd, Suite 3
+Chicago, Illnois  60647
+We hope you have enjoyed this game
+  REFLEX is distributed on a shareware basis. Try this game out, if you like
+it please send us $15. This fee makes you a registered Reflex user. Also if
+be you send a floppy disk with your check you will recieve a silly program
+that allows you to modify the shapes in reflex to whatever forms you like.
+And you will be placed on our mailing list.
+  Your contributions encourage us to continue to produce programs and expand
+to new machines, as we have just done with the IBM compatables.
+  Please make checks or money orders out to: 3F Productions
+  And send it to:   3F Productions
+                    3141 W. Palmer Blvd. Suite 3
+                    Chicago, Illnois  60647
+  If you do not like the game, simply erase it from your disk
+  3F Productions reserves all rights to Reflex, including object code, source
+code and concept. However we grant the right to make unlimited copies of this
+program and it's data files and to distribute them to other people, as long as
+no charge is performed for this service. People recieving copies are NOT auto-
+matically registered users.
+  If you have any suggestions or criticisms, please send them to the above
+address or leave a message on Compuserve, ID# 71540, 2114
+  We can't serve you better, if we don't hear from you.
+89:;<=>?
+EGAVGA
+IBM8514
+PC3270
+No error
+(BGI) graphics not installed
+Graphics hardware not detected
+Device driver file not found (
+Invalid device driver file (
+Not enough memory to load driver
+Out of memory in scan fill
+Out of memory in flood fill
+Font file not found (
+Not enough memory to load font
+Invalid graphics mode for selected driver
+Graphics error
+Graphics I/O error
+Invalid font file (
+Invalid font number
+Invalid device number
+Graphics error (
+BGI Error: not in graphics mode
+BGI Error: graphics not initialized (use 'initgraph')
+Floating point error:
+Domain.
+Singularity (or div by zero).
+Overflow.
+Underflow.
+Total loss of precision.
+Partial loss of precision.
+QCpow10
+!!!'!DOMAIN
+OVERFLOW
+UNDERFLOW
+%s: %s error
+COMPAQ
+         !!!!!
+@@@@@@@@@@@@@@@
+@@@@@@@
+@@@@@@
+printf : floating point formats not linked
+scanf : floating point formats not linked
+(null)
+0123456789ABCDEF
