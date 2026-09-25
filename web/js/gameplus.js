@@ -218,6 +218,11 @@
       return out;
     }
 
+    async descend(n) {
+      await super.descend(n);
+      if (this.levelHold) await this.wait(this.levelHold);
+    }
+
     async wipeBoard() {
       this.pending = [];
       await super.wipeBoard();

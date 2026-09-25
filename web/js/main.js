@@ -3,7 +3,7 @@
   'use strict';
 
   const { Game, Abort, T, W, H } = window.Reflex;
-  const { Renderer, CELL_ASPECT } = window.ReflexRender;
+  const { Renderer } = window.ReflexRender;
   const { GamePlus, BOONS } = window.ReflexPlus;
   const { Conductor, Music } = window.ReflexMusic;
   const $ = (s, el = document) => el.querySelector(s);
@@ -25,7 +25,7 @@
   };
 
   const settings = Object.assign(
-    { sound: true, tick: true, safeHint: true, scanlines: false, palette: 'modern', music: true, musicVolume: 0.8 },
+    { sound: true, tick: true, safeHint: true, scanlines: false, palette: 'modern', music: true, musicVolume: 0.8, sphere: false },
     store.get('reflex.settings', {}),
   );
   function applySettings() {
@@ -33,7 +33,10 @@
     speaker.tickEnabled = settings.tick;
     if (music) { music.setEnabled(settings.music && settings.sound); music.setVolume(settings.musicVolume); }
     $('#music-volume').value = Math.round(settings.musicVolume * 100);
-    renderer.setOptions({ palette: settings.palette, safeHint: settings.safeHint });
+    renderer.setOptions({ palette: settings.palette, safeHint: settings.safeHint, sphere: settings.sphere });
+    app.classList.toggle('sphere-view', settings.sphere);
+    if (game && game.plus) game.levelHold = settings.sphere ? 950 : 0;
+    if (typeof layout === 'function') layout();
     app.dataset.palette = settings.palette;
     app.classList.toggle('crt', settings.scanlines);
     $$('[data-setting]').forEach((el) => { el.checked = !!settings[el.dataset.setting]; });
@@ -271,6 +274,7 @@
       host.chooseBoon = (choices) => c.guard(showDraft(choices));
       host.sfx = plusSfx;
       game = new GamePlus(host);
+      game.levelHold = settings.sphere ? 950 : 0; // time to land on the new planet
       renderer.conductor = cond;
       cond.start(game.tempo());
     } else {
@@ -279,6 +283,7 @@
     }
     renderer.setGame(game);
     renderer.dim = 0;
+    layout();
     hud.reset();
     toast('GET READY', m === 'plus' ? 'move on the beat' : 'use the arrows or numpad');
     try { await c.wait(m === 'plus' ? conductor.turnMs * 8 : 1300); } catch { return; }
@@ -312,7 +317,7 @@
   }
 
   // Game+ sounds: most effects become in-key stingers quantized to the beat.
-  const STINGERS = new Set(['shield', 'wipe', 'martini', 'extraman', 'demon', 'cross', 'devolve', 'graze', 'boss', 'rivalCrash', 'rewind']);
+  const STINGERS = new Set(['boom', 'shield', 'wipe', 'martini', 'extraman', 'demon', 'cross', 'devolve', 'graze', 'boss', 'rivalCrash', 'rewind']);
   function plusSfx(name, a, b) {
     if (name === 'tick' || name === 'click') return 0;
     if (name === 'death') return speaker.fx('death');
@@ -433,6 +438,7 @@
     game = null;
     app.classList.remove('plus', 'boss');
     setMode('menu');
+    layout();
     screenStack = [];
     showScreen('menu');
     startAttract();
@@ -523,6 +529,7 @@
   function uiFx(type, d) {
     if (type === 'level') {
       const g = game;
+      if (g.plus && settings.sphere) plusSfx('boom');
       const sub = g.speed >= 35 ? 'safe lane on the move' : g.speed >= 30 ? 'safe lane drifting' : g.speed === 1 && g.level > 1 ? 'the cycle begins again — faster' : '';
       toast('LEVEL ' + d.level, g.plus ? `${g.tempo()} BPM` + (sub ? ' · ' + sub : '') : sub);
     }
@@ -832,8 +839,9 @@
     const r = stage.getBoundingClientRect();
     const availW = Math.max(200, r.width - 12);
     const availH = Math.max(140, r.height - 30);
-    const aspect = (W * CELL_ASPECT) / H;
-    const w = Math.floor(Math.min(availW, availH * aspect));
+    // Planet view uses the whole stage, so stars and flying debris reach the edges.
+    if (renderer.sphereOn) return renderer.resizeTo(Math.floor(availW), Math.floor(availH));
+    const w = Math.floor(Math.min(availW, availH * renderer.aspect));
     renderer.resize(w);
   }
   window.addEventListener('resize', layout);
@@ -841,6 +849,7 @@
   const boardWrap = $('#board-wrap');
   let last = performance.now();
   function frame(now) {
+    requestAnimationFrame(frame); // first, so one bad frame can't stop the loop
     const dt = Math.min(100, now - last);
     last = now;
     pollGamepad();
@@ -851,7 +860,6 @@
       boardWrap.style.setProperty('--beat', k.toFixed(3));
     } else boardWrap.style.setProperty('--beat', '0');
     renderer.draw(now, dt);
-    requestAnimationFrame(frame);
   }
 
   // Console handle for debugging: __reflex.game.val[i] = Reflex.T.MARTINI, etc.

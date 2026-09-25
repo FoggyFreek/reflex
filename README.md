@@ -11,6 +11,7 @@ A modern web remake of **REFLEX v1.2.3** (1988, 3F Productions), a DOS EGA arcad
   - Telegraphed evolution: tiles about to change pulse a beat ahead.
   - A rival worm boss every 10 levels.
   - A pick-1-of-3 boon draft every 5 levels.
+  - An optional **planet view** (Settings): the board is drawn on a rolling globe centred on your worm, and every level-down shatters the planet and drops you onto a new one.
 
   See [docs/GAME_PLUS.md](docs/GAME_PLUS.md) for the details.
 
@@ -50,6 +51,7 @@ web/                  the game
   js/game.js          DOM-free engine, a port of the original logic
   js/gameplus.js      Game+ rules (extends the engine)
   js/music.js         beat conductor + layered synth soundtrack (WebAudio)
+  js/sphere.js        Game+ planet view (globe projection, billboards, planet swap)
   js/render.js        canvas renderer (original sprites, palettes, effects)
   js/audio.js         PC-speaker emulation (WebAudio)
   js/main.js          UI, input, HUD, Top Forty, attract mode

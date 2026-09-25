@@ -114,6 +114,23 @@ The original PC-speaker death sound still plays, as a homage.
 | Insurance | Sunny Island makes Clear trail instead of Barren |
 | Cruise Control | −10 BPM at ×0.9 score (stacks twice) |
 
+## Planet view (Settings → "Game+ planet view")
+
+This setting draws the Game+ board on a globe. Code: `web/js/sphere.js`; the rendering hooks are in `web/js/render.js`.
+
+- **Worm-centred projection.** Each cell's offset from the worm becomes an angle on the sphere: 7.4° per column and 6.4° per row, which keeps the original cell shape. The camera tilts down 14°.
+  - The worm's position is smoothed between beats, so the globe rolls the opposite way it moves.
+- **Tiles all the way round.** The board wraps, so its repeats keep tiling the globe on every side. Near the horizon you are looking at the same wrapped cells from the other side.
+- **Flat and standing.** Trail, clear trail, empty ground, Transports and Barren areas lie flat. Each cell is mapped onto the curved surface on its own, and effects such as telegraphs and sparkles are drawn in that cell's space too.
+  - Every other object is a 2-D sprite standing on its cell, with a shadow. Sprites lean outward toward the left and right edges and are drawn back to front.
+- **Level-down, from the core outward.** The current globe is snapshotted and split into rings of jagged wedges around its core.
+  - **Crack (0.26 s):** glowing cracks spread outward from a white-hot core, and the planet swells slightly.
+  - **Blast:** the wedges fly straight out from the core. Pieces further out move faster, so the planet visibly expands; the edges glow molten. A fireball, a shockwave, sparks and a "boom" in the music go with it.
+  - **Rebirth:** a new planet in the next colour theme (8 themes, one per level) grows from the core point, and the worm drops onto it.
+  - The game waits an extra 950 ms per level-down (`levelHold`) so you land before your next move.
+- **Framing.** In planet view the canvas fills the whole play area, so stars and debris reach the edges. The globe's size is set by `ZOOM` in `sphere.js`; it runs a little past the bottom of the view and fades out there. Flashes and tints become round glows around the globe, and the starfield drifts against the direction of travel.
+- Controls are unchanged, because up on the screen is always north on the board. Classic mode is never affected.
+
 ## Testing
 
 `node tests/sim.js` runs:

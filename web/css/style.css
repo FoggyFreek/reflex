@@ -43,7 +43,7 @@ kbd {
 .app {
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr auto auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
   grid-template-columns: minmax(0, 1fr);
   padding: max(10px, env(safe-area-inset-top)) 16px max(10px, env(safe-area-inset-bottom));
   gap: 10px;
@@ -332,6 +332,17 @@ kbd {
 .entry.show + .menu { display: none; }
 
 /* ---------- Responsive ---------- */
+/* ---------- Game+ planet view ---------- */
+.app.plus.sphere-view .board-wrap,
+.app.plus.boss.sphere-view .board-wrap { background: transparent; box-shadow: none; }
+.app.plus.sphere-view .board-wrap::before { background: transparent; }
+.app.plus.sphere-view #board {
+  border-radius: 0;
+  /* the zoomed globe runs past the bottom of the view; fade it into space */
+  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+}
+
 /* ---------- Game+ ---------- */
 .app:not(.plus) .plus-only { display: none !important; }
 .stat-groove { position: relative; min-width: 84px; }

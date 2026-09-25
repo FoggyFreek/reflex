@@ -55,11 +55,13 @@
 
     setOptions(o) { Object.assign(this.opts, o); this.overlay = null; }
 
-    get aspect() { return (W * CELL_ASPECT) / H; }
+    get sphereOn() { return !!(this.opts.sphere && this.game && this.game.plus); }
+    get aspect() { return this.sphereOn ? 1.22 : (W * CELL_ASPECT) / H; }
 
-    resize(cssW) {
+    resize(cssW) { this.resizeTo(cssW, cssW / this.aspect); }
+
+    resizeTo(cssW, cssH) {
       const dpr = Math.min(root.devicePixelRatio || 1, 3);
-      const cssH = cssW / this.aspect;
       this.cssW = cssW; this.cssH = cssH; this.dpr = dpr;
       this.canvas.style.width = cssW + 'px';
       this.canvas.style.height = cssH + 'px';
@@ -77,7 +79,7 @@
       const colors = PALETTES[pal].map(hexToRgb);
       const map = colors.slice();
       map[0] = colors[ink];
-      if (variant) for (const [k, hex] of Object.entries(VARIANTS[variant])) map[k] = hexToRgb(hex);
+      if (variant) for (const [k, hex] of Object.entries(VARIANTS[variant])) map[k] = hex === null ? null : hexToRgb(hex);
       set = [];
       for (let k = 0; k < S.names.length; k++) {
         const c = document.createElement('canvas');
@@ -86,6 +88,7 @@
         const img = cx.createImageData(SW, SH);
         for (let p = 0; p < SW * SH; p++) {
           const rgb = map[PIX[k * SW * SH + p]];
+          if (!rgb) continue; // transparent
           img.data[p * 4] = rgb[0]; img.data[p * 4 + 1] = rgb[1]; img.data[p * 4 + 2] = rgb[2]; img.data[p * 4 + 3] = 255;
         }
         cx.putImageData(img, 0, 0);
@@ -146,6 +149,9 @@
         case 'transport':
           for (let k = 0; k < 3; k++) this.rings.push({ x: cx(d.x), y: cy(d.y), t0: now + k * 120, dur: 650, color: '92,141,255', r: this.cw * (2 + k), inward: true });
           this.popText(cx(d.x), cy(d.y), d.n > 1 ? `DROP ${d.n} LEVELS` : 'DOWN A LEVEL', '#8fb0ff');
+          break;
+        case 'level':
+          if (this.sphereOn && this.sphereView) this.sphereView.explode(now, d.level);
           break;
         case 'wipeRow':
           this.rowFx.push({ r: d.r, t0: now, dur: 380 });
@@ -266,111 +272,120 @@
 
       const spr = this.sprites(pal, g.ink);
       const colors = PALETTES[pal];
-
-      // tiles
-      for (let y = 0; y < H; y++) {
-        for (let x = 0; x < W; x++) {
-          const i = y * W + x;
-          c.drawImage(spr[g.disp[i]], x * cw, y * ch, cw + 0.5, ch + 0.5);
+      if (!this.sphereView && root.ReflexSphere) this.sphereView = new root.ReflexSphere.SphereView(this);
+      const sphere = this.sphereOn && this.sphereView;
+      this.warp = sphere ? (x, y) => this.sphereView.warp(x, y) : null;
+      if (sphere) {
+        this.sphereView.draw(c, now, dt, sx, sy);
+        this.rowFx = this.rowFx.filter((r) => now - r.t0 < r.dur);
+        this.beams = this.beams.filter((b) => now - b.t0 < b.dur);
+        for (const [i, f] of this.cellFx) if (now - f.t0 >= f.dur) this.cellFx.delete(i);
+      } else {
+        // tiles
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            const i = y * W + x;
+            c.drawImage(spr[g.disp[i]], x * cw, y * ch, cw + 0.5, ch + 0.5);
+          }
         }
-      }
-      // barren sparkles
-      const px = cw / SW, py = ch / SH;
-      for (const [i, list] of g.sparkles) {
-        if (g.disp[i] !== T.BARREN) continue;
-        const ox = (i % W) * cw, oy = ((i / W) | 0) * ch;
-        for (const [x, y, col] of list) {
-          c.fillStyle = colors[col];
-          c.fillRect(ox + x * px, oy + y * py, px + 0.3, py + 0.3);
+        // barren sparkles
+        const px = cw / SW, py = ch / SH;
+        for (const [i, list] of g.sparkles) {
+          if (g.disp[i] !== T.BARREN) continue;
+          const ox = (i % W) * cw, oy = ((i / W) | 0) * ch;
+          for (const [x, y, col] of list) {
+            c.fillStyle = colors[col];
+            c.fillRect(ox + x * px, oy + y * py, px + 0.3, py + 0.3);
+          }
         }
-      }
-      // A soft outline makes the deadly trail readable on the dark modern board.
-      if (pal === 'modern' || g.owner) {
-        c.lineWidth = Math.max(1, cw * 0.035);
-        for (let i = 0; i < W * H; i++) {
-          if (g.disp[i] !== T.TRAIL) continue;
-          const rival = g.owner && g.owner[i] === 2;
-          if (pal !== 'modern' && !rival) continue;
-          c.strokeStyle = rival ? 'rgba(124,242,156,0.75)' : 'rgba(255,121,208,0.28)';
-          const x = i % W, y = (i / W) | 0;
-          c.beginPath();
-          c.ellipse((x + 0.5) * cw, (y + 0.5) * ch, cw * 0.44, ch * 0.42, 0, 0, Math.PI * 2);
-          c.stroke();
+        // A soft outline makes the deadly trail readable on the dark modern board.
+        if (pal === 'modern' || g.owner) {
+          c.lineWidth = Math.max(1, cw * 0.035);
+          for (let i = 0; i < W * H; i++) {
+            if (g.disp[i] !== T.TRAIL) continue;
+            const rival = g.owner && g.owner[i] === 2;
+            if (pal !== 'modern' && !rival) continue;
+            c.strokeStyle = rival ? 'rgba(124,242,156,0.75)' : 'rgba(255,121,208,0.28)';
+            const x = i % W, y = (i / W) | 0;
+            c.beginPath();
+            c.ellipse((x + 0.5) * cw, (y + 0.5) * ch, cw * 0.44, ch * 0.42, 0, 0, Math.PI * 2);
+            c.stroke();
+          }
         }
-      }
-      // cell flashes
-      for (const [i, f] of this.cellFx) {
-        const t = (now - f.t0) / f.dur;
-        if (t >= 1) { this.cellFx.delete(i); continue; }
-        if (t < 0) continue;
-        c.fillStyle = `rgba(${f.color},${f.a * (1 - t)})`;
-        c.fillRect((i % W) * cw, ((i / W) | 0) * ch, cw, ch);
-      }
-      // Game+: tiles that will evolve on the next beat pulse (red = turning deadly).
-      if (g.pending && g.pending.length && !g.over) {
-        const ph = this.conductor ? this.conductor.phase(now).phase : 0.5;
-        const r = Math.min(cw, ch) * 0.16;
-        c.lineWidth = Math.max(1.2, cw * 0.05);
-        for (const p of g.pending) {
-          const v = g.val[p.i];
-          if (v === T.BARREN) continue;
-          const nv = Math.min(T.BARREN, v + p.inc);
-          const deadly = nv === T.PIGMAN || nv === T.DEMON || nv === T.BARREN;
-          const good = nv >= T.TRANSPORT && nv !== T.DEMON && nv !== T.BARREN && nv !== T.ARROW;
-          if (!deadly && !good) continue;
-          const col = deadly ? '236,58,86' : '255,212,71';
-          const a = 0.25 + 0.6 * ph;
-          const x = (p.i % W) * cw, y = ((p.i / W) | 0) * ch, ins = cw * (0.14 - 0.08 * ph);
-          c.strokeStyle = `rgba(${col},${a})`;
-          c.beginPath();
-          c.roundRect(x + ins, y + ins * (ch / cw), cw - ins * 2, ch - ins * 2 * (ch / cw), r);
-          c.stroke();
+        // cell flashes
+        for (const [i, f] of this.cellFx) {
+          const t = (now - f.t0) / f.dur;
+          if (t >= 1) { this.cellFx.delete(i); continue; }
+          if (t < 0) continue;
+          c.fillStyle = `rgba(${f.color},${f.a * (1 - t)})`;
+          c.fillRect((i % W) * cw, ((i / W) | 0) * ch, cw, ch);
         }
+        // Game+: tiles that will evolve on the next beat pulse (red = turning deadly).
+        if (g.pending && g.pending.length && !g.over) {
+          const ph = this.conductor ? this.conductor.phase(now).phase : 0.5;
+          const r = Math.min(cw, ch) * 0.16;
+          c.lineWidth = Math.max(1.2, cw * 0.05);
+          for (const p of g.pending) {
+            const v = g.val[p.i];
+            if (v === T.BARREN) continue;
+            const nv = Math.min(T.BARREN, v + p.inc);
+            const deadly = nv === T.PIGMAN || nv === T.DEMON || nv === T.BARREN;
+            const good = nv >= T.TRANSPORT && nv !== T.DEMON && nv !== T.BARREN && nv !== T.ARROW;
+            if (!deadly && !good) continue;
+            const col = deadly ? '236,58,86' : '255,212,71';
+            const a = 0.25 + 0.6 * ph;
+            const x = (p.i % W) * cw, y = ((p.i / W) | 0) * ch, ins = cw * (0.14 - 0.08 * ph);
+            c.strokeStyle = `rgba(${col},${a})`;
+            c.beginPath();
+            c.roundRect(x + ins, y + ins * (ch / cw), cw - ins * 2, ch - ins * 2 * (ch / cw), r);
+            c.stroke();
+          }
+        }
+        // safe lane hint
+        if (this.opts.safeHint && g.safe >= 0 && g.safe < W) {
+          const x = g.safe * cw;
+          const grad = c.createLinearGradient(0, 0, 0, this.cssH);
+          grad.addColorStop(0, 'rgba(124,242,156,0.10)');
+          grad.addColorStop(0.5, 'rgba(124,242,156,0.03)');
+          grad.addColorStop(1, 'rgba(124,242,156,0.10)');
+          c.fillStyle = grad;
+          c.fillRect(x, 0, cw, this.cssH);
+        }
+        // row wipe
+        this.rowFx = this.rowFx.filter((r) => {
+          const t = (now - r.t0) / r.dur;
+          if (t >= 1) return false;
+          c.fillStyle = `rgba(143,176,255,${0.5 * (1 - t)})`;
+          c.fillRect(0, r.r * ch, this.cssW, ch);
+          return true;
+        });
+
+        c.setTransform(1, 0, 0, 1, sx * d, sy * d);
+        if (this.overlay.width) c.drawImage(this.overlay, 0, 0);
+        c.setTransform(d, 0, 0, d, sx * d, sy * d);
+
+        if (this.opts.safeHint && g.safe >= 0 && g.safe < W) {
+          c.fillStyle = 'rgba(124,242,156,0.85)';
+          const mx = (g.safe + 0.5) * cw, s = Math.max(3, cw * 0.12);
+          c.beginPath(); c.moveTo(mx - s, 0); c.lineTo(mx + s, 0); c.lineTo(mx, s * 0.9); c.fill();
+          c.beginPath(); c.moveTo(mx - s, this.cssH); c.lineTo(mx + s, this.cssH); c.lineTo(mx, this.cssH - s * 0.9); c.fill();
+        }
+
+        // beams (cross, safe lane)
+        this.beams = this.beams.filter((b) => {
+          const t = (now - b.t0) / b.dur;
+          if (t >= 1) return false;
+          const a = 0.8 * (1 - t);
+          c.fillStyle = `rgba(${b.color},${a})`;
+          if (b.row !== undefined) c.fillRect(0, b.row * ch + ch * 0.5 * t, this.cssW, ch * (1 - t));
+          if (b.col !== undefined) c.fillRect(b.col * cw + cw * 0.5 * t, 0, cw * (1 - t), this.cssH);
+          return true;
+        });
+
+        // head
+        if (!g.over || now % 600 < 400) this.drawHead(now, spr);
+        if (g.rival) this.drawRival(now, pal, g.ink);
       }
-      // safe lane hint
-      if (this.opts.safeHint && g.safe >= 0 && g.safe < W) {
-        const x = g.safe * cw;
-        const grad = c.createLinearGradient(0, 0, 0, this.cssH);
-        grad.addColorStop(0, 'rgba(124,242,156,0.10)');
-        grad.addColorStop(0.5, 'rgba(124,242,156,0.03)');
-        grad.addColorStop(1, 'rgba(124,242,156,0.10)');
-        c.fillStyle = grad;
-        c.fillRect(x, 0, cw, this.cssH);
-      }
-      // row wipe
-      this.rowFx = this.rowFx.filter((r) => {
-        const t = (now - r.t0) / r.dur;
-        if (t >= 1) return false;
-        c.fillStyle = `rgba(143,176,255,${0.5 * (1 - t)})`;
-        c.fillRect(0, r.r * ch, this.cssW, ch);
-        return true;
-      });
-
-      c.setTransform(1, 0, 0, 1, sx * d, sy * d);
-      if (this.overlay.width) c.drawImage(this.overlay, 0, 0);
-      c.setTransform(d, 0, 0, d, sx * d, sy * d);
-
-      if (this.opts.safeHint && g.safe >= 0 && g.safe < W) {
-        c.fillStyle = 'rgba(124,242,156,0.85)';
-        const mx = (g.safe + 0.5) * cw, s = Math.max(3, cw * 0.12);
-        c.beginPath(); c.moveTo(mx - s, 0); c.lineTo(mx + s, 0); c.lineTo(mx, s * 0.9); c.fill();
-        c.beginPath(); c.moveTo(mx - s, this.cssH); c.lineTo(mx + s, this.cssH); c.lineTo(mx, this.cssH - s * 0.9); c.fill();
-      }
-
-      // beams (cross, safe lane)
-      this.beams = this.beams.filter((b) => {
-        const t = (now - b.t0) / b.dur;
-        if (t >= 1) return false;
-        const a = 0.8 * (1 - t);
-        c.fillStyle = `rgba(${b.color},${a})`;
-        if (b.row !== undefined) c.fillRect(0, b.row * ch + ch * 0.5 * t, this.cssW, ch * (1 - t));
-        if (b.col !== undefined) c.fillRect(b.col * cw + cw * 0.5 * t, 0, cw * (1 - t), this.cssH);
-        return true;
-      });
-
-      // head
-      if (!g.over || now % 600 < 400) this.drawHead(now, spr);
-      if (g.rival) this.drawRival(now, pal, g.ink);
 
       // rings
       c.lineWidth = Math.max(1.5, cw * 0.06);
@@ -378,9 +393,11 @@
         const t = (now - r.t0) / r.dur;
         if (t >= 1) return false;
         if (t < 0) return true;
-        const rad = r.inward ? r.r * (1 - easeOut(t)) + 2 : r.r * easeOut(t) + 2;
+        const m = this.warp ? this.warp(r.x, r.y) : { x: r.x, y: r.y, k: 1, z: 1 };
+        if (m.z < 0) return true;
+        const rad = (r.inward ? r.r * (1 - easeOut(t)) + 2 : r.r * easeOut(t) + 2) * m.k;
         c.strokeStyle = `rgba(${r.color},${1 - t})`;
-        c.beginPath(); c.ellipse(r.x, r.y, rad, rad * (ch / cw), 0, 0, Math.PI * 2); c.stroke();
+        c.beginPath(); c.ellipse(m.x, m.y, rad, rad * (ch / cw), 0, 0, Math.PI * 2); c.stroke();
         return true;
       });
 
@@ -389,9 +406,12 @@
         p.life += dt;
         if (p.life >= p.max) return false;
         p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 0.0006 * dt * cw * 0.05;
+        const m = this.warp && !p.screen ? this.warp(p.x, p.y) : { x: p.x, y: p.y, k: 1, z: 1 };
+        if (m.z < 0) return true;
+        const size = p.size * m.k;
         c.globalAlpha = 1 - p.life / p.max;
         c.fillStyle = p.color;
-        c.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+        c.fillRect(m.x - size / 2, m.y - size / 2, size, size);
         return true;
       });
       c.globalAlpha = 1;
@@ -403,9 +423,15 @@
         const t = (now - p.t0) / p.dur;
         if (t >= 1) return false;
         const rise = easeOut(Math.min(1, t * 1.4)) * ch * 1.6;
-        let y = p.y - rise;
-        const x = Math.min(this.cssW - cw * 1.5, Math.max(cw * 1.5, p.x));
-        y = Math.max(ch * 0.9, y);
+        let x, y;
+        if (this.warp) {
+          // On the globe, popups rise from their cell's standing position.
+          const m = this.warp(p.x, p.y);
+          x = m.x; y = m.y - ch * 0.6 - rise;
+        } else {
+          y = Math.max(ch * 0.9, p.y - rise);
+          x = Math.min(this.cssW - cw * 1.5, Math.max(cw * 1.5, p.x));
+        }
         c.globalAlpha = t < 0.75 ? 1 : 1 - (t - 0.75) / 0.25;
         if (p.sprite !== undefined) {
           const pop = 1 + 0.25 * Math.sin(Math.min(1, t * 4) * Math.PI);
@@ -424,12 +450,10 @@
       c.globalAlpha = 1;
 
       // freeze tint
-      if (g.freezeLeft > 0) {
-        c.fillStyle = `rgba(120,190,255,${0.12 + 0.05 * Math.sin(now / 120)})`;
-        c.fillRect(0, 0, this.cssW, this.cssH);
-      }
+      if (g.freezeLeft > 0) this.tint('120,190,255', 0.12 + 0.05 * Math.sin(now / 120));
       // hunger vignette
-      if (g.hunger > 0) {
+      if (g.hunger > 0 && this.warp) this.tint('255,140,40', 0.2 + 0.08 * Math.sin(now / 90));
+      else if (g.hunger > 0) {
         const grad = c.createRadialGradient(this.cssW / 2, this.cssH / 2, this.cssH * 0.3, this.cssW / 2, this.cssH / 2, this.cssW * 0.7);
         grad.addColorStop(0, 'rgba(255,140,40,0)');
         grad.addColorStop(1, `rgba(255,140,40,${0.22 + 0.08 * Math.sin(now / 90)})`);
@@ -441,14 +465,27 @@
         const t = (now - this.flash.t0) / this.flash.dur;
         if (t >= 1) this.flash = null;
         else {
-          c.fillStyle = `rgba(${this.flash.color},${this.flash.a * (1 - t)})`;
-          c.fillRect(0, 0, this.cssW, this.cssH);
+          this.tint(this.flash.color, this.flash.a * (1 - t));
         }
       }
-      if (this.dim > 0) {
-        c.fillStyle = `rgba(7,10,19,${this.dim})`;
-        c.fillRect(0, 0, this.cssW, this.cssH);
+      if (this.dim > 0) this.tint('7,10,19', this.dim);
+    }
+
+    // Full-view colour wash. On the planet it's a soft glow around the globe, so the
+    // canvas edges never show against space.
+    tint(rgb, a) {
+      const c = this.ctx;
+      if (this.warp && this.sphereView) {
+        const v = this.sphereView;
+        const grad = c.createRadialGradient(v.cx, v.cy, v.R * 0.6, v.cx, v.cy, v.R * 1.35);
+        grad.addColorStop(0, `rgba(${rgb},${a})`);
+        grad.addColorStop(1, `rgba(${rgb},0)`);
+        c.fillStyle = grad;
+        c.beginPath(); c.arc(v.cx, v.cy, v.R * 1.35, 0, Math.PI * 2); c.fill();
+        return;
       }
+      c.fillStyle = `rgba(${rgb},${a})`;
+      c.fillRect(0, 0, this.cssW, this.cssH);
     }
 
     drawRival(now, pal, ink) {
@@ -494,5 +531,5 @@
     }
   }
 
-  root.ReflexRender = { Renderer, PALETTES, CELL_ASPECT };
+  root.ReflexRender = { Renderer, PALETTES, CELL_ASPECT, VARIANTS };
 })(window);

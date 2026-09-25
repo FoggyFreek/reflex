@@ -512,6 +512,28 @@
           return sd * 1000;
         }
         case 'graze': this.bell(t, chordNote(6), 0.35, 0.12); return 0;
+        case 'boom': {
+          // planet shatters: a sub drop, a noise blast and a falling chord
+          const o = this.ctx.createOscillator();
+          o.frequency.setValueAtTime(90, t);
+          o.frequency.exponentialRampToValueAtTime(28, t + 0.7);
+          const og = this.ctx.createGain();
+          o.connect(og).connect(this.stingGain);
+          this.env(og, t, 1.2, 0.005, 0.8);
+          o.start(t); o.stop(t + 0.9);
+          const src = this.ctx.createBufferSource();
+          src.buffer = this.noise;
+          const f = this.ctx.createBiquadFilter();
+          f.type = 'lowpass';
+          f.frequency.setValueAtTime(6000, t);
+          f.frequency.exponentialRampToValueAtTime(150, t + 0.8);
+          const ng = this.ctx.createGain();
+          src.connect(f).connect(ng).connect(this.stingGain);
+          this.env(ng, t, 0.9, 0.004, 0.8);
+          src.start(t, 0, 0.9);
+          for (let k = 0; k < 4; k++) this.bell(t + 0.3 + k * sd, chordNote(3 - k), 0.6, 0.3);
+          return sd * 4000;
+        }
         case 'shield': this.swell(t + sd, sd * 2); this.bell(t + sd, chordNote(3), 0.8); return 0;
         case 'wipe': for (let k = 0; k < 6; k++) this.bell(t + k * sd * 0.5, chordNote(5 - k), 0.55, 0.2); return sd * 3000;
         case 'martini': for (let k = 0; k < 8; k++) this.bell(t + k * sd, chordNote(k), 0.8, 0.3); return sd * 8000;
