@@ -39,7 +39,7 @@
       this.hungerChain = 0;
       this.shieldCarry = 0;
       this.beat = 0;
-      this.path = [];
+      this.path = [this.idx()]; // recent head cells: moving off your own tail isn't a graze
       this.upBeat = {};
       this.owner = new Uint8Array(W * H); // 1 = your trail, 2 = rival trail
       this.painter = 1;
@@ -262,6 +262,7 @@
         this.rival = s.rival;
         this.history.length = 0;
         this.pending = [];
+        this.path = [this.idx()];
         this.resetGroove();
         this.sfx('rewind');
         this.emit('rewind', { x: this.x, y: this.y });

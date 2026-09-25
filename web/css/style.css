@@ -43,7 +43,7 @@ kbd {
 .app {
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: auto 1fr auto auto auto;
   grid-template-columns: minmax(0, 1fr);
   padding: max(10px, env(safe-area-inset-top)) 16px max(10px, env(safe-area-inset-bottom));
   gap: 10px;
@@ -189,6 +189,12 @@ kbd {
 .actions { display: flex; gap: 12px; }
 .act { width: 84px; height: 84px; border-radius: 50%; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .act-shield { border-color: rgba(92, 225, 255, 0.5); color: var(--cyan); }
+.act { position: relative; }
+.act em {
+  position: absolute; top: -2px; right: -2px; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px;
+  display: grid; place-items: center; font: 700 12px/1 var(--font-display); font-style: normal;
+  background: var(--bg-2); border: 1px solid currentColor;
+}
 .act-shield.down { background: rgba(92, 225, 255, 0.3); }
 .act-freeze { border-color: rgba(143, 176, 255, 0.4); }
 
@@ -326,6 +332,59 @@ kbd {
 .entry.show + .menu { display: none; }
 
 /* ---------- Responsive ---------- */
+/* ---------- Game+ ---------- */
+.app:not(.plus) .plus-only { display: none !important; }
+.stat-groove { position: relative; min-width: 84px; }
+.stat-groove output { color: var(--cyan); transition: color 0.2s, text-shadow 0.2s; }
+.stat-groove[data-level="4"] output, .stat-groove[data-level="5"] output { color: #b98cff; text-shadow: 0 0 10px rgba(185, 140, 255, 0.6); }
+.stat-groove[data-level="6"] output, .stat-groove[data-level="7"] output, .stat-groove[data-level="8"] output { color: var(--pink); text-shadow: 0 0 14px rgba(255, 121, 208, 0.8); }
+.stat-groove output.pop { animation: pop 0.4s; }
+.groove-bar { position: absolute; left: 10px; right: 10px; bottom: 5px; height: 3px; border-radius: 3px; background: rgba(92, 225, 255, 0.12); overflow: hidden; }
+.groove-bar b { position: absolute; inset: 0; background: var(--cyan); transform-origin: left; transform: scaleX(0); transition: transform 0.15s linear; }
+.app.plus .board-wrap {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55),
+    0 0 calc(10px + var(--beat, 0) * 50px) rgba(255, 121, 208, calc(0.08 + var(--beat, 0) * 0.55));
+}
+.app.plus.boss .board-wrap { background: linear-gradient(145deg, rgba(124, 242, 156, 0.6), rgba(255, 121, 208, 0.35)); }
+.plusbar { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; min-height: 26px; }
+.boss-tag {
+  display: none; padding: 4px 10px; border-radius: 999px; font: 700 11px/1 var(--font-display); letter-spacing: 0.18em;
+  color: #0b0f1a; background: var(--green); box-shadow: 0 0 16px rgba(124, 242, 156, 0.6); animation: blink 0.9s infinite;
+}
+.app.boss .boss-tag { display: inline-block; }
+@keyframes blink { 50% { opacity: 0.55; } }
+.boons { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.boon-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 4px; border-radius: 999px;
+  background: var(--panel); border: 1px solid var(--panel-edge); font-size: 12px; color: #c9d0e6;
+}
+.boon-chip canvas { width: 20px; height: 17.3px; border-radius: 4px; image-rendering: pixelated; }
+.plus-btn small { display: block; font-family: var(--font-body); font-weight: 500; font-size: 11px; letter-spacing: 0.04em; opacity: 0.75; margin-top: 2px; }
+.menu button.plus-btn { background: linear-gradient(95deg, rgba(92, 225, 255, 0.95), rgba(124, 242, 156, 0.9)); }
+.tabs { display: flex; gap: 6px; margin: -4px 0 12px; }
+.tabs button { padding: 7px 16px; border-radius: 999px; border: 1px solid var(--panel-edge); background: transparent; cursor: pointer; font-family: var(--font-display); font-weight: 600; letter-spacing: 0.06em; }
+.tabs button.on { background: rgba(255, 121, 208, 0.22); border-color: rgba(255, 121, 208, 0.6); }
+.range { display: flex; align-items: center; gap: 14px; padding: 4px; }
+.range span { flex: none; }
+.range input { flex: 1; accent-color: var(--pink); }
+.gameover-mode { text-align: center; margin: -10px 0 14px; color: var(--muted); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
+.panel-draft { text-align: center; }
+.draft-sub { color: var(--muted); margin: 0 0 18px; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+.card {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 14px 14px; border-radius: 14px; cursor: pointer;
+  background: rgba(7, 10, 19, 0.6); border: 1px solid var(--panel-edge); position: relative; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.card:hover, .card:focus-visible { outline: none; transform: translateY(-3px); border-color: rgba(255, 121, 208, 0.7); box-shadow: 0 10px 30px rgba(255, 121, 208, 0.2); }
+.card .sprite { width: 64px; height: 55px; border-radius: 10px; }
+.card b { font-family: var(--font-display); font-size: 17px; letter-spacing: 0.05em; }
+.card span { font-size: 13px; color: #b4bcd6; line-height: 1.45; }
+.card kbd { position: absolute; top: 8px; left: 8px; }
+.plus-list { margin: 0 0 10px; padding-left: 20px; color: #c9d0e6; line-height: 1.55; }
+.plus-list li { margin-bottom: 6px; }
+.t-red { color: #ff8c9c; }
+.t-gold { color: var(--yellow); }
+
 @media (max-width: 860px) {
   .brand-name, .stat-small { display: none; }
   .hud { gap: 6px; }
@@ -336,6 +395,10 @@ kbd {
   .pips i { width: 5px; }
   .lives canvas { width: 18px; height: 15.5px; }
   .top40 { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: 1fr; }
+  .card { flex-direction: row; text-align: left; padding: 12px; }
+  .card .sprite { width: 48px; height: 41px; flex: none; }
+  .card kbd { position: static; }
 }
 @media (max-width: 520px) {
   .app { padding-left: 16px; padding-right: 16px; }
@@ -345,6 +408,8 @@ kbd {
   .lives canvas:not(:first-child), .lives .more { display: none; }
   .lives .count { display: inline; }
   .icon-btn { width: 40px; flex: none; }
+  .stat-groove { min-width: 0; }
+  .app.plus .stat:has(#hud-shields) { display: none; }
   .pips { gap: 2px; }
   .pips i { width: 4px; height: 12px; }
   .dpad { grid-template-columns: repeat(3, 50px); grid-template-rows: repeat(3, 50px); }

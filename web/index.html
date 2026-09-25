@@ -20,6 +20,8 @@
       <div class="stat"><span class="stat-label">Forcefield</span><div class="pips" id="hud-shields" aria-live="off"></div></div>
       <div class="stat"><span class="stat-label">Worms</span><div class="lives" id="hud-worms"></div></div>
       <div class="stat stat-small"><span class="stat-label">Pause</span><output id="hud-freezes">0</output></div>
+      <div class="stat stat-groove plus-only" data-level="1"><span class="stat-label">Groove</span><output id="hud-groove">×1</output><i class="groove-bar"><b id="hud-groove-bar"></b></i></div>
+      <div class="stat stat-small plus-only"><span class="stat-label">BPM</span><output id="hud-bpm">84</output></div>
       <button class="icon-btn" id="btn-menu" aria-label="Pause menu" title="Menu (Esc)">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>
       </button>
@@ -35,6 +37,11 @@
       </div>
     </main>
 
+    <div class="plusbar plus-only" id="plusbar">
+      <span class="boss-tag">BOSS · GLUTTON</span>
+      <div class="boons" id="hud-boons"></div>
+    </div>
+
     <footer class="keys" id="keys">
       <span><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> / numpad move (two arrows = diagonal)</span>
       <span><kbd>Space</kbd> forcefield</span>
@@ -49,8 +56,8 @@
         <button data-dir="-1,1">↙</button><button data-dir="0,1">↓</button><button data-dir="1,1">↘</button>
       </div>
       <div class="actions">
-        <button class="act act-shield" id="touch-shield">Force<br>field</button>
-        <button class="act act-freeze" id="touch-freeze">Pause</button>
+        <button class="act act-shield" id="touch-shield">Force<br>field<em id="touch-shield-n">0</em></button>
+        <button class="act act-freeze" id="touch-freeze">Pause<em id="touch-freeze-n">0</em></button>
       </div>
     </div>
 
@@ -61,7 +68,8 @@
         <h1 class="logo">REFLEX</h1>
         <p class="tagline">more than the mind can handle!</p>
         <nav class="menu" aria-label="Main menu">
-          <button data-action="play" class="primary">Play</button>
+          <button data-action="play" class="primary">Play Classic</button>
+          <button data-action="playplus" class="primary plus-btn">Play Game+ <small>on the beat · boons · rival</small></button>
           <button data-action="howto">How to Play</button>
           <button data-action="top40">Top Forty</button>
           <button data-action="settings">Settings</button>
@@ -81,6 +89,7 @@
     <section class="screen" id="screen-top40" data-screen="top40">
       <div class="panel panel-wide">
         <header class="panel-head"><h2>Reflex's All-Time Greatest Top Forty</h2><button class="close" data-action="back" aria-label="Back">✕</button></header>
+        <div class="tabs" role="tablist"><button data-tab="classic">Classic</button><button data-tab="plus">Game+</button></div>
         <div class="panel-body"><div class="top40" id="top40"></div></div>
       </div>
     </section>
@@ -91,6 +100,8 @@
         <div class="panel-body settings">
           <label class="toggle"><input type="checkbox" data-setting="sound"><span>Sound</span></label>
           <label class="toggle"><input type="checkbox" data-setting="tick"><span>Turn tick (the original's metronome click)</span></label>
+          <label class="toggle"><input type="checkbox" data-setting="music"><span>Game+ music</span></label>
+          <label class="range"><span>Music volume</span><input type="range" id="music-volume" min="0" max="100" step="1"></label>
           <label class="toggle"><input type="checkbox" data-setting="safeHint"><span>Show the safe lane</span></label>
           <label class="toggle"><input type="checkbox" data-setting="scanlines"><span>CRT scanlines</span></label>
           <div class="seg" role="radiogroup" aria-label="Palette">
@@ -135,9 +146,19 @@
       </div>
     </section>
 
+    <section class="screen" id="screen-draft" data-screen="draft">
+      <div class="panel panel-wide panel-draft">
+        <h2 class="center">Choose a boon</h2>
+        <p class="draft-sub" id="draft-sub"></p>
+        <div class="cards" id="draft-cards"></div>
+        <p class="muted center">Press <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>, or click a card</p>
+      </div>
+    </section>
+
     <section class="screen" id="screen-gameover" data-screen="gameover">
       <div class="panel panel-narrow">
         <h2 class="gameover-title">GAME OVER</h2>
+        <p class="gameover-mode" id="gameover-mode"></p>
         <div class="final">
           <div><span class="stat-label">Score</span><strong id="final-score">0</strong></div>
           <div><span class="stat-label">Level</span><strong id="final-level">1</strong></div>
@@ -148,7 +169,7 @@
           <button class="primary" type="submit">Save to Top Forty</button>
         </form>
         <nav class="menu" id="gameover-menu" aria-label="Game over">
-          <button data-action="play" class="primary">Play Again</button>
+          <button data-action="again" class="primary">Play Again</button>
           <button data-action="top40">Top Forty</button>
           <button data-action="home">Main Menu</button>
         </nav>
@@ -160,6 +181,8 @@
   <script src="js/game.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/render.js"></script>
+  <script src="js/gameplus.js"></script>
+  <script src="js/music.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -4,6 +4,8 @@
 
   const { Game, Abort, T, W, H } = window.Reflex;
   const { Renderer, CELL_ASPECT } = window.ReflexRender;
+  const { GamePlus, BOONS } = window.ReflexPlus;
+  const { Conductor, Music } = window.ReflexMusic;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 
@@ -23,12 +25,14 @@
   };
 
   const settings = Object.assign(
-    { sound: true, tick: true, safeHint: true, scanlines: false, palette: 'modern' },
+    { sound: true, tick: true, safeHint: true, scanlines: false, palette: 'modern', music: true, musicVolume: 0.8 },
     store.get('reflex.settings', {}),
   );
   function applySettings() {
     speaker.enabled = settings.sound;
     speaker.tickEnabled = settings.tick;
+    if (music) { music.setEnabled(settings.music && settings.sound); music.setVolume(settings.musicVolume); }
+    $('#music-volume').value = Math.round(settings.musicVolume * 100);
     renderer.setOptions({ palette: settings.palette, safeHint: settings.safeHint });
     app.dataset.palette = settings.palette;
     app.classList.toggle('crt', settings.scanlines);
@@ -39,16 +43,23 @@
   }
 
   // Top Forty, seeded like the original REFLEX.T40: 40 x "Vacant", level 0, 1000 points.
+  // Classic and Game+ keep separate tables.
   const VACANT = () => Array.from({ length: 40 }, () => ({ name: 'Vacant', level: 0, score: 1000 }));
-  let top40 = store.get('reflex.top40', null);
-  if (!Array.isArray(top40) || top40.length !== 40) top40 = VACANT();
-  const saveTop40 = () => store.set('reflex.top40', top40);
+  const TOP_KEYS = { classic: 'reflex.top40', plus: 'reflex.top40plus' };
+  const tables = {};
+  for (const m of Object.keys(TOP_KEYS)) {
+    const t = store.get(TOP_KEYS[m], null);
+    tables[m] = Array.isArray(t) && t.length === 40 ? t : VACANT();
+  }
+  const saveTop40 = (m) => store.set(TOP_KEYS[m], tables[m]);
   // sub_2733: a new score goes above any entry it ties with.
-  const rankFor = (score) => {
+  const rankFor = (score, m) => {
+    const top40 = tables[m];
     let i = 39;
     while (i >= 0 && top40[i].score <= score) i--;
     return i + 1 < 40 ? i + 1 : -1;
   };
+  let top40Tab = 'classic';
 
   // ---------- sprite icons ----------
   function spriteCanvas(k, cls = 'sprite') {
@@ -104,6 +115,17 @@
       this.dead = true;
       for (const w of this.waiters) { clearTimeout(w.t); w.reject(new Abort()); }
       this.waiters.clear();
+      for (const g of this.guards || []) g(new Abort());
+      this.guards = null;
+    }
+    // Wraps an outside promise (the beat, a boon choice) so aborting the clock rejects it too.
+    guard(p) {
+      if (this.dead) return Promise.reject(new Abort());
+      if (!this.guards) this.guards = new Set();
+      return new Promise((resolve, reject) => {
+        this.guards.add(reject);
+        p.then((v) => { if (this.guards) this.guards.delete(reject); resolve(v); });
+      });
     }
   }
 
@@ -140,8 +162,10 @@
   }
 
   // ---------- state ----------
-  let mode = 'menu';          // menu | play | pause | gameover
+  let mode = 'menu';          // menu | play | pause | draft | gameover
   let game = null, clock = null;
+  let gameMode = 'classic';   // classic | plus
+  let music = null, conductor = null;
   let attract = null, attractClock = null;
   let screenStack = [];
   let lastResult = null;
@@ -153,7 +177,7 @@
     const current = screenStack[screenStack.length - 1];
     if (push && current !== name) screenStack.push(name);
     $$('.screen').forEach((s) => s.classList.toggle('active', s.dataset.screen === name));
-    if (name === 'top40') renderTop40();
+    if (name === 'top40') { if (mode === 'gameover' && lastResult) top40Tab = lastResult.mode; renderTop40(); }
     if (name === 'howto') renderHowto();
     const target = $(`#screen-${name} .primary`) || $(`#screen-${name} .menu button`) || $(`#screen-${name} .close`);
     if (target && name !== 'gameover') setTimeout(() => target.focus({ preventScroll: true }), 30);
@@ -213,38 +237,140 @@
 
   // ---------- game session ----------
   let session = 0;
-  async function startGame() {
+  async function startGame(m = gameMode) {
+    gameMode = m;
     speaker.unlock();
     stopAttract();
+    stopMusic();
     if (clock) clock.abort();
     const id = ++session;
     hideScreens();
     setMode('play');
+    app.classList.toggle('plus', m === 'plus');
     input.clear();
     clock = new Clock();
     const c = clock;
-    game = new Game({
+    const host = {
       wait: (ms) => c.wait(ms),
       input,
       sfx: (n, a, b) => speaker.fx(n, a, b),
       fx: (t, d) => { renderer.fx(t, d); uiFx(t, d); },
-    });
+    };
+    if (m === 'plus') {
+      // Game+ runs on the music: the conductor's 8th notes are the game's turns.
+      if (!music && speaker.ctx) { music = new Music(speaker.ctx); applySettings(); }
+      conductor = new Conductor(speaker.ctx);
+      const cond = conductor;
+      if (music && cond.ctx) {
+        cond.handlers.push(music);
+        music.state = () => plusState(game);
+        music.start();
+      }
+      cond.tempoProvider = () => (game && game.tempo ? game.tempo() : 84);
+      host.beat = () => c.guard(cond.nextTurn());
+      host.chooseBoon = (choices) => c.guard(showDraft(choices));
+      host.sfx = plusSfx;
+      game = new GamePlus(host);
+      renderer.conductor = cond;
+      cond.start(game.tempo());
+    } else {
+      game = new Game(host);
+      renderer.conductor = null;
+    }
     renderer.setGame(game);
     renderer.dim = 0;
     hud.reset();
-    toast('GET READY', 'use the arrows or numpad');
-    try { await c.wait(1300); } catch { return; }
+    toast('GET READY', m === 'plus' ? 'move on the beat' : 'use the arrows or numpad');
+    try { await c.wait(m === 'plus' ? conductor.turnMs * 8 : 1300); } catch { return; }
     const result = await game.run();
     if (id !== session) return;
+    result.mode = m;
     lastResult = result;
     try { await c.wait(1600); } catch { return; }
     if (id !== session) return;
+    stopMusic();
     gameOver(result);
+  }
+
+  function stopMusic() {
+    if (conductor) conductor.stop();
+    if (music) music.stop();
+    conductor = null;
+    renderer.conductor = null;
+  }
+
+  // Intensity inputs for the music, read once per bar.
+  function plusState(g) {
+    if (!g) return {};
+    let danger = 0;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+      if (!dx && !dy) continue;
+      const v = g.val[((g.y + dy + H) % H) * W + ((g.x + dx + W) % W)];
+      if (v === T.TRAIL || v === T.PIGMAN || v === T.BARREN || v === T.DEMON) danger++;
+    }
+    return { level: g.level, groove: g.groove, danger: danger / 8, hunger: g.hunger > 0, boss: !!g.rival, freeze: g.freezeLeft > 0 };
+  }
+
+  // Game+ sounds: most effects become in-key stingers quantized to the beat.
+  const STINGERS = new Set(['shield', 'wipe', 'martini', 'extraman', 'demon', 'cross', 'devolve', 'graze', 'boss', 'rivalCrash', 'rewind']);
+  function plusSfx(name, a, b) {
+    if (name === 'tick' || name === 'click') return 0;
+    if (name === 'death') return speaker.fx('death');
+    const live = music && conductor && conductor.ctx;
+    if (name === 'musicDeath') return live ? music.stinger('death', conductor) : 0;
+    if (name === 'gameover') { if (live) music.stinger('gameover', conductor); return speaker.fx('gameover'); }
+    if (!live) return name === 'graze' ? 0 : speaker.fx(name, a, b);
+    if (name === 'tone') return music.stinger(b >= 300 ? 'pickup' : 'blip', conductor, { freq: a, groove: game ? game.groove : 1 });
+    if (name === 'islandCell') return music.stinger('island', conductor);
+    if (STINGERS.has(name)) return music.stinger(name, conductor);
+    return speaker.fx(name, a, b);
+  }
+
+  // Boon draft: the game waits on this promise while the music plays on, muffled.
+  let draftResolve = null;
+  function showDraft(choices) {
+    return new Promise((resolve) => {
+      const wrap = $('#draft-cards');
+      wrap.innerHTML = '';
+      choices.forEach((id, n) => {
+        const b = BOONS[id];
+        const card = document.createElement('button');
+        card.className = 'card';
+        card.dataset.boon = id;
+        card.appendChild(spriteCanvas(b.sprite));
+        card.insertAdjacentHTML('beforeend', '<b></b><span></span><kbd></kbd>');
+        card.querySelector('b').textContent = b.name;
+        card.querySelector('span').textContent = b.text;
+        card.querySelector('kbd').textContent = n + 1;
+        card.addEventListener('click', () => chooseBoon(id));
+        wrap.appendChild(card);
+      });
+      $('#draft-sub').textContent = `Level ${game.level} reached. Pick one upgrade for this run.`;
+      draftResolve = resolve;
+      setMode('draft');
+      if (music) music.muffle(true);
+      speaker.fx('uiSelect');
+      showScreen('draft');
+      setTimeout(() => wrap.firstChild && wrap.firstChild.focus(), 60);
+    });
+  }
+  function chooseBoon(id) {
+    if (!draftResolve) return;
+    const r = draftResolve;
+    draftResolve = null;
+    hideScreens();
+    setMode('play');
+    input.clear();
+    if (music) music.muffle(false);
+    speaker.fx('uiSelect');
+    toast(BOONS[id].name.toUpperCase(), BOONS[id].text);
+    r(id);
   }
 
   function pauseGame() {
     if (mode !== 'play' || !clock) return;
     clock.pause();
+    if (conductor) conductor.pause();
     setMode('pause');
     showScreen('pause');
   }
@@ -254,21 +380,25 @@
     setMode('play');
     input.clear();
     clock.resume();
+    if (conductor) conductor.resume();
   }
   function endGame() {
     // Like Ctrl-Alt in the original: stop now and go to the score table.
     if (!game) return;
     session++;
     clock.abort();
+    stopMusic();
     game.over = true;
-    gameOver({ score: game.score, level: game.level });
+    lastResult = { score: game.score, level: game.level, mode: gameMode };
+    gameOver(lastResult);
   }
 
   function gameOver(result) {
     setMode('gameover');
     $('#final-score').textContent = fmt(result.score);
     $('#final-level').textContent = result.level;
-    myRank = rankFor(result.score);
+    myRank = rankFor(result.score, result.mode);
+    $('#gameover-mode').textContent = result.mode === 'plus' ? 'Game+' : 'Classic';
     const entry = $('#entry');
     entry.classList.toggle('show', myRank >= 0);
     showScreen('gameover');
@@ -286,9 +416,10 @@
     e.preventDefault();
     const name = ($('#entry-name').value.trim() || 'Anonymous').slice(0, 20);
     store.set('reflex.lastName', name);
+    const top40 = tables[lastResult.mode];
     top40.splice(myRank, 0, { name, level: lastResult.level, score: lastResult.score });
     top40.length = 40;
-    saveTop40();
+    saveTop40(lastResult.mode);
     $('#entry').classList.remove('show');
     speaker.fx('uiSelect');
     screenStack = ['gameover'];
@@ -298,7 +429,9 @@
   function goHome() {
     session++;
     if (clock) clock.abort();
+    stopMusic();
     game = null;
+    app.classList.remove('plus', 'boss');
     setMode('menu');
     screenStack = [];
     showScreen('menu');
@@ -319,7 +452,8 @@
       if (Math.abs(g.score - this.score) < 1) this.score = g.score;
       this.set('score', fmt(this.score), (v) => { $('#hud-score').textContent = v; });
       this.set('level', g.level, (v) => { $('#hud-level').textContent = v; });
-      this.set('freezes', g.freezes, (v) => { $('#hud-freezes').textContent = v; });
+      this.set('freezes', g.freezes, (v) => { $('#hud-freezes').textContent = v; $('#touch-freeze-n').textContent = v; });
+      this.set('shieldsN', g.shields, (v) => { $('#touch-shield-n').textContent = v; });
       this.set('shields', g.shields, (v) => {
         const el = $('#hud-shields');
         if (!el.children.length) for (let k = 0; k < 10; k++) el.appendChild(document.createElement('i'));
@@ -337,6 +471,29 @@
         if (v > 6) el.appendChild(Object.assign(document.createElement('span'), { className: 'more', textContent: '+' + (v - 6) }));
         el.appendChild(Object.assign(document.createElement('span'), { className: 'count', textContent: '×' + v }));
       });
+      if (g.plus) {
+        this.set('groove', g.groove, (v, prev) => {
+          const el = $('#hud-groove');
+          el.textContent = '×' + v;
+          el.parentElement.dataset.level = v;
+          if (prev !== undefined && v > prev) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+        });
+        $('#hud-groove-bar').style.transform = `scaleX(${g.groove > 1 ? g.grooveBeats / g.grooveWindow : 0})`;
+        this.set('bpm', conductor ? Math.round(conductor.bpm) : g.tempo(), (v) => { $('#hud-bpm').textContent = v; });
+        this.set('boons', Object.entries(g.boons).map(([k, n]) => k + n).join(','), () => {
+          const el = $('#hud-boons');
+          el.textContent = '';
+          for (const [id, n] of Object.entries(g.boons)) {
+            const chip = document.createElement('span');
+            chip.className = 'boon-chip';
+            chip.title = BOONS[id].text;
+            chip.appendChild(spriteCanvas(BOONS[id].sprite, ''));
+            chip.append(BOONS[id].name + (n > 1 ? ' ×' + n : ''));
+            el.appendChild(chip);
+          }
+        });
+        app.classList.toggle('boss', !!g.rival);
+      }
       app.classList.toggle('hungry', g.hunger > 0);
       app.classList.toggle('frozen', g.freezeLeft > 0);
       if (g.hunger > 0) $('#meter-hunger span').style.transform = `scaleX(${g.hunger / Math.max(1, g.hungerMax)})`;
@@ -367,9 +524,11 @@
     if (type === 'level') {
       const g = game;
       const sub = g.speed >= 35 ? 'safe lane on the move' : g.speed >= 30 ? 'safe lane drifting' : g.speed === 1 && g.level > 1 ? 'the cycle begins again — faster' : '';
-      toast('LEVEL ' + d.level, sub);
+      toast('LEVEL ' + d.level, g.plus ? `${g.tempo()} BPM` + (sub ? ' · ' + sub : '') : sub);
     }
     if (type === 'gameover') toast('GAME OVER');
+    if (type === 'boss') toast('GLUTTON!', 'a rival worm: make it crash');
+    if (type === 'rewind') toast('SECOND WIND', 'rewound 4 beats');
     if (type === 'freeze' && d.on) toast('PAUSE', '3 seconds');
   }
 
@@ -422,6 +581,16 @@
       drifting left, and from level 35 it jumps around. After level 50 the cycle starts over, faster.</p>
       <p><strong>Forcefield</strong>: hold it while you move and your worm passes through anything, Barren included,
       for one move per charge. <strong>Pause</strong>: freezes everything for 3 seconds, and uses up every pause you've saved.</p>
+      <h3>Game+</h3>
+      <p>Same board, same objects, same evolution. Game+ adds ideas from the 35 years of games since:</p>
+      <ul class="plus-list">
+        <li><strong>Everything moves on the beat.</strong> Each move is an 8th note. The original's tick is the metronome, and the band joins in as things heat up: hi-hat, beat, bass, chords, melody, then brass. Deeper levels play faster.</li>
+        <li><strong>Groove ×1–×8.</strong> Chain pickups (Palmtrees, Extramen, Crosses, Pre-barren, hunger eats) to raise your multiplier. It drains when you go quiet and resets when you lose a worm. Higher groove also means a faster tempo.</li>
+        <li><strong>Graze.</strong> Finishing a move right next to something deadly scores points and keeps the groove alive.</li>
+        <li><strong>Telegraphs.</strong> Tiles that will evolve on the next beat pulse: <span class="t-red">red</span> if they're turning deadly, <span class="t-gold">gold</span> if they're turning into something good.</li>
+        <li><strong>Glutton.</strong> Every 10th level a rival worm arrives and steals Palmtrees. Its trail is deadly to you, and yours to it. Make it crash and its body turns into Palmtrees.</li>
+        <li><strong>Boons.</strong> Every 5th level, pick one of three upgrades for the rest of the run.</li>
+      </ul>
       <h3>Controls</h3>
       <table class="controls-table">
         <tr><td><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></td><td>Steer. Press two arrows together for a diagonal.</td></tr>
@@ -457,7 +626,9 @@
   function renderTop40() {
     const el = $('#top40');
     el.innerHTML = '';
-    const highlight = mode === 'gameover' ? myRank : -1;
+    const top40 = tables[top40Tab];
+    $$('[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === top40Tab));
+    const highlight = mode === 'gameover' && lastResult && lastResult.mode === top40Tab ? myRank : -1;
     for (let col = 0; col < 2; col++) {
       const list = document.createElement('div');
       const head = document.createElement('div');
@@ -482,23 +653,31 @@
   }
 
   function updateBest() {
-    const best = top40.find((e) => !(e.name === 'Vacant' && e.level === 0));
-    $('#menu-best').textContent = best ? `Top score: ${fmt(best.score)} by ${best.name} (level ${best.level})` : 'Based on REFLEX (1988) by 3F Productions';
+    const best = (m) => tables[m].find((e) => !(e.name === 'Vacant' && e.level === 0));
+    const parts = [['Classic', best('classic')], ['Game+', best('plus')]].filter(([, b]) => b)
+      .map(([label, b]) => `${label}: ${fmt(b.score)} by ${b.name}`);
+    $('#menu-best').textContent = parts.length ? 'Top scores · ' + parts.join(' · ') : 'Based on REFLEX (1988) by 3F Productions';
   }
 
   // ---------- actions ----------
   const actions = {
-    play: startGame,
+    play: () => startGame('classic'),
+    playplus: () => startGame('plus'),
+    again: () => startGame(lastResult ? lastResult.mode : gameMode),
     howto: () => showScreen('howto'),
     top40: () => showScreen('top40'),
     settings: () => showScreen('settings'),
     about: () => showScreen('about'),
     back,
     resume: resumeGame,
-    restart: startGame,
+    restart: () => startGame(gameMode),
     end: endGame,
     home: goHome,
-    'reset-scores': () => { top40 = VACANT(); saveTop40(); updateBest(); toastMenu('Top Forty reset'); },
+    'reset-scores': () => {
+      for (const m of Object.keys(TOP_KEYS)) { tables[m] = VACANT(); saveTop40(m); }
+      updateBest();
+      toastMenu('Top Forty reset');
+    },
   };
   function toastMenu(t) { const b = $('[data-action="reset-scores"]'); b.textContent = t; setTimeout(() => { b.textContent = 'Reset Top Forty'; }, 1500); }
 
@@ -506,7 +685,7 @@
     const b = e.target.closest('[data-action]');
     if (!b) return;
     speaker.unlock();
-    speaker.fx(b.dataset.action === 'play' || b.dataset.action === 'restart' ? 'uiSelect' : 'ui');
+    speaker.fx(['play', 'playplus', 'again', 'restart'].includes(b.dataset.action) ? 'uiSelect' : 'ui');
     actions[b.dataset.action]();
   });
   $$('[data-setting]').forEach((el) => el.addEventListener('change', () => {
@@ -520,13 +699,30 @@
     applySettings();
     speaker.fx('ui');
   }));
+  $$('[data-tab]').forEach((el) => el.addEventListener('click', () => { top40Tab = el.dataset.tab; renderTop40(); speaker.fx('ui'); }));
+  $('#music-volume').addEventListener('input', (e) => {
+    settings.musicVolume = e.target.value / 100;
+    applySettings();
+  });
   $('#btn-menu').addEventListener('click', () => (mode === 'pause' ? resumeGame() : pauseGame()));
 
   // ---------- keyboard ----------
   document.addEventListener('keydown', (e) => {
     speaker.unlock();
-    const typing = e.target.tagName === 'INPUT' && e.target.type !== 'checkbox';
+    const typing = e.target.tagName === 'INPUT' && e.target.type !== 'checkbox' && e.target.type !== 'range';
     if (typing) return;
+    if (mode === 'draft') {
+      const n = { Digit1: 0, Digit2: 1, Digit3: 2, Numpad1: 0, Numpad2: 1, Numpad3: 2 }[e.code];
+      const cards = $$('#draft-cards .card');
+      if (n !== undefined && cards[n]) { e.preventDefault(); cards[n].click(); return; }
+      if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        e.preventDefault();
+        const i = cards.indexOf(document.activeElement);
+        cards[(i + (e.code === 'ArrowRight' ? 1 : cards.length - 1)) % cards.length].focus();
+        return;
+      }
+      if (e.code === 'Escape') { e.preventDefault(); return; }
+    }
     if (e.code === 'Escape') {
       e.preventDefault();
       if (mode === 'play') pauseGame();
@@ -642,18 +838,27 @@
   }
   window.addEventListener('resize', layout);
 
+  const boardWrap = $('#board-wrap');
   let last = performance.now();
   function frame(now) {
     const dt = Math.min(100, now - last);
     last = now;
     pollGamepad();
     hud.update(dt);
+    if (conductor && game && game.plus) {
+      const b = conductor.phase(now);
+      const k = Math.pow(1 - b.phase, 2) * (b.downbeat ? 1 : b.beat ? 0.55 : 0.25);
+      boardWrap.style.setProperty('--beat', k.toFixed(3));
+    } else boardWrap.style.setProperty('--beat', '0');
     renderer.draw(now, dt);
     requestAnimationFrame(frame);
   }
 
   // Console handle for debugging: __reflex.game.val[i] = Reflex.T.MARTINI, etc.
-  window.__reflex = { get game() { return game; }, renderer, speaker };
+  window.__reflex = {
+    get game() { return game; }, get music() { return music; }, get conductor() { return conductor; },
+    renderer, speaker,
+  };
 
   applySettings();
   layout();

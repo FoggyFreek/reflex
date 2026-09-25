@@ -58,3 +58,69 @@ async function play(Mode, stats) {
     console.log(name, JSON.stringify(stats));
   }
 })().catch((e) => { console.error(e); process.exit(1); });
+
+// Targeted Game+ checks with a scripted host.
+(async () => {
+  const { GamePlus: GP } = globalThis.ReflexPlus;
+  const mk = () => {
+    const events = [];
+    const g = new GP({
+      wait: () => Promise.resolve(), beat: () => Promise.resolve(), chooseBoon: (c) => Promise.resolve(c[0]),
+      sfx: () => 0, fx: (t, d) => events.push([t, d]),
+      input: { takeDir: () => null, takeShield: () => false, takeFreeze: () => false },
+    });
+    return { g, events };
+  };
+  const put = (g, x, y, v) => { const i = ((y + H) % H) * W + ((x + W) % W); g.val[i] = v; g.disp[i] = v; };
+
+  // Rival crash: surrounded by Pigmen, its recent trail becomes Palmtrees and pays 5000 x groove.
+  {
+    const { g } = mk();
+    g.x = 0; g.y = 0;
+    g.spawnRival();
+    check(g.rival, 'rival spawned');
+    for (let k = 0; k < 3; k++) await g.rivalTurn();
+    const r = g.rival;
+    for (const [dx, dy] of dirs) put(g, r.x + dx, r.y + dy, T.PIGMAN);
+    g.groove = 3;
+    const before = g.score;
+    await g.rivalTurn();
+    check(!g.rival, 'rival crashed');
+    check(g.score - before === 15000, 'crash bonus ' + (g.score - before));
+    check([...g.val].filter((v) => v === T.PALM).length >= 1, 'palms dropped');
+  }
+  // Second Wind: a death rewinds instead of costing a worm, once per level.
+  {
+    const { g, events } = mk();
+    g.boons.secondWind = 1;
+    for (let k = 0; k < 5; k++) await g.turn();
+    put(g, g.x, g.y + 1, T.PIGMAN);
+    await g.turn();
+    check(g.worms === 4 && events.some(([t]) => t === 'rewind'), 'second wind rewound');
+    put(g, g.x, g.y + 1, T.PIGMAN);
+    await g.turn();
+    check(g.worms === 3, 'second wind only once per level');
+  }
+  // Long Field: one forcefield charge covers two moves.
+  {
+    const { g } = mk();
+    g.boons.longField = 1;
+    g.shields = 1;
+    let asked = 0;
+    g.host.input.takeShield = () => (asked++ === 0);
+    put(g, g.x, g.y + 1, T.PIGMAN); put(g, g.x, g.y + 2, T.PIGMAN);
+    await g.turn(); await g.turn();
+    check(g.worms === 4 && g.shields === 0, 'long field covered two moves');
+  }
+  // Groove: a Palmtree raises it and multiplies the points.
+  {
+    const { g } = mk();
+    put(g, g.x, g.y + 1, T.PALM);
+    const before = g.score;
+    await g.turn();
+    check(g.groove === 2, 'groove up on palm');
+    const gained = g.score - before;
+    check(gained >= 100 && gained <= 1000 && gained % 100 === 0, 'palm scored ' + gained);
+  }
+  console.log('Game+ targeted checks: ok');
+})().catch((e) => { console.error(e); process.exit(1); });
