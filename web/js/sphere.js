@@ -31,8 +31,6 @@
     { ground: '#23405a', base: '#0f1f2e', atmo: '150,220,255' },
   ];
   THEMES.forEach((th, k) => { VARIANTS['planet' + k] = { 11: th.ground }; });
-  VARIANTS.cut = { 11: null };
-  VARIANTS.rivalcut = Object.assign({}, VARIANTS.rival, { 11: null });
 
   const wrapf = (v, n) => { v = ((v % n) + n) % n; return v >= n / 2 ? v - n : v; };
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);

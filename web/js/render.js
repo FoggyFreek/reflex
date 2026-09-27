@@ -17,8 +17,9 @@
     ],
   };
   // Palette swaps: the rival worm is the player's head sprite in other colours.
-  const VARIANTS = { rival: { 13: '#7cf29c', 15: '#fffbe0', 2: '#ec3a56', 12: '#2fbf71' } };
-  const FRAME = { modern: '#0d1322', classic: '#aa0000' };
+  // The "cut" variants drop the tile background (index 11) so heads float over the board.
+  const VARIANTS = { rival: { 13: '#7cf29c', 15: '#fffbe0', 2: '#ec3a56', 12: '#2fbf71' }, cut: { 11: null } };
+  VARIANTS.rivalcut = Object.assign({}, VARIANTS.rival, { 11: null });
 
   const hexToRgb = (h) => [1, 3, 5].map((o) => parseInt(h.substr(o, 2), 16));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -53,7 +54,7 @@
       this.rivalAnim = { id: -1 };
     }
 
-    setOptions(o) { Object.assign(this.opts, o); this.overlay = null; }
+    setOptions(o) { Object.assign(this.opts, o); }
 
     get sphereOn() { return !!(this.opts.sphere && this.game && this.game.plus); }
     get aspect() { return this.sphereOn ? 1.22 : (W * CELL_ASPECT) / H; }
@@ -68,7 +69,6 @@
       this.canvas.width = Math.round(cssW * dpr);
       this.canvas.height = Math.round(cssH * dpr);
       this.cw = cssW / W; this.ch = cssH / H;
-      this.overlay = null;
     }
 
     // 27 sprite canvases for a palette, with palette index 0 remapped (setbkcolor).
@@ -100,27 +100,6 @@
 
     // Canvas for UI icons (legend, HUD).
     icon(k, pal = this.opts.palette) { return this.sprites(pal, 0)[k]; }
-
-    buildOverlay() {
-      const o = document.createElement('canvas');
-      o.width = this.canvas.width; o.height = this.canvas.height;
-      const c = o.getContext('2d');
-      if (this.opts.palette === 'modern') {
-        const d = this.dpr, cw = this.cw * d, ch = this.ch * d;
-        const gap = Math.max(1, cw * 0.05), r = Math.min(cw, ch) * 0.16;
-        c.fillStyle = FRAME.modern;
-        c.fillRect(0, 0, o.width, o.height);
-        c.globalCompositeOperation = 'destination-out';
-        for (let y = 0; y < H; y++) {
-          for (let x = 0; x < W; x++) {
-            c.beginPath();
-            c.roundRect(x * cw + gap / 2, y * ch + gap / 2, cw - gap, ch - gap, r);
-            c.fill();
-          }
-        }
-      }
-      this.overlay = o;
-    }
 
     // Visual-effect hooks, called from the game's emit().
     fx(type, d) {
@@ -260,7 +239,6 @@
       c.setTransform(1, 0, 0, 1, 0, 0);
       c.clearRect(0, 0, this.canvas.width, this.canvas.height);
       if (!g) return;
-      if (!this.overlay) this.buildOverlay();
 
       let sx = 0, sy = 0;
       if (this.shake > 0.2) {
@@ -281,11 +259,13 @@
         this.beams = this.beams.filter((b) => now - b.t0 < b.dur);
         for (const [i, f] of this.cellFx) if (now - f.t0 >= f.dur) this.cellFx.delete(i);
       } else {
-        // tiles
+        // tiles; a head's own trail cell stays empty so the see-through head floats over the board
+        const headOn = !g.over || now % 600 < 400;
+        const under = (i) => g.disp[i] === T.TRAIL && ((headOn && i === g.idx()) || (g.rival && i === g.idx(g.rival.x, g.rival.y)));
         for (let y = 0; y < H; y++) {
           for (let x = 0; x < W; x++) {
             const i = y * W + x;
-            c.drawImage(spr[g.disp[i]], x * cw, y * ch, cw + 0.5, ch + 0.5);
+            c.drawImage(spr[under(i) ? T.EMPTY : g.disp[i]], x * cw, y * ch, cw + 0.5, ch + 0.5);
           }
         }
         // barren sparkles
@@ -302,7 +282,7 @@
         if (pal === 'modern' || g.owner) {
           c.lineWidth = Math.max(1, cw * 0.035);
           for (let i = 0; i < W * H; i++) {
-            if (g.disp[i] !== T.TRAIL) continue;
+            if (g.disp[i] !== T.TRAIL || under(i)) continue;
             const rival = g.owner && g.owner[i] === 2;
             if (pal !== 'modern' && !rival) continue;
             c.strokeStyle = rival ? 'rgba(124,242,156,0.75)' : 'rgba(255,121,208,0.28)';
@@ -360,10 +340,6 @@
           return true;
         });
 
-        c.setTransform(1, 0, 0, 1, sx * d, sy * d);
-        if (this.overlay.width) c.drawImage(this.overlay, 0, 0);
-        c.setTransform(d, 0, 0, d, sx * d, sy * d);
-
         if (this.opts.safeHint && g.safe >= 0 && g.safe < W) {
           c.fillStyle = 'rgba(124,242,156,0.85)';
           const mx = (g.safe + 0.5) * cw, s = Math.max(3, cw * 0.12);
@@ -383,7 +359,7 @@
         });
 
         // head
-        if (!g.over || now % 600 < 400) this.drawHead(now, spr);
+        if (!g.over || now % 600 < 400) this.drawHead(now, this.sprites(pal, g.ink, 'cut'));
         if (g.rival) this.drawRival(now, pal, g.ink);
       }
 
@@ -500,7 +476,7 @@
       grad.addColorStop(1, 'rgba(124,242,156,0)');
       c.fillStyle = grad;
       c.fillRect(hx - cw, hy - ch, cw * 3, ch * 3);
-      c.drawImage(this.sprites(pal, ink, 'rival')[T.POWERED], hx, hy, cw + 0.5, ch + 0.5);
+      c.drawImage(this.sprites(pal, ink, 'rivalcut')[T.POWERED], hx, hy, cw + 0.5, ch + 0.5);
     }
 
     drawHead(now, spr) {
